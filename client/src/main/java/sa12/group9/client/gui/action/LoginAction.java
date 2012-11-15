@@ -9,9 +9,9 @@ import sa12.group9.client.gui.swing.LoginFrame;
 public class LoginAction implements ActionListener
 {
     private LoginFrame frame;
-    private ActionListener actlist;
+    private MainAction actlist;
 
-    public LoginAction(ActionListener actlist)
+    public LoginAction(MainAction actlist)
     {
         this.actlist = actlist;
         frame = new LoginFrame(this);
@@ -28,7 +28,7 @@ public class LoginAction implements ActionListener
 
                 if (true)
                 {
-                    ((MainAction) actlist).loginSuccessful();
+                    actlist.loginSuccessful();
                     frame.dispose();
                 }
                 else

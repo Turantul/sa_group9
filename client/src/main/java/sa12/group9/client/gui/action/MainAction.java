@@ -18,6 +18,8 @@ import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.misc.AudioFilter;
 import sa12.group9.client.gui.swing.MainFrame;
+import sa12.group9.client.gui.swing.panel.CalculatingPanel;
+import sa12.group9.client.gui.swing.panel.MainPanel;
 
 public class MainAction implements ActionListener
 {
@@ -25,6 +27,7 @@ public class MainAction implements ActionListener
 
     private MainFrame frame;
     private File f;
+    private Thread processing;
 
     public MainAction()
     {
@@ -53,20 +56,21 @@ public class MainAction implements ActionListener
             if (returnval == JFileChooser.APPROVE_OPTION)
             {
                 f = fc.getSelectedFile();
-                frame.updateFileName(fc.getSelectedFile().getName());
+                frame.swapPanel(new MainPanel(this, fc.getSelectedFile().getName()));
             }
         }
         else if (e.getActionCommand().equals(ActionCommands.SEARCH))
         {
             if (f != null)
             {
-                try
+                if (processing == null || !processing.isAlive())
                 {
-                    searchSong();
+                    processing = createSearchThread();
+                    processing.start();
                 }
-                catch (IOException e1)
+                else
                 {
-                    frame.showError("There was an error processing the audio file!", "Error processing file");
+                    frame.showError("You already issued a song search request.\nWait until it is finished!", "Already searching");
                 }
             }
             else
@@ -79,28 +83,42 @@ public class MainAction implements ActionListener
     public void loginSuccessful()
     {
         log.info("User logged in");
-        
-        frame.userLoggedIn();
+
+        frame.swapPanel(new MainPanel(this));
     }
-    
-    private void searchSong() throws IOException
+
+    private Thread createSearchThread()
     {
-        log.info("Calculating fingerprint");
-        
-        FingerprintSystem system = new FingerprintSystem(44100);
-        Fingerprint finger = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
-        
-        Fingerprint finger2 = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
-        
-        frame.showError("" + finger.match(finger2), "Match");
-        
-        //TODO: issue server request
-        log.info("Issuing server request");
-        
-        //TODO: send to peers
-        log.info("Sending request to peers");
-        
-        //TODO: open server for listening
-        log.info("Waiting for responses...");
+        return new Thread()
+        {
+            public void run()
+            {
+                try
+                {
+                    log.info("Calculating fingerprint");
+                    frame.swapPanel(new CalculatingPanel(MainAction.this));
+    
+                    FingerprintSystem system = new FingerprintSystem(44100);
+                    Fingerprint finger = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
+    
+                    Fingerprint finger2 = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
+    
+                    frame.showError("" + finger.match(finger2), "Match");
+    
+                    // TODO: issue server request
+                    log.info("Issuing server request");
+    
+                    // TODO: send to peers
+                    log.info("Sending request to peers");
+    
+                    // TODO: open server for listening
+                    log.info("Waiting for responses...");
+                }
+                catch (IOException e)
+                {
+                    frame.showError("There was an error processing the audio file!", "Error processing file");
+                }
+            }
+        };
     }
 }
