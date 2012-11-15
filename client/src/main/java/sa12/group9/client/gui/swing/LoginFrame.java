@@ -13,8 +13,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-import sa12.group9.client.gui.ActionCommands;
 import sa12.group9.client.gui.action.LoginAction;
+import sa12.group9.client.gui.misc.ActionCommands;
 
 public class LoginFrame extends JFrame
 {

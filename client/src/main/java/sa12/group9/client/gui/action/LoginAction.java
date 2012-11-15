@@ -3,7 +3,7 @@ package sa12.group9.client.gui.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import sa12.group9.client.gui.ActionCommands;
+import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.swing.LoginFrame;
 
 public class LoginAction implements ActionListener
