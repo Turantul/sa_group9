@@ -3,11 +3,17 @@ package sa12.group9.client.gui.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.swing.JFileChooser;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 
 import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.misc.AudioFilter;
@@ -54,7 +60,14 @@ public class MainAction implements ActionListener
         {
             if (f != null)
             {
-                searchSong();
+                try
+                {
+                    searchSong();
+                }
+                catch (IOException e1)
+                {
+                    frame.showError("There was an error processing the audio file!", "Error processing file");
+                }
             }
             else
             {
@@ -70,10 +83,16 @@ public class MainAction implements ActionListener
         frame.userLoggedIn();
     }
     
-    private void searchSong()
+    private void searchSong() throws IOException
     {
-        //TODO: calculate fingerprint
         log.info("Calculating fingerprint");
+        
+        FingerprintSystem system = new FingerprintSystem(44100);
+        Fingerprint finger = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
+        
+        Fingerprint finger2 = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
+        
+        frame.showError("" + finger.match(finger2), "Match");
         
         //TODO: issue server request
         log.info("Issuing server request");

@@ -108,8 +108,8 @@ public class MainFrame extends JFrame
 
         fileName = new JTextField();
         fileName.setEnabled(false);
-        fileName.setPreferredSize(new Dimension(250, 20));
-        p.add(fileName, "align center");
+        fileName.setPreferredSize(new Dimension(400, 20));
+        p.add(fileName);
 
         JButton file = new JButton("Select file");
         file.setActionCommand(ActionCommands.CHOOSEFILE);
