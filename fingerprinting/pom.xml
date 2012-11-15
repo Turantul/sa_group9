@@ -12,6 +12,8 @@
   <version>0.2-SNAPSHOT</version>
 
   <name>SWAzam :: Fingerprint Calculation</name>
+  
+  <packaging>jar</packaging>
 
   <repositories>
     <repository>
