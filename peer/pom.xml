@@ -21,6 +21,11 @@
       <artifactId>swazam-common</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>ac.at.tuwien.infosys.swa.audio</groupId>
+      <artifactId>fingerprint</artifactId>
+      <version>0.2-SNAPSHOT</version>
+    </dependency>
 
     <dependency>
       <groupId>com.sun.jersey</groupId>

@@ -23,6 +23,7 @@
     <module>peer</module>
     <module>server</module>
     <module>common</module>
+    <module>fingerprinting</module>
   </modules>
   
   <scm>
