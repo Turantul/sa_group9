@@ -2,15 +2,15 @@ package sa12.group9.common.beans;
 
 public class SuccessRequest extends SearchIssueRequest
 {
-    private String peerUsername;
+    private FoundInformation information;
 
-    public String getPeerUsername()
+    public FoundInformation getInformation()
     {
-        return peerUsername;
+        return information;
     }
 
-    public void setPeerUsername(String peerUsername)
+    public void setInformation(FoundInformation information)
     {
-        this.peerUsername = peerUsername;
+        this.information = information;
     }
 }

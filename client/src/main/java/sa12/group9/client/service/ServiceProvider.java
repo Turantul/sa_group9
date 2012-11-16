@@ -9,11 +9,11 @@ import java.nio.file.Paths;
 import javax.ws.rs.core.MediaType;
 
 import sa12.group9.client.gui.action.MainAction;
+import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
-import sa12.group9.common.beans.FoundNotification;
 import sa12.group9.common.beans.SuccessRequest;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
@@ -66,12 +66,12 @@ public class ServiceProvider
         return response;
     }
     
-    public static void notifySuccess(String userId, int hash, String peerUsername)
+    public static void notifySuccess(String userId, int hash, FoundInformation information)
     {
         SuccessRequest request = new SuccessRequest();
         request.setUserId(userId);
         request.setHash(hash);
-        request.setPeerUsername(peerUsername);
+        request.setInformation(information);
         
         ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
@@ -99,7 +99,7 @@ public class ServiceProvider
                     {
                         //TODO: process response
                 
-                        FoundNotification information = new FoundNotification();
+                        FoundInformation information = new FoundInformation();
                         mainAction.receivingCallback(information);
                     }
                 }.start();

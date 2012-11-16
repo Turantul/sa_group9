@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -19,9 +21,9 @@ import sa12.group9.client.gui.swing.panel.CalculatingPanel;
 import sa12.group9.client.gui.swing.panel.IssuingSearchRequestPanel;
 import sa12.group9.client.gui.swing.panel.MainPanel;
 import sa12.group9.client.service.ServiceProvider;
+import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.SearchIssueResponse;
-import sa12.group9.common.beans.FoundNotification;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class MainAction implements ActionListener
@@ -30,7 +32,7 @@ public class MainAction implements ActionListener
 
     private String userId;
     private File f;
-    private List<FoundNotification> songs;
+    private List<FoundInformation> songs;
 
     private MainFrame frame;
     private Thread processing;
@@ -121,7 +123,7 @@ public class MainAction implements ActionListener
                     else
                     {
                         log.info("Waiting for responses...");
-                        songs = new ArrayList<FoundNotification>();
+                        songs = new ArrayList<FoundInformation>();
                         
                         try
                         {
@@ -151,15 +153,49 @@ public class MainAction implements ActionListener
                             }
                             else
                             {
-                                // TODO: wait 20 seconds, select winner, display result
+                                Thread.sleep(20000);
                                 
-                                ServiceProvider.notifySuccess(userId, finger.hashCode(), null);
+                                if (songs.size() == 0)
+                                {
+                                    log.info("No answers received.");
+                                    frame.showError("Unfortunately, your search request has not been answered.\nYou can retry your request if you want.", "No answers");
+                                    resetPanel();
+                                }
+                                else
+                                {
+                                    Collections.sort(songs, new Comparator<FoundInformation>()
+                                            {
+                                                @Override
+                                                public int compare(FoundInformation o1, FoundInformation o2)
+                                                {
+                                                    if (o1.getMatch() == o2.getMatch())
+                                                    {
+                                                        return 0;
+                                                    }
+                                                    else if (o1.getMatch() < o2.getMatch())
+                                                    {
+                                                        return 1;
+                                                    }
+                                                    return -1;
+                                                }
+                                            });
+                                    
+                                    ServiceProvider.notifySuccess(userId, finger.hashCode(), songs.get(0));
+                                    
+                                    //TODO: show panel
+                                }
                             }
                         }
                         catch (IOException e)
                         {
                             log.error("Could not open listening socket");
                             frame.showError("Could not open listening socket.", "Listening socket");
+                            resetPanel();
+                        }
+                        catch (InterruptedException e)
+                        {
+                            log.error("Thread got interrupted");
+                            frame.showError("An unknown error occured.\nPlease try again.", "Unknown error");
                             resetPanel();
                         }
                     }
@@ -180,7 +216,7 @@ public class MainAction implements ActionListener
         frame.swapPanel(new MainPanel(MainAction.this, f.getName()));
     }
     
-    public synchronized void receivingCallback(FoundNotification information)
+    public synchronized void receivingCallback(FoundInformation information)
     {
         if (songs != null)
         {

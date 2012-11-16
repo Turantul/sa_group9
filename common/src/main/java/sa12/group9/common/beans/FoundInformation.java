@@ -1,6 +1,6 @@
 package sa12.group9.common.beans;
 
-public class FoundNotification
+public class FoundInformation
 {
     private String interpret;
     private String title;
@@ -8,6 +8,7 @@ public class FoundNotification
     private String album;
     private String genre;
     
+    private double match;
     private String peerUsername;
     
     public String getInterpret()
@@ -68,5 +69,15 @@ public class FoundNotification
     public void setPeerUsername(String peerUsername)
     {
         this.peerUsername = peerUsername;
+    }
+
+    public double getMatch()
+    {
+        return match;
+    }
+
+    public void setMatch(double match)
+    {
+        this.match = match;
     }
 }
