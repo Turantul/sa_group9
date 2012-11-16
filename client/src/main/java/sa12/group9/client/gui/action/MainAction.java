@@ -4,27 +4,28 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javax.swing.JFileChooser;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
-
 import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.misc.AudioFilter;
 import sa12.group9.client.gui.swing.MainFrame;
 import sa12.group9.client.gui.swing.panel.CalculatingPanel;
+import sa12.group9.client.gui.swing.panel.IssuingSearchRequestPanel;
 import sa12.group9.client.gui.swing.panel.MainPanel;
+import sa12.group9.client.service.ServiceProvider;
+import sa12.group9.common.beans.SearchResponse;
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class MainAction implements ActionListener
 {
     private static Log log = LogFactory.getLog(MainAction.class);
 
+    private String userId;
+    
     private MainFrame frame;
     private File f;
     private Thread processing;
@@ -56,7 +57,7 @@ public class MainAction implements ActionListener
             if (returnval == JFileChooser.APPROVE_OPTION)
             {
                 f = fc.getSelectedFile();
-                frame.swapPanel(new MainPanel(this, fc.getSelectedFile().getName()));
+                frame.swapPanel(new MainPanel(this, f.getName()));
             }
         }
         else if (e.getActionCommand().equals(ActionCommands.SEARCH))
@@ -80,10 +81,11 @@ public class MainAction implements ActionListener
         }
     }
 
-    public void loginSuccessful()
+    public void loginSuccessful(String id)
     {
-        log.info("User logged in");
+        log.info("User logged in with ID: " + id);
 
+        userId = id;
         frame.swapPanel(new MainPanel(this));
     }
 
@@ -97,26 +99,32 @@ public class MainAction implements ActionListener
                 {
                     log.info("Calculating fingerprint");
                     frame.swapPanel(new CalculatingPanel(MainAction.this));
+                    Fingerprint finger = ServiceProvider.generateFingerprint(f.getAbsolutePath());
     
-                    FingerprintSystem system = new FingerprintSystem(44100);
-                    Fingerprint finger = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
-    
-                    Fingerprint finger2 = system.fingerprint(Files.readAllBytes(Paths.get(f.getAbsolutePath())));
-    
-                    frame.showError("" + finger.match(finger2), "Match");
-    
-                    // TODO: issue server request
                     log.info("Issuing server request");
-    
-                    // TODO: send to peers
-                    log.info("Sending request to peers");
-    
-                    // TODO: open server for listening
-                    log.info("Waiting for responses...");
+                    frame.swapPanel(new IssuingSearchRequestPanel(MainAction.this));
+                    SearchResponse response = ServiceProvider.generateSearchRequest(userId, finger.hashCode());
+                    if (response.getErrorMsg() != null && !response.getErrorMsg().equals(""))
+                    {
+                        log.info("Request could not be issued because: " + response.getErrorMsg());
+                        frame.showError("There was a problem creating your search!\nReason: " + response.getErrorMsg(), "Error issuing search");
+                        frame.swapPanel(new MainPanel(MainAction.this, f.getName()));
+                    }
+                    else
+                    {
+                        // TODO: send to peers
+                        log.info("Sending request to peers");
+        
+                        // TODO: open server for listening
+                        log.info("Waiting for responses...");
+                    }
                 }
                 catch (IOException e)
                 {
+                    log.error("There was an error processing the audio file!");
+                    
                     frame.showError("There was an error processing the audio file!", "Error processing file");
+                    frame.swapPanel(new MainPanel(MainAction.this, f.getName()));
                 }
             }
         };

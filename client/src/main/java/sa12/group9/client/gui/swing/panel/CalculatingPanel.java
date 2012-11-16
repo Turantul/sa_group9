@@ -17,8 +17,13 @@ public class CalculatingPanel extends AbstractWorkingPanel
     protected void draw()
     {
         JLabel calc = new JLabel("Calculating fingerprint...");
-        calc.setFont(new Font("Arial", Font.BOLD, 20));
+        calc.setFont(new Font("Arial", Font.BOLD, 30));
         calc.setForeground(Color.WHITE);
-        add(calc, "align center, push");
+        add(calc, "gaptop 100, align center, wrap");
+
+        JLabel desc = new JLabel("Please be patient. This may take some time.");
+        desc.setFont(new Font("Arial", Font.BOLD, 14));
+        desc.setForeground(Color.WHITE);
+        add(desc, "align center, push");
     }
 }

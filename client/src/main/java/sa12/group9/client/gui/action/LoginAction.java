@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.swing.LoginFrame;
+import sa12.group9.client.service.ServiceProvider;
 
 public class LoginAction implements ActionListener
 {
@@ -24,11 +25,11 @@ public class LoginAction implements ActionListener
         {
             if (frame.checkInput())
             {
-                //TODO: login at server using frame.getUsername() and frame.getPassword()
+                String id = ServiceProvider.loginAtServer(frame.getUsername(), frame.getPassword());
 
-                if (true)
+                if (id != null)
                 {
-                    actlist.loginSuccessful();
+                    actlist.loginSuccessful(id);
                     frame.dispose();
                 }
                 else

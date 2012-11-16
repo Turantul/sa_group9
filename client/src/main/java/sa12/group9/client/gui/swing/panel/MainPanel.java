@@ -56,5 +56,4 @@ public class MainPanel extends AbstractWorkingPanel
         button.addActionListener(actlist);
         add(button, "span, align center, push");
     }
-    
 }
