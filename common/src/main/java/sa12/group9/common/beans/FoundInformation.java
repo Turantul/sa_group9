@@ -7,15 +7,15 @@ public class FoundInformation
     private int length;
     private String album;
     private String genre;
-    
+
     private double match;
     private String peerUsername;
-    
+
     public String getInterpret()
     {
         return interpret;
     }
-    
+
     public void setInterpret(String interpret)
     {
         this.interpret = interpret;

@@ -69,9 +69,9 @@ public class MainFrame extends JFrame
     public void swapPanel(AbstractWorkingPanel panel)
     {
         getContentPane().remove(this.panel);
-        
+
         this.panel = panel;
-        
+
         getContentPane().add(panel, BorderLayout.CENTER);
         panel.updateUI();
     }

@@ -7,22 +7,22 @@ public class SearchIssueResponse
     private String errorMsg;
     private List<PeerEndpoint> peers;
     private int ttl;
-    
+
     public String getErrorMsg()
     {
         return errorMsg;
     }
-    
+
     public void setErrorMsg(String errorMsg)
     {
         this.errorMsg = errorMsg;
     }
-    
+
     public List<PeerEndpoint> getPeers()
     {
         return peers;
     }
-    
+
     public void setPeers(List<PeerEndpoint> peers)
     {
         this.peers = peers;

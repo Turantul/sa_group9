@@ -24,8 +24,7 @@ public class AudioFilter extends FileFilter
         String extension = getExtension(f);
         if (extension != null)
         {
-            return extension.equals(ogg) || extension.equals(wav) || extension.equals(mp3) || extension.equals(flac)
-                    || extension.equals(wma) || extension.equals(aac);
+            return extension.equals(ogg) || extension.equals(wav) || extension.equals(mp3) || extension.equals(flac) || extension.equals(wma) || extension.equals(aac);
         }
 
         return false;

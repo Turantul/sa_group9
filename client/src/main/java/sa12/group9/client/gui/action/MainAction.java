@@ -20,6 +20,7 @@ import sa12.group9.client.gui.swing.MainFrame;
 import sa12.group9.client.gui.swing.panel.CalculatingPanel;
 import sa12.group9.client.gui.swing.panel.IssuingSearchRequestPanel;
 import sa12.group9.client.gui.swing.panel.MainPanel;
+import sa12.group9.client.gui.swing.panel.ResultPanel;
 import sa12.group9.client.service.ServiceProvider;
 import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.PeerEndpoint;
@@ -87,6 +88,9 @@ public class MainAction implements ActionListener
                     frame.showError("You must select an audio file first!", "No file selected");
                 }
                 break;
+            case ActionCommands.NEW:
+                frame.swapPanel(new MainPanel(this));
+                break;
         }
     }
 
@@ -124,11 +128,11 @@ public class MainAction implements ActionListener
                     {
                         log.info("Waiting for responses...");
                         songs = new ArrayList<FoundInformation>();
-                        
+
                         try
                         {
-                            ServiceProvider.openListeningSocket(MainAction.this);
-    
+                            ServiceProvider.openListeningSocket(MainAction.this, 20);
+
                             log.info("Sending request to peers");
                             int i = 0;
                             for (PeerEndpoint peer : response.getPeers())
@@ -144,7 +148,7 @@ public class MainAction implements ActionListener
                                     log.info("Peer at " + peer.getAddress() + " at port " + peer.getPort() + " could not be reached");
                                 }
                             }
-                            
+
                             if (i == 0)
                             {
                                 log.info("No peer could be reached at all");
@@ -154,35 +158,38 @@ public class MainAction implements ActionListener
                             else
                             {
                                 Thread.sleep(20000);
-                                
+
                                 if (songs.size() == 0)
                                 {
                                     log.info("No answers received.");
-                                    frame.showError("Unfortunately, your search request has not been answered.\nYou can retry your request if you want.", "No answers");
+                                    frame.showError("Unfortunately, your search request has yielded no answers.\nYou can retry your request if you want.", "No answers");
                                     resetPanel();
                                 }
                                 else
                                 {
-                                    Collections.sort(songs, new Comparator<FoundInformation>()
+                                    if (songs.size() > 1)
+                                    {
+                                        Collections.sort(songs, new Comparator<FoundInformation>()
+                                        {
+                                            @Override
+                                            public int compare(FoundInformation o1, FoundInformation o2)
                                             {
-                                                @Override
-                                                public int compare(FoundInformation o1, FoundInformation o2)
+                                                if (o1.getMatch() == o2.getMatch())
                                                 {
-                                                    if (o1.getMatch() == o2.getMatch())
-                                                    {
-                                                        return 0;
-                                                    }
-                                                    else if (o1.getMatch() < o2.getMatch())
-                                                    {
-                                                        return 1;
-                                                    }
-                                                    return -1;
+                                                    return 0;
                                                 }
-                                            });
-                                    
+                                                else if (o1.getMatch() < o2.getMatch())
+                                                {
+                                                    return 1;
+                                                }
+                                                return -1;
+                                            }
+                                        });
+                                    }
+
                                     ServiceProvider.notifySuccess(userId, finger.hashCode(), songs.get(0));
-                                    
-                                    //TODO: show panel
+
+                                    frame.swapPanel(new ResultPanel(MainAction.this, songs.get(0)));
                                 }
                             }
                         }
@@ -210,12 +217,12 @@ public class MainAction implements ActionListener
             }
         };
     }
-    
+
     private void resetPanel()
     {
         frame.swapPanel(new MainPanel(MainAction.this, f.getName()));
     }
-    
+
     public synchronized void receivingCallback(FoundInformation information)
     {
         if (songs != null)

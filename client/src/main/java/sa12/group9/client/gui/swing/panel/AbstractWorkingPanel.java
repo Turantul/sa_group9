@@ -12,7 +12,7 @@ public abstract class AbstractWorkingPanel extends JPanel
 {
     protected ActionListener actlist;
     protected JPanel panel;
-    
+
     protected AbstractWorkingPanel(ActionListener actlist)
     {
         super();
@@ -27,6 +27,6 @@ public abstract class AbstractWorkingPanel extends JPanel
         setBorder(BorderFactory.createLoweredBevelBorder());
         setBackground(new Color(50, 75, 100));
     }
-    
+
     protected abstract void draw();
 }

@@ -14,12 +14,12 @@ import sa12.group9.client.gui.misc.ActionCommands;
 public class MainPanel extends AbstractWorkingPanel
 {
     private JTextField file;
-    
+
     public MainPanel(ActionListener actlist)
     {
         super(actlist);
     }
-    
+
     public MainPanel(ActionListener actlist, String fileName)
     {
         super(actlist);
