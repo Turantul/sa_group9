@@ -8,8 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import sa12.group9.common.beans.LoginRequest;
-import sa12.group9.common.beans.SearchRequest;
-import sa12.group9.common.beans.SearchResponse;
+import sa12.group9.common.beans.SearchIssueRequest;
+import sa12.group9.common.beans.SearchIssueResponse;
+import sa12.group9.common.beans.SuccessRequest;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -32,12 +33,20 @@ public class ClientService
     @Path("issueSearchRequest")
     @Consumes("application/json")
     @Produces("application/json")
-    public SearchResponse newSearch(SearchRequest request)
+    public SearchIssueResponse issueSearchRequest(SearchIssueRequest request)
     {
         //TODO: check coins and log
 
-        SearchResponse response = new SearchResponse();
+        SearchIssueResponse response = new SearchIssueResponse();
         response.setErrorMsg("No peers available!");
         return response;
+    }
+    
+    @POST
+    @Path("notifySuccess")
+    @Consumes("application/json")
+    public void notifySuccess(SuccessRequest request)
+    {
+        //TODO: update coins and log
     }
 }

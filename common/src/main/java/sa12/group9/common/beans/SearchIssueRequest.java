@@ -1,6 +1,6 @@
 package sa12.group9.common.beans;
 
-public class SearchRequest
+public class SearchIssueRequest
 {
     private String userId;
     private int hash;

@@ -2,10 +2,11 @@ package sa12.group9.common.beans;
 
 import java.util.List;
 
-public class SearchResponse
+public class SearchIssueResponse
 {
     private String errorMsg;
     private List<PeerEndpoint> peers;
+    private int ttl;
     
     public String getErrorMsg()
     {
@@ -25,5 +26,15 @@ public class SearchResponse
     public void setPeers(List<PeerEndpoint> peers)
     {
         this.peers = peers;
+    }
+
+    public int getTtl()
+    {
+        return ttl;
+    }
+
+    public void setTtl(int ttl)
+    {
+        this.ttl = ttl;
     }
 }
