@@ -26,17 +26,17 @@ import com.sun.jersey.api.json.JSONConfiguration;
 
 public class ServiceProvider
 {
-    private static String serverUrl = "http://localhost:8080/swazam-server-1.0-SNAPSHOT/client/";
-    private static float herz = 44100;
-    private static int listeningPort = 123456;
+    private String serverUrl;
+    private float herz;
+    private int listeningPort;
 
-    public static Fingerprint generateFingerprint(String path) throws IOException
+    public Fingerprint generateFingerprint(String path) throws IOException
     {
         FingerprintSystem system = new FingerprintSystem(herz);
         return system.fingerprint(Files.readAllBytes(Paths.get(path)));
     }
 
-    public static String loginAtServer(String username, String password)
+    public String loginAtServer(String username, String password)
     {
         LoginRequest request = new LoginRequest();
         request.setUsername(username);
@@ -52,7 +52,7 @@ public class ServiceProvider
         return response;
     }
 
-    public static SearchIssueResponse generateSearchRequest(String userId, int hash)
+    public SearchIssueResponse generateSearchRequest(String userId, int hash)
     {
         SearchIssueRequest request = new SearchIssueRequest();
         request.setUserId(userId);
@@ -68,7 +68,7 @@ public class ServiceProvider
         return response;
     }
 
-    public static void notifySuccess(String userId, int hash, FoundInformation information)
+    public void notifySuccess(String userId, int hash, FoundInformation information)
     {
         SuccessRequest request = new SuccessRequest();
         request.setUserId(userId);
@@ -83,7 +83,7 @@ public class ServiceProvider
         resource.type(MediaType.APPLICATION_JSON).post(request);
     }
 
-    public static void openListeningSocket(final MainAction mainAction, int seconds) throws IOException
+    public void openListeningSocket(final MainAction mainAction, int seconds) throws IOException
     {
         ServerSocket serverSocket = new ServerSocket(listeningPort);
 
@@ -120,7 +120,7 @@ public class ServiceProvider
         serverSocket.close();
     }
 
-    public static void sendSearchRequest(PeerEndpoint peer, Fingerprint finger) throws IOException
+    public void sendSearchRequest(PeerEndpoint peer, Fingerprint finger) throws IOException
     {
         Socket socket = new Socket(peer.getAddress(), peer.getPort());
 
@@ -128,5 +128,20 @@ public class ServiceProvider
         // ttl
 
         socket.close();
+    }
+
+    public void setServerUrl(String serverUrl)
+    {
+        this.serverUrl = serverUrl;
+    }
+
+    public void setHerz(float herz)
+    {
+        this.herz = herz;
+    }
+
+    public void setListeningPort(int listeningPort)
+    {
+        this.listeningPort = listeningPort;
     }
 }

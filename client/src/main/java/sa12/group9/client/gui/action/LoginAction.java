@@ -3,18 +3,25 @@ package sa12.group9.client.gui.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.swing.LoginFrame;
 import sa12.group9.client.service.ServiceProvider;
 
 public class LoginAction implements ActionListener
 {
+    private static Log log = LogFactory.getLog(LoginAction.class);
+
     private LoginFrame frame;
     private MainAction actlist;
+    private ServiceProvider provider;
 
-    public LoginAction(MainAction actlist)
+    public LoginAction(MainAction actlist, ServiceProvider provider)
     {
         this.actlist = actlist;
+        this.provider = provider;
         frame = new LoginFrame(this);
     }
 
@@ -25,17 +32,25 @@ public class LoginAction implements ActionListener
         {
             if (frame.checkInput())
             {
-                String id = ServiceProvider.loginAtServer(frame.getUsername(), frame.getPassword());
+                try
+                {
+                    String id = provider.loginAtServer(frame.getUsername(), frame.getPassword());
 
-                if (id != null)
-                {
-                    actlist.loginSuccessful(id);
-                    frame.dispose();
+                    if (id != null)
+                    {
+                        actlist.loginSuccessful(id);
+                        frame.dispose();
+                    }
+                    else
+                    {
+                        frame.showError("Unknown username/password combination!");
+                        frame.clearPW();
+                    }
                 }
-                else
+                catch (Exception e2)
                 {
-                    frame.showError("Unknown username/password combination!");
-                    frame.clearPW();
+                    log.error("There was an error connecting to the server");
+                    frame.showError("The server could not be reached.\nPlease try again later.");
                 }
             }
         }

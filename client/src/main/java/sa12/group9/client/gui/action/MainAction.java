@@ -37,12 +37,19 @@ public class MainAction implements ActionListener
 
     private MainFrame frame;
     private Thread processing;
+    
+    private ServiceProvider provider;
 
     public MainAction()
     {
         log.debug("Creating MainAction");
 
         frame = new MainFrame(this);
+    }
+    
+    public void setProvider(ServiceProvider provider)
+    {
+        this.provider = provider;
     }
 
     @Override
@@ -55,7 +62,7 @@ public class MainAction implements ActionListener
                 break;
 
             case ActionCommands.LOGIN:
-                new LoginAction(this);
+                new LoginAction(this, provider);
                 break;
 
             case ActionCommands.CHOOSEFILE:
@@ -113,11 +120,11 @@ public class MainAction implements ActionListener
                 {
                     log.info("Calculating fingerprint");
                     frame.swapPanel(new CalculatingPanel(MainAction.this));
-                    Fingerprint finger = ServiceProvider.generateFingerprint(f.getAbsolutePath());
+                    Fingerprint finger = provider.generateFingerprint(f.getAbsolutePath());
 
                     log.info("Issuing server request");
                     frame.swapPanel(new IssuingSearchRequestPanel(MainAction.this));
-                    SearchIssueResponse response = ServiceProvider.generateSearchRequest(userId, finger.hashCode());
+                    SearchIssueResponse response = provider.generateSearchRequest(userId, finger.hashCode());
                     if (response.getErrorMsg() != null && !response.getErrorMsg().equals(""))
                     {
                         log.info("Request could not be issued because: " + response.getErrorMsg());
@@ -131,7 +138,7 @@ public class MainAction implements ActionListener
 
                         try
                         {
-                            ServiceProvider.openListeningSocket(MainAction.this, 20);
+                            provider.openListeningSocket(MainAction.this, 20);
 
                             log.info("Sending request to peers");
                             int i = 0;
@@ -139,7 +146,7 @@ public class MainAction implements ActionListener
                             {
                                 try
                                 {
-                                    ServiceProvider.sendSearchRequest(peer, finger);
+                                    provider.sendSearchRequest(peer, finger);
                                     log.info("Request sent to peer at " + peer.getAddress() + " at port " + peer.getPort());
                                     i++;
                                 }
@@ -187,7 +194,7 @@ public class MainAction implements ActionListener
                                         });
                                     }
 
-                                    ServiceProvider.notifySuccess(userId, finger.hashCode(), songs.get(0));
+                                    provider.notifySuccess(userId, finger.hashCode(), songs.get(0));
 
                                     frame.swapPanel(new ResultPanel(MainAction.this, songs.get(0)));
                                 }
