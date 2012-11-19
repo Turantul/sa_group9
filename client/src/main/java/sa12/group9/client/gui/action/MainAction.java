@@ -21,6 +21,7 @@ import sa12.group9.client.gui.swing.panel.CalculatingPanel;
 import sa12.group9.client.gui.swing.panel.IssuingSearchRequestPanel;
 import sa12.group9.client.gui.swing.panel.MainPanel;
 import sa12.group9.client.gui.swing.panel.ResultPanel;
+import sa12.group9.client.service.ICallback;
 import sa12.group9.client.service.IPeerHandler;
 import sa12.group9.client.service.IServerHandler;
 import sa12.group9.common.beans.FoundInformation;
@@ -29,7 +30,7 @@ import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.media.IFingerprintService;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
-public class MainAction implements ActionListener
+public class MainAction implements ActionListener, ICallback
 {
     private static Log log = LogFactory.getLog(MainAction.class);
 
@@ -229,6 +230,7 @@ public class MainAction implements ActionListener
         frame.swapPanel(new MainPanel(MainAction.this, f.getName()));
     }
 
+    @Override
     public synchronized void receivingCallback(FoundInformation information)
     {
         if (songs != null)

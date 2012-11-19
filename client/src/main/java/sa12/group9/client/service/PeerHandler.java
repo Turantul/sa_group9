@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import sa12.group9.client.gui.action.MainAction;
 import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.PeerEndpoint;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
@@ -13,7 +12,7 @@ public class PeerHandler implements IPeerHandler
 {
     private int listeningPort;
 
-    public void openListeningSocket(final MainAction mainAction, int seconds) throws IOException
+    public void openListeningSocket(final ICallback mainAction, int seconds) throws IOException
     {
         ServerSocket serverSocket = new ServerSocket(listeningPort);
 
@@ -50,7 +49,7 @@ public class PeerHandler implements IPeerHandler
         serverSocket.close();
     }
 
-    public void sendSearchRequest(PeerEndpoint peer, Fingerprint finger) throws IOException
+    public void sendSearchRequest(PeerEndpoint peer, Fingerprint fingerprint) throws IOException
     {
         Socket socket = new Socket(peer.getAddress(), peer.getPort());
 
