@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 import sa12.group9.client.gui.misc.ActionCommands;
 import sa12.group9.client.gui.swing.LoginFrame;
-import sa12.group9.client.service.ServiceProvider;
+import sa12.group9.client.service.IServerHandler;
 
 public class LoginAction implements ActionListener
 {
@@ -16,9 +16,9 @@ public class LoginAction implements ActionListener
 
     private LoginFrame frame;
     private MainAction actlist;
-    private ServiceProvider provider;
+    private IServerHandler provider;
 
-    public LoginAction(MainAction actlist, ServiceProvider provider)
+    public LoginAction(MainAction actlist, IServerHandler provider)
     {
         this.actlist = actlist;
         this.provider = provider;

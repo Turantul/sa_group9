@@ -13,14 +13,22 @@
   <!-- ********************************************************************************************** -->
   <!-- GUI-Master-Beans -->
   <!-- ********************************************************************************************** -->
-  <bean id="mainAction" class="${root}.gui.action.MainAction">
-    <property name="provider" ref="serviceProvider" />
+  <bean id="mainAction" class="${root}.client.gui.action.MainAction">
+    <property name="serverHandler" ref="serverHandler" />
+    <property name="peerHandler" ref="peerHandler" />
+    <property name="fingerprintService" ref="fingerprintService" />
   </bean>
 
-  <bean id="serviceProvider" class="${root}.service.ServiceProvider">
+  <bean id="serverHandler" class="${root}.client.service.ServerHandler">
     <property name="serverUrl" value="${serverUrl}" />
-    <property name="herz" value="${herz}" />
+  </bean>
+
+  <bean id="peerHandler" class="${root}.client.service.PeerHandler">
     <property name="listeningPort" value="${listeningPort}" />
+  </bean>
+
+  <bean id="fingerprintService" class="${root}.common.media.FingerprintService">
+    <property name="herz" value="${herz}" />
   </bean>
 
 </beans>

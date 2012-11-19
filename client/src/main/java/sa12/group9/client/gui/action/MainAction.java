@@ -21,10 +21,12 @@ import sa12.group9.client.gui.swing.panel.CalculatingPanel;
 import sa12.group9.client.gui.swing.panel.IssuingSearchRequestPanel;
 import sa12.group9.client.gui.swing.panel.MainPanel;
 import sa12.group9.client.gui.swing.panel.ResultPanel;
-import sa12.group9.client.service.ServiceProvider;
+import sa12.group9.client.service.IPeerHandler;
+import sa12.group9.client.service.IServerHandler;
 import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.SearchIssueResponse;
+import sa12.group9.common.media.IFingerprintService;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class MainAction implements ActionListener
@@ -38,7 +40,9 @@ public class MainAction implements ActionListener
     private MainFrame frame;
     private Thread processing;
     
-    private ServiceProvider provider;
+    private IServerHandler serverHandler;
+    private IPeerHandler peerHandler;
+    private IFingerprintService fingerprintService;
 
     public MainAction()
     {
@@ -47,11 +51,6 @@ public class MainAction implements ActionListener
         frame = new MainFrame(this);
     }
     
-    public void setProvider(ServiceProvider provider)
-    {
-        this.provider = provider;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -62,7 +61,7 @@ public class MainAction implements ActionListener
                 break;
 
             case ActionCommands.LOGIN:
-                new LoginAction(this, provider);
+                new LoginAction(this, serverHandler);
                 break;
 
             case ActionCommands.CHOOSEFILE:
@@ -120,11 +119,11 @@ public class MainAction implements ActionListener
                 {
                     log.info("Calculating fingerprint");
                     frame.swapPanel(new CalculatingPanel(MainAction.this));
-                    Fingerprint finger = provider.generateFingerprint(f.getAbsolutePath());
+                    Fingerprint finger = fingerprintService.generateFingerprint(f.getAbsolutePath());
 
                     log.info("Issuing server request");
                     frame.swapPanel(new IssuingSearchRequestPanel(MainAction.this));
-                    SearchIssueResponse response = provider.generateSearchRequest(userId, finger.hashCode());
+                    SearchIssueResponse response = serverHandler.generateSearchRequest(userId, finger.hashCode());
                     if (response.getErrorMsg() != null && !response.getErrorMsg().equals(""))
                     {
                         log.info("Request could not be issued because: " + response.getErrorMsg());
@@ -138,7 +137,7 @@ public class MainAction implements ActionListener
 
                         try
                         {
-                            provider.openListeningSocket(MainAction.this, 20);
+                            peerHandler.openListeningSocket(MainAction.this, 20);
 
                             log.info("Sending request to peers");
                             int i = 0;
@@ -146,7 +145,7 @@ public class MainAction implements ActionListener
                             {
                                 try
                                 {
-                                    provider.sendSearchRequest(peer, finger);
+                                    peerHandler.sendSearchRequest(peer, finger);
                                     log.info("Request sent to peer at " + peer.getAddress() + " at port " + peer.getPort());
                                     i++;
                                 }
@@ -194,7 +193,7 @@ public class MainAction implements ActionListener
                                         });
                                     }
 
-                                    provider.notifySuccess(userId, finger.hashCode(), songs.get(0));
+                                    serverHandler.notifySuccess(userId, finger.hashCode(), songs.get(0));
 
                                     frame.swapPanel(new ResultPanel(MainAction.this, songs.get(0)));
                                 }
@@ -236,5 +235,20 @@ public class MainAction implements ActionListener
         {
             songs.add(information);
         }
+    }
+
+    public void setFingerprintService(IFingerprintService fingerprintService)
+    {
+        this.fingerprintService = fingerprintService;
+    }
+
+    public void setServerHandler(IServerHandler serverHandler)
+    {
+        this.serverHandler = serverHandler;
+    }
+
+    public void setPeerHandler(IPeerHandler peerHandler)
+    {
+        this.peerHandler = peerHandler;
     }
 }
