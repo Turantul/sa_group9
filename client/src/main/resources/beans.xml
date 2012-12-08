@@ -10,10 +10,7 @@
     </property>
   </bean>
 
-  <!-- ********************************************************************************************** -->
-  <!-- GUI-Master-Beans -->
-  <!-- ********************************************************************************************** -->
-  <bean id="mainAction" class="${root}.client.gui.action.MainAction">
+  <bean id="mainAction" class="${root}.client.gui.action.MainAction" lazy-init="true">
     <property name="serverHandler" ref="serverHandler" />
     <property name="peerHandler" ref="peerHandler" />
     <property name="fingerprintService" ref="fingerprintService" />

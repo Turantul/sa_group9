@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath:/config.properties</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- This is a datasource for usage with h2 in server mode -->
+  <bean id="org.h2.tools.Server" class="org.h2.tools.Server" factory-method="createTcpServer" init-method="start"
+    destroy-method="stop" lazy-init="true">
+    <constructor-arg value="-tcp,-tcpAllowOthers,true,-tcpPort,8043" />
+  </bean>
+
+  <!-- This datasource is for usage with the h2 database in EMBEDDED mode All H2 database files are loacted in src/main/resources/data. 
+    On executing Maven (e.g. compile) these files are copied to target/classes/data/base. This strategy has the advantage to 
+    test with a clean database, by doing mvn clean. -->
+  <bean id="H2DataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driver}" />
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.user}" />
+    <property name="password" value="${jdbc.password}" />
+    <property name="connectionProperties">
+      <props>
+        <prop key="shutdown">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <!-- This Transaction Manager is needed for SQL Transactions: it uses a SQL Datasource (see above) -->
+  <bean id="TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="H2DataSource" />
+  </bean>
+
+</beans>

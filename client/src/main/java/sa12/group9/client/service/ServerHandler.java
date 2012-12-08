@@ -18,16 +18,22 @@ public class ServerHandler implements IServerHandler
 {
     private String serverUrl;
 
+    private Client client;
+
+    public ServerHandler()
+    {
+        ClientConfig config = new DefaultClientConfig();
+        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
+
+        client = Client.create(config);
+    }
+
     public String loginAtServer(String username, String password)
     {
         LoginRequest request = new LoginRequest();
         request.setUsername(username);
         request.setPassword(password);
 
-        ClientConfig config = new DefaultClientConfig();
-        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
-
-        Client client = Client.create(config);
         WebResource resource = client.resource(serverUrl + "login");
         String response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(String.class, request);
 
@@ -40,10 +46,6 @@ public class ServerHandler implements IServerHandler
         request.setUserId(userId);
         request.setHash(hash);
 
-        ClientConfig config = new DefaultClientConfig();
-        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
-
-        Client client = Client.create(config);
         WebResource resource = client.resource(serverUrl + "issueSearchRequest");
         SearchIssueResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(SearchIssueResponse.class, request);
 
@@ -57,10 +59,6 @@ public class ServerHandler implements IServerHandler
         request.setHash(hash);
         request.setInformation(information);
 
-        ClientConfig config = new DefaultClientConfig();
-        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
-
-        Client client = Client.create(config);
         WebResource resource = client.resource(serverUrl + "notifySuccess");
         resource.type(MediaType.APPLICATION_JSON).post(request);
     }

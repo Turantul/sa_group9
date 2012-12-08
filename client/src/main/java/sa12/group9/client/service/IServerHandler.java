@@ -13,7 +13,7 @@ public interface IServerHandler
      * 
      * @param username
      * @param password
-     * @return unique ID for identification in further actions
+     * @return unique ID for identification in further actions or null if login failed
      */
     String loginAtServer(String username, String password);
 

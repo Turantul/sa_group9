@@ -7,6 +7,7 @@ public class SearchIssueResponse
     private String errorMsg;
     private List<PeerEndpoint> peers;
     private int ttl;
+    private int secondsToWait;
 
     public String getErrorMsg()
     {
@@ -36,5 +37,15 @@ public class SearchIssueResponse
     public void setTtl(int ttl)
     {
         this.ttl = ttl;
+    }
+
+    public int getSecondsToWait()
+    {
+        return secondsToWait;
+    }
+
+    public void setSecondsToWait(int secondsToWait)
+    {
+        this.secondsToWait = secondsToWait;
     }
 }
