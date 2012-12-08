@@ -1,7 +1,5 @@
 package sa12.group9.server.rest;
 
-import java.util.UUID;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,14 +24,13 @@ public class ClientService
     @POST
     @Path("login")
     @Consumes("application/json")
-    @Produces("application/json")
-    public UUID login(LoginRequest request)
+    public boolean login(LoginRequest request)
     {
         log.info("Got login request for " + request.getUsername());
 
         // TODO: check and log
 
-        return UUID.randomUUID();
+        return true;
     }
 
     @POST
@@ -42,7 +39,7 @@ public class ClientService
     @Produces("application/json")
     public SearchIssueResponse issueSearchRequest(SearchIssueRequest request)
     {
-        log.info("Got search issue request for " + request.getUserId());
+        log.info("Got search issue request for " + request.getUsername());
 
         // TODO: check coins and log
 
@@ -56,7 +53,7 @@ public class ClientService
     @Consumes("application/json")
     public void notifySuccess(SuccessRequest request)
     {
-        log.info("Got success notification from " + request.getUserId());
+        log.info("Got success notification from " + request.getUsername());
 
         // TODO: update coins and log
     }

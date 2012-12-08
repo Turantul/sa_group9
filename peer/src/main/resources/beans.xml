@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="locations">
@@ -8,6 +9,30 @@
         <value>classpath:/config.properties</value>
       </list>
     </property>
+  </bean>
+
+  <bean id="kernel" class="${root}.peer.service.Kernel" init-method="initialize">
+    <property name="serverHandler" ref="serverHandler" />
+    <property name="peerHandler" ref="peerHandler" />
+    <property name="fingerprintService" ref="fingerprintService" />
+    <property name="username">
+      <util:constant static-field="${root}.peer.Launcher.USERNAME" />
+    </property>
+    <property name="password">
+      <util:constant static-field="${root}.peer.Launcher.PASSWORD" />
+    </property>
+  </bean>
+
+  <bean id="serverHandler" class="${root}.peer.service.ServerHandler">
+    <property name="serverUrl" value="${serverUrl}" />
+  </bean>
+
+  <bean id="peerHandler" class="${root}.peer.service.PeerHandler">
+    <property name="listeningPort" value="${listeningPort}" />
+  </bean>
+
+  <bean id="fingerprintService" class="${root}.common.media.FingerprintService">
+    <property name="herz" value="${herz}" />
   </bean>
 
   <!-- This is a datasource for usage with h2 in server mode -->

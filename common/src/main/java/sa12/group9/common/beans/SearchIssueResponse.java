@@ -1,11 +1,9 @@
 package sa12.group9.common.beans;
 
-import java.util.List;
-
 public class SearchIssueResponse
 {
     private String errorMsg;
-    private List<PeerEndpoint> peers;
+    private PeerList peers;
     private int ttl;
     private int secondsToWait;
 
@@ -19,12 +17,12 @@ public class SearchIssueResponse
         this.errorMsg = errorMsg;
     }
 
-    public List<PeerEndpoint> getPeers()
+    public PeerList getPeers()
     {
         return peers;
     }
 
-    public void setPeers(List<PeerEndpoint> peers)
+    public void setPeers(PeerList peers)
     {
         this.peers = peers;
     }

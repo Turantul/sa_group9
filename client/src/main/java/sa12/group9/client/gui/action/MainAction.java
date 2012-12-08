@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.JFileChooser;
 
@@ -34,7 +35,8 @@ public class MainAction implements ActionListener, ICallback
 {
     private static Log log = LogFactory.getLog(MainAction.class);
 
-    private String userId;
+    private String username;
+    private String password;
     private File f;
     private List<FoundInformation> songs;
 
@@ -101,11 +103,13 @@ public class MainAction implements ActionListener, ICallback
         }
     }
 
-    public void loginSuccessful(String id)
+    public void loginSuccessful(String username, String password)
     {
-        log.info("User logged in with ID: " + id);
-
-        userId = id;
+        log.info("User logged in");
+        
+        this.username = username;
+        this.password = password;
+        
         frame.swapPanel(new MainPanel(this));
     }
 
@@ -121,10 +125,11 @@ public class MainAction implements ActionListener, ICallback
                     log.info("Calculating fingerprint");
                     frame.swapPanel(new CalculatingPanel(MainAction.this));
                     Fingerprint finger = fingerprintService.generateFingerprint(f.getAbsolutePath());
+                    String id = UUID.randomUUID().toString();
 
                     log.info("Issuing server request");
                     frame.swapPanel(new IssuingSearchRequestPanel(MainAction.this));
-                    SearchIssueResponse response = serverHandler.generateSearchRequest(userId, finger.hashCode());
+                    SearchIssueResponse response = serverHandler.generateSearchRequest(username, password, id, finger.hashCode());
                     if (response.getErrorMsg() != null && !response.getErrorMsg().equals(""))
                     {
                         log.info("Request could not be issued because: " + response.getErrorMsg());
@@ -142,7 +147,7 @@ public class MainAction implements ActionListener, ICallback
 
                             log.info("Sending request to peers");
                             int i = 0;
-                            for (PeerEndpoint peer : response.getPeers())
+                            for (PeerEndpoint peer : response.getPeers().getPeers())
                             {
                                 try
                                 {
@@ -194,7 +199,7 @@ public class MainAction implements ActionListener, ICallback
                                         });
                                     }
 
-                                    serverHandler.notifySuccess(userId, finger.hashCode(), songs.get(0));
+                                    serverHandler.notifySuccess(username, password, id, songs.get(0));
 
                                     frame.swapPanel(new ResultPanel(MainAction.this, songs.get(0)));
                                 }
@@ -235,7 +240,7 @@ public class MainAction implements ActionListener, ICallback
     {
         if (songs != null)
         {
-            log.info("Response received from :" + information.getPeerUsername());
+            log.info("Response received from: " + information.getPeerUsername());
             songs.add(information);
         }
     }

@@ -28,23 +28,25 @@ public class ServerHandler implements IServerHandler
         client = Client.create(config);
     }
 
-    public String loginAtServer(String username, String password)
+    public boolean loginAtServer(String username, String password)
     {
         LoginRequest request = new LoginRequest();
         request.setUsername(username);
         request.setPassword(password);
 
         WebResource resource = client.resource(serverUrl + "login");
-        String response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(String.class, request);
+        boolean response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(Boolean.class, request);
 
         return response;
     }
 
-    public SearchIssueResponse generateSearchRequest(String userId, int hash)
+    public SearchIssueResponse generateSearchRequest(String username, String password, String id, int hash)
     {
         SearchIssueRequest request = new SearchIssueRequest();
-        request.setUserId(userId);
+        request.setId(id);
         request.setHash(hash);
+        request.setUsername(username);
+        request.setPassword(password);
 
         WebResource resource = client.resource(serverUrl + "issueSearchRequest");
         SearchIssueResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(SearchIssueResponse.class, request);
@@ -52,12 +54,13 @@ public class ServerHandler implements IServerHandler
         return response;
     }
 
-    public void notifySuccess(String userId, int hash, FoundInformation information)
+    public void notifySuccess(String username, String password, String id, FoundInformation information)
     {
         SuccessRequest request = new SuccessRequest();
-        request.setUserId(userId);
-        request.setHash(hash);
+        request.setId(id);
         request.setInformation(information);
+        request.setUsername(username);
+        request.setPassword(password);
 
         WebResource resource = client.resource(serverUrl + "notifySuccess");
         resource.type(MediaType.APPLICATION_JSON).post(request);

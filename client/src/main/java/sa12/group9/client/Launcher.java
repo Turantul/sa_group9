@@ -1,4 +1,4 @@
-package sa12.group9.client.gui;
+package sa12.group9.client;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

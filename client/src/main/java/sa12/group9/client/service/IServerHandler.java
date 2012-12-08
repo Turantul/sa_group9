@@ -13,25 +13,28 @@ public interface IServerHandler
      * 
      * @param username
      * @param password
-     * @return unique ID for identification in further actions or null if login failed
+     * @return true if successful
      */
-    String loginAtServer(String username, String password);
+    boolean loginAtServer(String username, String password);
 
     /**
      * Reports a new search request to the server
      * 
-     * @param userId of the current session
+     * @param username
+     * @param password
+     * @param id id of the request
      * @param hash of the file to be looked up
      * @return Response containing the list of peers to be contacted
      */
-    SearchIssueResponse generateSearchRequest(String userId, int hash);
+    SearchIssueResponse generateSearchRequest(String username, String password, String id, int hash);
 
     /**
      * Closes a search request by notifying about its success
      * 
-     * @param userId of the current session
-     * @param hash of the file which was looked up
+     * @param username
+     * @param password
+     * @param id of the lookup request
      * @param information holding information about the peer which found the song
      */
-    void notifySuccess(String userId, int hash, FoundInformation information);
+    void notifySuccess(String username, String password, String id, FoundInformation information);
 }

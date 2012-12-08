@@ -34,11 +34,11 @@ public class LoginAction implements ActionListener
             {
                 try
                 {
-                    String id = provider.loginAtServer(frame.getUsername(), frame.getPassword());
+                    boolean success = provider.loginAtServer(frame.getUsername(), frame.getPassword());
 
-                    if (id != null)
+                    if (success)
                     {
-                        actlist.loginSuccessful(id);
+                        actlist.loginSuccessful(frame.getUsername(), frame.getPassword());
                         frame.dispose();
                     }
                     else

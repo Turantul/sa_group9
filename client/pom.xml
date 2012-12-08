@@ -23,7 +23,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>sa12.group9.client.gui.Launcher</mainClass>
+              <mainClass>sa12.group9.client.Launcher</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

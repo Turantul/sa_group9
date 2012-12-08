@@ -2,8 +2,8 @@ package sa12.group9.common.beans;
 
 public class LoginRequest
 {
-    private String username;
-    private String password;
+    protected String username;
+    protected String password;
 
     public String getUsername()
     {

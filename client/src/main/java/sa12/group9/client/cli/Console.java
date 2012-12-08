@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -27,11 +27,8 @@ public class Console implements ICallback
     private String password;
     private String location;
 
-    @Autowired
     private IFingerprintService fingerprintService;
-    @Autowired
     private IServerHandler serverHandler;
-    @Autowired
     private IPeerHandler peerHandler;
 
     public static void main(String[] args)
@@ -64,16 +61,17 @@ public class Console implements ICallback
     {
         try
         {
-            String id = serverHandler.loginAtServer(username, password);
+            boolean success = serverHandler.loginAtServer(username, password);
 
-            if (id != null)
+            if (success)
             {
                 try
                 {
                     System.out.println("Calculating fingerprint...");
                     Fingerprint finger = fingerprintService.generateFingerprint(location);
+                    String id = UUID.randomUUID().toString();
 
-                    SearchIssueResponse response = serverHandler.generateSearchRequest(id, finger.hashCode());
+                    SearchIssueResponse response = serverHandler.generateSearchRequest(username, password, id, finger.hashCode());
                     if (response.getErrorMsg() != null && !response.getErrorMsg().equals(""))
                     {
                         System.out.println("There was a problem creating your search!\nReason: " + response.getErrorMsg());
@@ -87,7 +85,7 @@ public class Console implements ICallback
                             peerHandler.openListeningSocket(this, response.getSecondsToWait());
 
                             int i = 0;
-                            for (PeerEndpoint peer : response.getPeers())
+                            for (PeerEndpoint peer : response.getPeers().getPeers())
                             {
                                 try
                                 {
@@ -135,7 +133,7 @@ public class Console implements ICallback
                                         });
                                     }
 
-                                    serverHandler.notifySuccess(id, finger.hashCode(), songs.get(0));
+                                    serverHandler.notifySuccess(username, password, id, songs.get(0));
 
                                     // TODO print songs.get(0) to console
                                 }
@@ -173,7 +171,7 @@ public class Console implements ICallback
     {
         if (songs != null)
         {
-            System.out.println("Response received from :" + information.getPeerUsername());
+            System.out.println("Response received from: " + information.getPeerUsername());
             songs.add(information);
         }
     }
