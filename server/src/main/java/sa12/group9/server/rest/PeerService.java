@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerList;
-import sa12.group9.common.beans.SearchIssueRequest;
+import sa12.group9.common.beans.IsAliveNotification;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -36,7 +36,7 @@ public class PeerService
     @Path("getNeighbors")
     @Consumes("application/json")
     @Produces("application/json")
-    public PeerList getNeighbors(SearchIssueRequest request)
+    public PeerList getNeighbors(LoginRequest request)
     {
         log.info("Got neigbor request for " + request.getUsername());
 
@@ -44,5 +44,15 @@ public class PeerService
 
         PeerList response = new PeerList();
         return response;
+    }
+    
+    @POST
+    @Path("isAlive")
+    @Consumes("application/json")
+    public void isAlive(IsAliveNotification notification)
+    {
+        log.debug("Got isAlive from " + notification.getUsername());
+
+        // TODO: mark as alive
     }
 }

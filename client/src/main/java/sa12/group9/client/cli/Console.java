@@ -35,7 +35,7 @@ public class Console implements ICallback
     {
         if (args.length != 3)
         {
-            System.out.println("Wrong usage: <username> <password> <locationToFile>");
+            System.out.println("Wrong usage: <username> <password> <locationOfFile>");
         }
         else
         {
@@ -94,7 +94,7 @@ public class Console implements ICallback
                                 }
                                 catch (IOException e)
                                 {
-                                    System.out.println("Peer at " + peer.getAddress() + " at port " + peer.getPort() + " could not be reached.");
+                                    System.out.println("Peer at " + peer.getAddress() + " at port " + peer.getListeningPort() + " could not be reached.");
                                 }
                             }
 

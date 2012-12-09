@@ -13,13 +13,17 @@
 
   <bean id="kernel" class="${root}.peer.service.Kernel" init-method="initialize">
     <property name="serverHandler" ref="serverHandler" />
-    <property name="peerHandler" ref="peerHandler" />
-    <property name="fingerprintService" ref="fingerprintService" />
+    <property name="keepAliveOutgoing" ref="keepAliveOutgoing" />
+    <property name="keepAliveIncoming" ref="keepAliveIncoming" />
+    <property name="management" ref="management" />
     <property name="username">
       <util:constant static-field="${root}.peer.Launcher.USERNAME" />
     </property>
     <property name="password">
       <util:constant static-field="${root}.peer.Launcher.PASSWORD" />
+    </property>
+    <property name="listeningPort">
+      <util:constant static-field="${root}.peer.Launcher.LISTENINGPORT" />
     </property>
   </bean>
 
@@ -27,8 +31,20 @@
     <property name="serverUrl" value="${serverUrl}" />
   </bean>
 
-  <bean id="peerHandler" class="${root}.peer.service.PeerHandler">
-    <property name="listeningPort" value="${listeningPort}" />
+  <bean id="keepAliveOutgoing" class="${root}.peer.service.thread.KeepAliveOutgoingThread">
+    <property name="serverHandler" ref="serverHandler" />
+  </bean>
+
+  <bean id="keepAliveIncoming" class="${root}.peer.service.thread.KeepAliveIncomingThread">
+    <property name="keepAlivePort">
+      <util:constant static-field="${root}.peer.Launcher.KEEPALIVEPORT" />
+    </property>
+  </bean>
+
+  <bean id="management" class="${root}.peer.service.thread.ManagementThread">
+    <property name="managementPort">
+      <util:constant static-field="${root}.peer.Launcher.MANAGEMENTPORT" />
+    </property>
   </bean>
 
   <bean id="fingerprintService" class="${root}.common.media.FingerprintService">

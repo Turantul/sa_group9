@@ -1,20 +1,9 @@
 package sa12.group9.common.beans;
 
-public class PeerEndpoint
+public class IsAliveNotification extends LoginRequest
 {
-    private String address;
     private int listeningPort;
     private int keepAlivePort;
-
-    public String getAddress()
-    {
-        return address;
-    }
-
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
 
     public int getListeningPort()
     {

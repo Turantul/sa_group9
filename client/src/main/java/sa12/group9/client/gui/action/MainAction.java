@@ -152,12 +152,12 @@ public class MainAction implements ActionListener, ICallback
                                 try
                                 {
                                     peerHandler.sendSearchRequest(peer, finger);
-                                    log.info("Request sent to peer at " + peer.getAddress() + " at port " + peer.getPort());
+                                    log.info("Request sent to peer at " + peer.getAddress() + " at port " + peer.getListeningPort());
                                     i++;
                                 }
                                 catch (IOException e)
                                 {
-                                    log.info("Peer at " + peer.getAddress() + " at port " + peer.getPort() + " could not be reached");
+                                    log.info("Peer at " + peer.getAddress() + " at port " + peer.getListeningPort() + " could not be reached");
                                 }
                             }
 

@@ -43,7 +43,7 @@ public class LoginAction implements ActionListener
                     }
                     else
                     {
-                        frame.showError("Unknown username/password combination!");
+                        frame.showError("Invalid username/password combination!");
                         frame.clearPW();
                     }
                 }

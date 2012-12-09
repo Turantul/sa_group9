@@ -51,7 +51,7 @@ public class PeerHandler implements IPeerHandler
 
     public void sendSearchRequest(PeerEndpoint peer, Fingerprint fingerprint) throws IOException
     {
-        Socket socket = new Socket(peer.getAddress(), peer.getPort());
+        Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
 
         // TODO: send out request with fingerprint, client callback address and
         // ttl
