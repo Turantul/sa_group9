@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
@@ -53,6 +54,19 @@ public class ServerHandler implements IServerHandler
         List<PeerEndpoint> peers = Collections.synchronizedList(response.getPeers());
 
         return peers;
+    }
+    
+    @Override
+    public void isAlive(String username, String password, int listeningPort, int keepAlivePort)
+    {
+        IsAliveNotification request = new IsAliveNotification();
+        request.setUsername(username);
+        request.setPassword(password);
+        request.setListeningPort(listeningPort);
+        request.setKeepAlivePort(keepAlivePort);
+
+        WebResource resource = client.resource(serverUrl + "isAlive");
+        resource.type(MediaType.APPLICATION_JSON).post(request);
     }
     
     public void setServerUrl(String serverUrl)

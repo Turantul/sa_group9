@@ -26,4 +26,14 @@ public interface IServerHandler
      * @return list of peers (may be empty)
      */
     List<PeerEndpoint> getNeighbors(String username, String password);
+    
+    /**
+     * Notifies about the availability
+     * 
+     * @param username
+     * @param password
+     * @param listeningPort
+     * @param keepAlivePort
+     */
+    void isAlive(String username, String password, int listeningPort, int keepAlivePort);
 }

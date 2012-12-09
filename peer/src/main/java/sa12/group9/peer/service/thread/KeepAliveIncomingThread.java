@@ -7,7 +7,7 @@ public class KeepAliveIncomingThread extends AliveThread
     @Override
     public void run()
     {
-        // TODO listen for keepAlives and maintain neighbor list (synchronized)
+        // TODO: listen for keepAlives and maintain neighbor list (synchronized)
     }
 
     public void setKeepAlivePort(int keepAlivePort)

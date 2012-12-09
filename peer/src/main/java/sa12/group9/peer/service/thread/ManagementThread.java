@@ -7,7 +7,7 @@ public class ManagementThread extends Thread
     @Override
     public void run()
     {
-        // TODO listen for command line actions
+        // TODO: listen for command line actions
     }
 
     public void setManagementPort(int managementPort)

@@ -27,7 +27,7 @@ public class PeerService
     {
         log.info("Got login request for " + request.getUsername());
 
-        // TODO: check and log
+        // TODO: check
 
         return true;
     }
