@@ -1,6 +1,8 @@
 package sa12.group9.common.beans;
 
-public class FoundInformation extends SongMetadata
+import java.io.Serializable;
+
+public class FoundInformation extends SongMetadata implements Serializable
 {
     private double match;
     private String peerUsername;
