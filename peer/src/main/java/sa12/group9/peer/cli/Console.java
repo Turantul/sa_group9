@@ -1,6 +1,7 @@
 package sa12.group9.peer.cli;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -57,9 +58,12 @@ public class Console
         try
         {
             Fingerprint finger = fingerprintService.generateFingerprint(location);
+            System.out.println("Sending fingerprint to peer on Port: "+managementPort);
             Socket socket = new Socket(InetAddress.getLocalHost(), managementPort);
-            PrintWriter socketout = new PrintWriter(socket.getOutputStream(), true);
-            socketout.println(location);
+            ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+            socketout.writeObject(finger);
+            socketout.close();
+            System.exit(0);
         }
         catch (IOException e)
         {

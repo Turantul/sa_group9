@@ -7,10 +7,13 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import sa12.group9.peer.service.Kernel;
+
 public class ManagementThread extends Thread
 {
     private int managementPort;
     private ServerSocket socket;
+    private Kernel kernel;
 
     @Override
     public void run()
@@ -27,7 +30,7 @@ public class ManagementThread extends Thread
 				System.out.println("Waiting for ManagementCommands on Port: "+managementPort);
 				Socket inSocket = socket.accept();
 				System.out.println("Recieved Connection");
-				new ManagementCommandHandler(inSocket).start();
+				new ManagementCommandHandler(inSocket, kernel).start();
 			} catch (IOException e) {
 				System.out.println("Exception while reading from ManagementSocket.\n"+e.getMessage());
 			}
@@ -37,5 +40,9 @@ public class ManagementThread extends Thread
     public void setManagementPort(int managementPort)
     {
         this.managementPort = managementPort;
+    }
+    
+    public void setKernel(Kernel kernel){
+    	this.kernel = kernel;
     }
 }

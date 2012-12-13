@@ -5,12 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.peer.service.thread.AliveThread;
@@ -32,12 +36,15 @@ public class Kernel
     private ManagementThread management;
     private ExecutorService pool;
     ServerSocket serverSocket;
+    
+    private List<Fingerprint> fingerprintList;
+    private List<PeerEndpoint> peerList;
 
     @SuppressWarnings("unused")
     private void initialize()
     {
         log.info("Starting up");
-
+        fingerprintList = Collections.synchronizedList(new ArrayList<Fingerprint>());
         try
         {
             boolean success = serverHandler.loginAtServer(username, password);
@@ -45,6 +52,7 @@ public class Kernel
             if (success)
             {
                 List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
+                peerList = Collections.synchronizedList(peers);
 
                 keepAliveOutgoing.setPeers(peers);
                 keepAliveOutgoing.start();
@@ -52,6 +60,7 @@ public class Kernel
                 keepAliveIncoming.setPeers(peers);
                 keepAliveIncoming.start();
                 
+                management.setKernel(this);
                 management.start();
 
                 handleRequests();
@@ -166,5 +175,18 @@ public class Kernel
     public void setManagement(ManagementThread management)
     {
         this.management = management;
+    }
+    
+    public void addFingerprint(Fingerprint fingerprint){
+    	System.out.println("Adding Fingerprint: "+fingerprint.getShiftDuration());
+    	synchronized(fingerprintList){
+    		fingerprintList.add(fingerprint);
+    	}
+    }
+    
+    public void addPeerEndpoint(PeerEndpoint peer){
+    	synchronized(peerList){
+    		peerList.add(peer);
+    	}
     }
 }
