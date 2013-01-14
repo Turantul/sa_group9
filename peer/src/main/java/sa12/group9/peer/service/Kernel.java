@@ -12,7 +12,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,6 +26,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
+import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.media.IFingerprintService;
 import sa12.group9.common.util.Constants;
@@ -30,6 +34,7 @@ import sa12.group9.peer.service.thread.AliveThread;
 import sa12.group9.peer.service.thread.KeepAliveCleanupThread;
 import sa12.group9.peer.service.thread.ManagementThread;
 import sa12.group9.peer.service.thread.RequestHandler;
+import sa12.group9.peer.service.thread.RequestThread;
 
 public class Kernel
 {
@@ -44,13 +49,14 @@ public class Kernel
     private AliveThread keepAliveOutgoing;
     private AliveThread keepAliveIncoming;
     private KeepAliveCleanupThread keepAliveCleanup;
+    private RequestThread requestThread;
     
     private ManagementThread management;
-    private ExecutorService pool;
-    ServerSocket serverSocket;
+    
+    
     
     private List<Fingerprint> fingerprintList;
-    private List<PeerEndpoint> peerList;
+    private Map<String, PeerEndpoint> peerMap;
 
     @SuppressWarnings("unused")
     private void initialize()
@@ -64,7 +70,11 @@ public class Kernel
             if (success)
             {
                 List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
-                peerList = Collections.synchronizedList(peers);
+               
+                peerMap = Collections.synchronizedMap(new HashMap<String, PeerEndpoint>());
+                for(PeerEndpoint pe : peers){
+                	addPeerEndpoint(pe);
+                }
 
                 keepAliveOutgoing.setKernel(this);
                 keepAliveOutgoing.start();
@@ -77,6 +87,11 @@ public class Kernel
 
                 keepAliveCleanup = new KeepAliveCleanupThread(this);
                 keepAliveCleanup.start();
+                
+                requestThread = new RequestThread();
+                requestThread.setKernel(this);
+                requestThread.setListeningPort(listeningPort);
+                requestThread.start();
                 
                 handleRequests();
             }
@@ -94,38 +109,6 @@ public class Kernel
     private void handleRequests()
     {
         log.info("Peer successfully started\nListening for requests...");
-        pool = Executors.newCachedThreadPool();
-
-        new Thread()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-                    serverSocket = new ServerSocket(listeningPort);
-                    while (!serverSocket.isClosed())
-                    {
-                        try
-                        {
-                            Socket socket = serverSocket.accept();
-                            pool.execute(new RequestHandler(socket));
-                        }
-                        catch (IOException e)
-                        {
-                            if (!serverSocket.isClosed())
-                            {
-                                System.out.println("Error reading from TCP socket!");
-                            }
-                        }
-                    }
-                }
-                catch (IOException e)
-                {
-                    System.out.println("Error opening TCP socket!");
-                }
-            }
-        }.start();
 
         boolean running = true;
         InputStreamReader cin = new InputStreamReader(System.in);
@@ -143,12 +126,13 @@ public class Kernel
     				keepAliveIncoming.shutdown();
     				keepAliveOutgoing.shutdown();
     				management.shutdown();
-    				pool.shutdown();
+    				requestThread.shutdown();
     			}
     			if(in.equals("!peers")){
     				System.out.println("Current known peers:");
-    				List<PeerEndpoint> peerList = getPeerSnapshot();
-    				for(PeerEndpoint pe : peerList){
+    				Set<String> peerList = getPeerSnapshot();
+    				for(String key : peerList){
+    					PeerEndpoint pe = getPeerEndpoint(key);
     					System.out.println(pe.getAddress()+":"+pe.getListeningPort()+":"+pe.getKeepAlivePort()+" - "+pe.getLastKeepAlive());
     				}
     			}
@@ -193,22 +177,34 @@ public class Kernel
     					System.out.println("New file has been added");
     				}
     			}
+    			if(in.startsWith("!newrequest")){
+    				String[] split = in.split(" ");
+    				if(split.length!=4){
+    					System.out.println("Correct usage is !newrequest <peeraddress> <peerlisteningport> <filelocation>");
+    				}else{
+    					ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
+    					IFingerprintService fingerprintService = (IFingerprintService) ctx.getBean("fingerprintService");
+    					Fingerprint finger = fingerprintService.generateFingerprint(split[3].trim());
+    					System.out.println("Got Fingerprint");
+    					InetAddress adress = InetAddress.getByName(split[1].trim());
+    					int port = Integer.parseInt(split[2].trim());
+    					System.out.println("Connecting on "+adress+":"+port);
+    		            Socket socket = new Socket(adress, port);
+    		            ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+    		            P2PSearchRequest request = new P2PSearchRequest();
+    		            request.setId("test");
+    		            request.setFingerprint(finger);
+    		            request.setRequesterAddress(adress);
+    		            request.setRequesterPort(port);
+    		            request.setTtl(10);
+    		            socketout.writeObject(request);
+    		            socketout.close();
+    				}
+    			}
     		} catch (IOException e) {
     			System.out.println("Socket to Proxy has been closed. Press <ENTER> to shutdown Client");
-    			//e.printStackTrace();
+    			e.printStackTrace();
     		}
-        }
-        
-        if (serverSocket != null)
-        {
-            try
-            {
-                serverSocket.close();
-            }
-            catch (IOException e)
-            {
-                System.out.println("Error closing listening socket!");
-            }
         }
     }
 
@@ -255,21 +251,20 @@ public class Kernel
     }
     
     public void addPeerEndpoint(PeerEndpoint peer){
-    	synchronized(peerList){
-    		for(PeerEndpoint pe: peerList){
-    			if(pe.getAddress().equals(peer.getAddress())&&pe.getKeepAlivePort()==peer.getKeepAlivePort()&&pe.getListeningPort()==peer.getListeningPort())
-    			{
-    				peerList.remove(pe);
-    			}
-    		}
-    		peerList.add(peer);
+    	synchronized(peerMap){
+    		peerMap.put(peer.getAddress()+":"+peer.getListeningPort(), peer);
     	}
     }
     
-    public List<PeerEndpoint> getPeerSnapshot(){
-    	synchronized(peerList){
-    		List<PeerEndpoint> ret = new ArrayList<PeerEndpoint>(peerList);
-    		return ret;
+    public Set<String> getPeerSnapshot(){
+    	synchronized(peerMap){
+    		return peerMap.keySet();
+    	}
+    }
+    
+    public PeerEndpoint getPeerEndpoint(String key){
+    	synchronized(peerMap){
+    		return peerMap.get(key);
     	}
     }
     
@@ -280,9 +275,11 @@ public class Kernel
     	}
     }
     
-    public void removePeerEndpoint(PeerEndpoint pe) {
-		synchronized(peerList){
-			peerList.remove(pe);
+    public void removePeerEndpoint(String key) {
+		synchronized(peerMap){
+			if(peerMap.containsKey(key)){
+				peerMap.remove(key);
+			}
 		}
 	}
     

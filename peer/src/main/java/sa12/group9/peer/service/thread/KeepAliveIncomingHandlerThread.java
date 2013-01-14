@@ -31,7 +31,7 @@ public class KeepAliveIncomingHandlerThread extends Thread
 				pe.setKeepAlivePort(Integer.parseInt(splitmessage[2].trim()));
 				pe.setAddress(packet.getAddress().getHostAddress());
 				pe.setLastKeepAlive(new Date(System.currentTimeMillis()));
-				System.out.println("Recieved KeepAlive from: "+pe.getAddress()+":"+pe.getListeningPort());
+				//System.out.println("Recieved KeepAlive from: "+pe.getAddress()+":"+pe.getListeningPort());
 				kernel.addPeerEndpoint(pe);
 			}catch(Exception e){
 				System.out.println("Received invalid isAlive package: "+message+"\n");

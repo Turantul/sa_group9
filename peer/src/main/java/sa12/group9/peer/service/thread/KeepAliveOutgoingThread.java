@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Set;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
@@ -27,15 +28,16 @@ public class KeepAliveOutgoingThread extends AliveThread
     public void run()
     {
     	do{
-	        List<PeerEndpoint> peerSnapshot = kernel.getPeerSnapshot();
-	        for(PeerEndpoint pe : peerSnapshot){
+	        Set<String> peerSnapshot = kernel.getPeerSnapshot();
+	        for(String key : peerSnapshot){
+	        	PeerEndpoint pe = kernel.getPeerEndpoint(key);
 	        	try {
 					DatagramSocket datagram = new DatagramSocket();
 					String message = "!alive "+listeningPort+" "+keepAlivePort;
 					byte[] buf = message.getBytes();
 					DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(pe.getAddress()), pe.getKeepAlivePort());
 					datagram.send(packet);
-					System.out.println("Sent KeepAlive to "+packet.getAddress()+":"+packet.getPort()+"-"+packet.getSocketAddress());
+					//System.out.println("Sent KeepAlive to "+packet.getAddress()+":"+packet.getPort()+"-"+packet.getSocketAddress());
 				} catch (SocketException e) {
 					System.out.println("Error sending keepAlive to "+pe.getAddress()+":"+pe.getKeepAlivePort()+"\n"+e.getMessage());
 				} catch (UnknownHostException e) {
