@@ -54,10 +54,10 @@ public class Kernel
                 List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
                 peerList = Collections.synchronizedList(peers);
 
-                keepAliveOutgoing.setPeers(peers);
+                keepAliveOutgoing.setKernel(this);
                 keepAliveOutgoing.start();
 
-                keepAliveIncoming.setPeers(peers);
+                keepAliveIncoming.setKernel(this);
                 keepAliveIncoming.start();
                 
                 management.setKernel(this);
@@ -187,6 +187,25 @@ public class Kernel
     public void addPeerEndpoint(PeerEndpoint peer){
     	synchronized(peerList){
     		peerList.add(peer);
+    	}
+    }
+    
+    public List<PeerEndpoint> getPeerSnapshot(){
+    	synchronized(peerList){
+    		List<PeerEndpoint> ret = new ArrayList<PeerEndpoint>(peerList);
+    		return ret;
+    	}
+    }
+    
+    public void updatePeerEndpointKeepAlive(){}
+    
+    public void cleanupPeerEndpoints(){
+    	synchronized(peerList){
+    		for(PeerEndpoint pe : peerList){
+    			if(pe.getLastKeepAlive() != null && pe.getLastKeepAlive().getTime()<System.currentTimeMillis()-10000){
+    				peerList.remove(pe);
+    			}
+    		}
     	}
     }
 }
