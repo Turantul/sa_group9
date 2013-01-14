@@ -32,4 +32,12 @@ public class ManagementCommandHandler extends Thread {
 			System.out.println("Problem reading fingerprint. \n"+e.getMessage());
 		}
 	}
+	
+	public void shutdown(){
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("Error closing management handler socket\n"+e.getMessage());
+		}
+	}
 }

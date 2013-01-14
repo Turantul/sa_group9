@@ -45,4 +45,13 @@ public class ManagementThread extends Thread
     public void setKernel(Kernel kernel){
     	this.kernel = kernel;
     }
+    
+    public void shutdown(){
+    	try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("Error closing management connection.\n"+e.getMessage());
+		}
+    	
+    }
 }

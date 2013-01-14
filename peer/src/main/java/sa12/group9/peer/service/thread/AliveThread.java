@@ -10,4 +10,6 @@ public abstract class AliveThread extends Thread
     {
         this.kernel = kernel;
     }
+    
+    public abstract void shutdown();
 }
