@@ -7,19 +7,21 @@
     version="2.0">
 	
 	<managed-bean>
-		<managed-bean-name>SimpleLogin</managed-bean-name>
-		<managed-bean-class>sa12.group9.server.view.SimpleLogin</managed-bean-class>
+		<managed-bean-name>login</managed-bean-name>
+		<managed-bean-class>sa12.group9.server.view.LoginBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	
+	
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
 		<navigation-case>
-			<from-action>#{SimpleLogin.CheckValidUser}</from-action>
+			<from-action>#{login.CheckValidUser}</from-action>
 			<from-outcome>success</from-outcome>
 			<to-view-id>loginsuccess.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-action>#{SimpleLogin.CheckValidUser}</from-action>
+			<from-action>#{login.CheckValidUser}</from-action>
 			<from-outcome>fail</from-outcome>
 			<to-view-id>loginfail.xhtml</to-view-id>
 		</navigation-case>

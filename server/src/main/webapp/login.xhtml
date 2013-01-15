@@ -10,23 +10,30 @@
 </h:head>
 <h:body>
 <h:form>
+Login to Swazam <br/>
 <table>
 <tr>
 <td><h:outputText value="Enter Login ID: " /></td>
 <td><h:inputText id="loginname" 
-value="#{SimpleLogin.loginname}" />
+value="#{login.loginname}" />
 </td>
 </tr>
 <tr>
 <td><h:outputText value="Enter Password: " /></td>
 <td><h:inputSecret id="password" 
-value="#{SimpleLogin.password}" />
+value="#{login.password}" />
 </td>
 </tr>
 <tr>
 <td> </td>
 <td><h:commandButton value="Login" 
-action="#{SimpleLogin.CheckValidUser}"/>
+action="#{login.CheckValidUser}"/>
+</td>
+</tr>
+<tr>
+<td> New User? </td>
+<td><h:link value="Register Here"  
+outcome="register"/>
 </td>
 </tr>
 </table>
