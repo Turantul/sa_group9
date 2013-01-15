@@ -8,9 +8,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import sa12.group9.server.dto.UserDTO;
-
-
+import sa12.group9.commons.dto.UserDTO;
 
 
 
@@ -39,7 +37,7 @@ public class MongoUserDAO implements IUserDAO{
 	}
 
 	public UserDTO searchUser(String userName) {
-		return mongoOperation.findOne(new Query(Criteria.where("companyName").is(userName)),UserDTO.class, "users");		
+		return mongoOperation.findOne(new Query(Criteria.where("username").is(userName)),UserDTO.class, "users");		
 	}
 
 	@Override

@@ -1,7 +1,12 @@
 package sa12.group9.common.beans;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="peers")
 public class PeerEndpoint
 {
+	@Id
     private String address;
     private int listeningPort;
     private int keepAlivePort;
