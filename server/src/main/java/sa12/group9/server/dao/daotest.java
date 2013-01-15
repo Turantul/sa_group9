@@ -15,7 +15,7 @@ public class daotest {
 	public static void main(String[] args) {
 		
 
-		testpeerdao();
+		testuserdao();
 	}
 	
 	public static void testuserdao(){
@@ -28,7 +28,7 @@ public class daotest {
 		
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		
-		//userdao.storeUser(user);
+		userdao.storeUser(user);
 		
 		System.out.println(userdao.searchUser("hugo").getUsername());
 	}

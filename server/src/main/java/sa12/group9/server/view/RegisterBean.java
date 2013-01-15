@@ -5,91 +5,74 @@ import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import sa12.group9.commons.dto.UserDTO;
+import sa12.group9.server.dao.IUserDAO;
+import sa12.group9.server.dao.MongoUserDAO;
+
 @ManagedBean
 @RequestScoped
 public class RegisterBean{
-  String name;
-  String fname;
-  String mname;
-  String caddress;
-  String paddress;
-  String sex;
-  Date dob;
-  Long phoneno;
-  Long mobileno;
+  String loginname;
+  String password;
+  String retypePassword;
 
   public RegisterBean(){}
 
-  public String getName(){
-  return name;
+	public String getLoginname(){
+		return loginname;
+	}
+
+	public void setLoginname(String loginname){
+		this.loginname = loginname;
+	}
+
+
+public String getPassword(){
+	  return password;
   }
 
-  public void setName(String name){
-  this.name = name;
+  public void setPassword(String password){
+	  this.password = password;
   }
 
-  public String getFname(){
-  return fname;
+  public String getRetypePassword() {
+		return retypePassword;
+  }
+	
+  public void setRetypePassword(String retypePassword) {
+		this.retypePassword = retypePassword;
+  }
+  
+  public String RegisterUser(){
+	  
+	  IUserDAO userdao = MongoUserDAO.getInstance();
+	  
+	  if(checkPasswordMatch()){
+		  UserDTO newlyRegisteredUser = new UserDTO();
+		  
+		  newlyRegisteredUser.setUsername(loginname);
+		  newlyRegisteredUser.setPassword(password);
+		  newlyRegisteredUser.setCoins(20);
+		
+		  userdao.storeUser(newlyRegisteredUser);
+		  
+		  return "registersuccess";
+	  }else{
+		  return "registerfail";
+	  }
+  }
+  private Boolean checkPasswordMatch(){
+	 
+	  if(password.equals(retypePassword)){
+		  return true;  
+	  }
+	  else{
+		  return false;
+	  }
+	  
+	  
   }
 
-  public void setFname(String fname){
-  this.fname = fname;
-  }
 
-  public String getMname(){
-  return mname;
-  }
-
-  public void setMname(String mname){
-  this.mname = mname;
-  }
-
-  public String getCaddress(){
-  return caddress;
-  }
-
-  public void setCaddress(String caddress){
-  this.caddress = caddress;
-  }
-
-  public String getPaddress(){
-  return paddress;
-  }
-
-  public void setPaddress(String paddress){
-  this.paddress = paddress;
-  }
-
-  public String getSex(){
-  return sex;  
-  }
-
-  public void setSex(String sex){
-  this.sex = sex;
-  }
-
-  public Date getDob(){
-  return dob;
-  }
-
-  public void setDob(Date dob){
-  this.dob = dob;
-  }
-
-  public Long getPhoneno(){
-  return phoneno;
-  }
-
-  public void setPhoneno(Long phoneno){
-  this.phoneno = phoneno;
-  }
-
-  public Long getMobileno(){
-  return mobileno;
-  }
-
-  public void setMobileno(Long mobileno){
-  this.mobileno = mobileno;
-  }
 
 }
