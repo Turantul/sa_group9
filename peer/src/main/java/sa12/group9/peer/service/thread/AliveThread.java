@@ -1,15 +1,15 @@
 package sa12.group9.peer.service.thread;
 
-import java.util.List;
-
-import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.peer.service.Kernel;
 
 public abstract class AliveThread extends Thread
 {
-    protected List<PeerEndpoint> peers;
+    protected Kernel kernel;
     
-    public void setPeers(List<PeerEndpoint> peers)
+    public void setKernel(Kernel kernel)
     {
-        this.peers = peers;
+        this.kernel = kernel;
     }
+    
+    public abstract void shutdown();
 }

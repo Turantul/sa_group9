@@ -1,6 +1,10 @@
 package sa12.group9.peer.cli;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -40,10 +44,11 @@ public class Console
     {
         this.managementPort = managementPort;
         this.location = location;
-
+        
         ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
         fingerprintService = (IFingerprintService) ctx.getBean("fingerprintService");
-
+        
+        
         calculate();
     }
 
@@ -53,8 +58,12 @@ public class Console
         try
         {
             Fingerprint finger = fingerprintService.generateFingerprint(location);
-
-            // TODO somehow add song metadata and send it to instance
+            System.out.println("Sending fingerprint to peer on Port: "+managementPort);
+            Socket socket = new Socket(InetAddress.getLocalHost(), managementPort);
+            ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+            socketout.writeObject(finger);
+            socketout.close();
+            System.exit(0);
         }
         catch (IOException e)
         {

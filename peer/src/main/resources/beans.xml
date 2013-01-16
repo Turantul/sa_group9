@@ -11,7 +11,7 @@
     </property>
   </bean>
 
-  <bean id="kernel" class="${root}.peer.service.Kernel" init-method="initialize">
+  <bean id="kernel" class="${root}.peer.service.Kernel" init-method="initialize" lazy-init="true">
     <property name="serverHandler" ref="serverHandler" />
     <property name="keepAliveOutgoing" ref="keepAliveOutgoing" />
     <property name="keepAliveIncoming" ref="keepAliveIncoming" />
