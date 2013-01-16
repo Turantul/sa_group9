@@ -9,6 +9,8 @@ import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoUserDAO;
+import sa12.group9.server.handlers.ClientServiceHandler;
+import sa12.group9.server.handlers.IClientServiceHandler;
 
 
 @ManagedBean
@@ -37,22 +39,32 @@ public class LoginBean{
 
 	public String CheckValidUser(){
         
-		IUserDAO userdao = MongoUserDAO.getInstance();
 		
-		UserDTO fetcheduser = userdao.searchUser(loginname);
-	
-		if(fetcheduser == null){
-			return "fail";
-		}
+		IClientServiceHandler servicehandler = new ClientServiceHandler();
 		
-		
-		if(loginname.equals(fetcheduser.getUsername()) && 
-		password.equals(fetcheduser.getPassword())){
-			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
-					return "success";
+		if (servicehandler.verifyLogin(loginname, password)){
+			return "success";
 		}
 		else{
 			return "fail";
 		}
+		
+//		IUserDAO userdao = MongoUserDAO.getInstance();
+//		
+//		UserDTO fetcheduser = userdao.searchUser(loginname);
+//	
+//		if(fetcheduser == null){
+//			return "fail";
+//		}
+//		
+//		
+//		if(loginname.equals(fetcheduser.getUsername()) && 
+//		password.equals(fetcheduser.getPassword())){
+//			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
+//					return "success";
+//		}
+//		else{
+//			return "fail";
+//		}
 	}
 }
