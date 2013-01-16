@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Swazam</title>
+</h:head>
+<h:body>
+<h:form>
+Login to Swazam <br/>
+<table>
+<tr>
+<td><h:outputText value="Enter Login ID: " /></td>
+<td><h:inputText id="loginname" 
+value="#{login.loginname}" />
+</td>
+</tr>
+<tr>
+<td><h:outputText value="Enter Password: " /></td>
+<td><h:inputSecret id="password" 
+value="#{login.password}" />
+</td>
+</tr>
+<tr>
+<td> </td>
+<td><h:commandButton value="Login" 
+action="#{login.CheckValidUser}"/>
+</td>
+</tr>
+<tr>
+<td> New User? </td>
+<td><h:link value="Register Here"  
+outcome="register"/>
+</td>
+</tr>
+</table>
+</h:form>
+
+
+</h:body>
+</html>

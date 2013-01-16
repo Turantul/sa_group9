@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+	
+	<managed-bean>
+		<managed-bean-name>login</managed-bean-name>
+		<managed-bean-class>sa12.group9.server.view.LoginBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>register</managed-bean-name>
+		<managed-bean-class>sa12.group9.server.view.RegisterBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<navigation-rule>
+		<from-view-id>/login.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{login.CheckValidUser}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>loginsuccess.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.CheckValidUser}</from-action>
+			<from-outcome>fail</from-outcome>
+			<to-view-id>loginfail.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<from-view-id>/register.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{register.RegisterUser}</from-action>
+			<from-outcome>registersuccess</from-outcome>
+			<to-view-id>registersuccess.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{register.RegisterUser}</from-action>
+			<from-outcome>registerfail</from-outcome>
+			<to-view-id>registerfail.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+</faces-config>
