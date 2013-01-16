@@ -17,6 +17,7 @@
   <packaging>war</packaging>
 
   <build>
+  
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -37,7 +38,13 @@
       </plugin>
     </plugins>
   </build>
-
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <com.sun.jersey.version>1.14</com.sun.jersey.version>
+    <org.springframework.spring.version>2.5.6</org.springframework.spring.version>
+    <jdk.version>1.7</jdk.version>
+    <mvn.version>3.0</mvn.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>sa12.group9</groupId>
@@ -66,7 +73,7 @@
       <version>1.1.1</version>
     </dependency>
     
-    		<dependency>
+    	<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 			<version>2.1.7</version>
@@ -86,7 +93,27 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>2.9.1</version>
 		</dependency>
-			
+			<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework.spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework.spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.0.3.RELEASE</version>
+		</dependency>			
 
 
     <dependency>
@@ -95,4 +122,5 @@
       <version>1.2.14</version>
     </dependency>
   </dependencies>
+
 </project>

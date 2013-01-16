@@ -1,9 +1,13 @@
 package sa12.group9.common.beans;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
+@Document(collection="peers")
 public class PeerEndpoint
 {
+	@Id
     private String address;
     private int listeningPort;
     private int keepAlivePort;
@@ -46,5 +50,4 @@ public class PeerEndpoint
 	public void setLastKeepAlive(Date lastKeepAlive) {
 		this.lastKeepAlive = lastKeepAlive;
 	}
-    
 }

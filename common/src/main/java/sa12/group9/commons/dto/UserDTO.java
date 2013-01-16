@@ -1,4 +1,4 @@
-package sa12.group9.server.dto;
+package sa12.group9.commons.dto;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="users")
 public class UserDTO
 {
-	
+	@Id
     private String username;
     private String password;
     private Integer coins;

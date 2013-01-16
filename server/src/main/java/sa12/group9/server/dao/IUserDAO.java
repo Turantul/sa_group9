@@ -2,7 +2,9 @@ package sa12.group9.server.dao;
 
 import java.util.List;
 
-import sa12.group9.server.dto.UserDTO;
+import sa12.group9.commons.dto.UserDTO;
+
+
 
 
 public interface IUserDAO {
