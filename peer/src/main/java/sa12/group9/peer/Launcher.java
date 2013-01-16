@@ -3,6 +3,7 @@ package sa12.group9.peer;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import sa12.group9.common.util.Constants;
+import sa12.group9.peer.service.Kernel;
 
 public class Launcher
 {

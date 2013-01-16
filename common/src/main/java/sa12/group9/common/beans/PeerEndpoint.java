@@ -1,10 +1,13 @@
 package sa12.group9.common.beans;
 
+import java.util.Date;
+
 public class PeerEndpoint
 {
     private String address;
     private int listeningPort;
     private int keepAlivePort;
+    private Date lastKeepAlive;
 
     public String getAddress()
     {
@@ -35,4 +38,13 @@ public class PeerEndpoint
     {
         this.keepAlivePort = keepAlivePort;
     }
+
+	public Date getLastKeepAlive() {
+		return lastKeepAlive;
+	}
+
+	public void setLastKeepAlive(Date lastKeepAlive) {
+		this.lastKeepAlive = lastKeepAlive;
+	}
+    
 }
