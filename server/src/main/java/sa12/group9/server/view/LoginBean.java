@@ -2,16 +2,9 @@ package sa12.group9.server.view;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 
-import sa12.group9.commons.dto.UserDTO;
-import sa12.group9.server.dao.IPeerDAO;
-import sa12.group9.server.dao.IUserDAO;
-import sa12.group9.server.dao.MongoPeerDAO;
-import sa12.group9.server.dao.MongoUserDAO;
 import sa12.group9.server.handlers.ClientServiceHandler;
 import sa12.group9.server.handlers.IClientServiceHandler;
-
 
 @ManagedBean
 @RequestScoped

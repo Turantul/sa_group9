@@ -1,10 +1,7 @@
 package sa12.group9.server.handlers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
-
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
