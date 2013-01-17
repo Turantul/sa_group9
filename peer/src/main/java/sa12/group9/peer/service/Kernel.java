@@ -85,12 +85,10 @@ public class Kernel
                 management.setKernel(this);
                 management.start();
 
-                keepAliveCleanup = new KeepAliveCleanupThread(this);
+                keepAliveCleanup.setKernel(this);
                 keepAliveCleanup.start();
                 
-                requestThread = new RequestThread();
                 requestThread.setKernel(this);
-                requestThread.setListeningPort(listeningPort);
                 requestThread.start();
                 
                 handleRequests();

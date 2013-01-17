@@ -46,10 +46,19 @@
       <util:constant static-field="${root}.peer.Launcher.KEEPALIVEPORT" />
     </property>
   </bean>
+  
+  <bean id="keepAliveCleanup" class="${root}.peer.service.thread.KeepAliveCleanupThread">
+  </bean>
 
   <bean id="management" class="${root}.peer.service.thread.ManagementThread">
     <property name="managementPort">
       <util:constant static-field="${root}.peer.Launcher.MANAGEMENTPORT" />
+    </property>
+  </bean>
+  
+  <bean id="requestThread" class="${root}.peer.service.thread.RequestThread">
+    <property name="listeningPort">
+      <util:constant static-field="${root}.peer.Launcher.LISTENINGPORT" />
     </property>
   </bean>
 

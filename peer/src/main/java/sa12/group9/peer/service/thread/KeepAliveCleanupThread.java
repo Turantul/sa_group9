@@ -17,8 +17,7 @@ public class KeepAliveCleanupThread extends Thread
     private Kernel kernel;
     private boolean running=true;
     
-    public KeepAliveCleanupThread(Kernel kernel){
-    	this.kernel = kernel;
+    public KeepAliveCleanupThread(){
     }
     
     @Override
