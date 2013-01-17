@@ -280,6 +280,19 @@ public class Kernel
 			}
 		}
 	}
+
+	public int getPeerCount() {
+		synchronized(peerMap){
+			return peerMap.size();
+		}
+	}
+
+	public void requestNewPeersFromServer() {
+		List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
+        for(PeerEndpoint pe : peers){
+        	addPeerEndpoint(pe);
+        }
+	}
     
 }
 

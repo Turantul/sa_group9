@@ -17,6 +17,7 @@ public class KeepAliveCleanupThread extends Thread
     private Kernel kernel;
     private boolean running=true;
     private int keepAliveCleanupInterval = 5000;
+    private int requestNewPeerThreshold = 10;
     
     public KeepAliveCleanupThread(){
     }
@@ -34,6 +35,9 @@ public class KeepAliveCleanupThread extends Thread
 	    				System.out.println("Removed peer "+pe.getAddress()+":"+pe.getListeningPort());
 	    			}
 	    		}
+	    		if(kernel.getPeerCount()<requestNewPeerThreshold){
+	    			kernel.requestNewPeersFromServer();
+	    		}
 	    		Thread.sleep(keepAliveCleanupInterval);				
 			} catch (InterruptedException e) {
 				System.out.println("Exception in KeepAliveCleanupThread\n"+e.getMessage());
@@ -45,7 +49,11 @@ public class KeepAliveCleanupThread extends Thread
     	this.kernel = kernel;
     }
     
-    public void setKeepAliveCleanupInterval(int keepAliveCleanupInterval) {
+    public void setRequestNewPeerThreshold(int requestNewPeerThreshold) {
+		this.requestNewPeerThreshold = requestNewPeerThreshold;
+	}
+
+	public void setKeepAliveCleanupInterval(int keepAliveCleanupInterval) {
 		this.keepAliveCleanupInterval = keepAliveCleanupInterval;
 	}
 

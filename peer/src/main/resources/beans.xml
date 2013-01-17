@@ -50,6 +50,8 @@
   
   <bean id="keepAliveCleanup" class="${root}.peer.service.thread.KeepAliveCleanupThread">
   	<property name="keepAliveCleanupInterval" value="${keepAlive.cleanup.interval}" />
+  	<property name="requestNewPeerThreshold" value="${requestNewPeersThreshold}" />
+  	
   </bean>
 
   <bean id="management" class="${root}.peer.service.thread.ManagementThread">
