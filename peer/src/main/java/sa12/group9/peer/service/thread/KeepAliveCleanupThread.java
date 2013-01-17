@@ -16,6 +16,7 @@ public class KeepAliveCleanupThread extends Thread
 {
     private Kernel kernel;
     private boolean running=true;
+    private int keepAliveCleanupInterval = 5000;
     
     public KeepAliveCleanupThread(){
     }
@@ -33,7 +34,7 @@ public class KeepAliveCleanupThread extends Thread
 	    				System.out.println("Removed peer "+pe.getAddress()+":"+pe.getListeningPort());
 	    			}
 	    		}
-	    		Thread.sleep(5000);				
+	    		Thread.sleep(keepAliveCleanupInterval);				
 			} catch (InterruptedException e) {
 				System.out.println("Exception in KeepAliveCleanupThread\n"+e.getMessage());
 			}
@@ -44,7 +45,11 @@ public class KeepAliveCleanupThread extends Thread
     	this.kernel = kernel;
     }
     
-    public void shutdown(){
+    public void setKeepAliveCleanupInterval(int keepAliveCleanupInterval) {
+		this.keepAliveCleanupInterval = keepAliveCleanupInterval;
+	}
+
+	public void shutdown(){
     	running = false;
     }
 }

@@ -39,6 +39,7 @@
     <property name="keepAlivePort">
       <util:constant static-field="${root}.peer.Launcher.KEEPALIVEPORT" />
     </property>
+    <property name="keepAliveOutgoingInterval" value="${keepAlive.outgoing.interval}" />
   </bean>
 
   <bean id="keepAliveIncoming" class="${root}.peer.service.thread.KeepAliveIncomingThread">
@@ -48,6 +49,7 @@
   </bean>
   
   <bean id="keepAliveCleanup" class="${root}.peer.service.thread.KeepAliveCleanupThread">
+  	<property name="keepAliveCleanupInterval" value="${keepAlive.cleanup.interval}" />
   </bean>
 
   <bean id="management" class="${root}.peer.service.thread.ManagementThread">

@@ -21,7 +21,7 @@ public class KeepAliveOutgoingThread extends AliveThread
 
     private int listeningPort;
     private int keepAlivePort;
-    private int keepAlivePeriod = 2500;
+    private int keepAliveOutgoingInterval = 1000;
     private Boolean sending = true;
 
     @Override
@@ -47,7 +47,7 @@ public class KeepAliveOutgoingThread extends AliveThread
 				}
 	        }
 	        try {
-				Thread.sleep(keepAlivePeriod);
+				Thread.sleep(keepAliveOutgoingInterval);
 			} catch (InterruptedException e) {
 				System.out.println("Keep Alive Thread has been interrupted.\n"+e.getMessage());
 			}
@@ -68,9 +68,9 @@ public class KeepAliveOutgoingThread extends AliveThread
     {
         this.keepAlivePort = keepAlivePort;
     }
-    
-    public void setKeepAlivePeriod(int keepAlivePeriod) {
-		this.keepAlivePeriod = keepAlivePeriod;
+
+	public void setKeepAliveOutgoingInterval(int keepAliveOutgoingInterval) {
+		this.keepAliveOutgoingInterval = keepAliveOutgoingInterval;
 	}
 
 	public void shutdown(){
