@@ -119,7 +119,7 @@ public class Kernel
         while (running){
         	try {
     			in = bin.readLine();
-    			System.out.println(in);
+    			//System.out.println(in);
     			if(in.equals("!exit")){
     				System.out.println("Exiting the Peer program");
     				running = false;
