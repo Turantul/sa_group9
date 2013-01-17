@@ -16,8 +16,8 @@ public class KeepAliveCleanupThread extends Thread
 {
     private Kernel kernel;
     private boolean running=true;
-    private int keepAliveCleanupInterval = 5000;
-    private int requestNewPeerThreshold = 10;
+    private int keepAliveCleanupInterval;
+    private int requestNewPeerThreshold;
     
     public KeepAliveCleanupThread(){
     }

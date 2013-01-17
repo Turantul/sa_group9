@@ -21,7 +21,7 @@ public class KeepAliveOutgoingThread extends AliveThread
 
     private int listeningPort;
     private int keepAlivePort;
-    private int keepAliveOutgoingInterval = 1000;
+    private int keepAliveOutgoingInterval;
     private Boolean sending = true;
 
     @Override

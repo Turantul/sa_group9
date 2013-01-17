@@ -15,7 +15,9 @@
     <property name="serverHandler" ref="serverHandler" />
     <property name="keepAliveOutgoing" ref="keepAliveOutgoing" />
     <property name="keepAliveIncoming" ref="keepAliveIncoming" />
+    <property name="keepAliveCleanup" ref="keepAliveCleanup" />
     <property name="management" ref="management" />
+    <property name="requestThread" ref="requestThread" />
     <property name="username">
       <util:constant static-field="${root}.peer.Launcher.USERNAME" />
     </property>

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -101,6 +102,7 @@ public class Kernel
         catch (Exception e)
         {
             System.out.println("The server could not be reached.\nPlease try again later.");
+            e.printStackTrace();
         }
     }
 
@@ -117,7 +119,7 @@ public class Kernel
         while (running){
         	try {
     			in = bin.readLine();
-    			//System.out.println(in);
+    			System.out.println(in);
     			if(in.equals("!exit")){
     				System.out.println("Exiting the Peer program");
     				running = false;
@@ -241,7 +243,15 @@ public class Kernel
         this.management = management;
     }
     
-    public void addFingerprint(Fingerprint fingerprint){
+    public void setKeepAliveCleanup(KeepAliveCleanupThread keepAliveCleanup) {
+		this.keepAliveCleanup = keepAliveCleanup;
+	}
+
+	public void setRequestThread(RequestThread requestThread) {
+		this.requestThread = requestThread;
+	}
+
+	public void addFingerprint(Fingerprint fingerprint){
     	System.out.println("Adding Fingerprint: "+fingerprint.getShiftDuration());
     	synchronized(fingerprintList){
     		fingerprintList.add(fingerprint);
@@ -256,7 +266,7 @@ public class Kernel
     
     public Set<String> getPeerSnapshot(){
     	synchronized(peerMap){
-    		return peerMap.keySet();
+    		return new HashSet<String>(peerMap.keySet());
     	}
     }
     
