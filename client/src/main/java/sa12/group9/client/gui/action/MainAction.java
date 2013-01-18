@@ -144,7 +144,7 @@ public class MainAction implements ActionListener, ICallback
 
                         try
                         {
-                            peerHandler.openListeningSocket(MainAction.this, response.getSecondsToWait());
+                            peerHandler.openListeningSocket(MainAction.this);
 
                             log.info("Sending request to peers");
                             int i = 0;
@@ -171,6 +171,7 @@ public class MainAction implements ActionListener, ICallback
                             else
                             {
                                 Thread.sleep(response.getSecondsToWait() * 1000);
+                                peerHandler.shutdown();
 
                                 if (songs.size() == 0)
                                 {
