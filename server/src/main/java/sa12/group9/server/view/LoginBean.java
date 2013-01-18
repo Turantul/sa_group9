@@ -3,6 +3,8 @@ package sa12.group9.server.view;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import sa12.group9.commons.dto.UserDTO;
+import sa12.group9.server.dao.MongoUserDAO;
 import sa12.group9.server.handlers.ClientServiceHandler;
 import sa12.group9.server.handlers.IClientServiceHandler;
 
@@ -11,6 +13,26 @@ import sa12.group9.server.handlers.IClientServiceHandler;
 public class LoginBean{
 	String loginname;
 	String password;
+	int coins;
+
+	public int getCoins() {
+		
+		try {
+			MongoUserDAO usersdao = MongoUserDAO.getInstance();
+			
+			UserDTO loggedinuser = usersdao.searchUser(loginname);
+			
+			return loggedinuser.getCoins();
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "could not get coins");
+			return 0;
+		}
+		
+	}
+
+	public void setCoins(int coins) {
+		this.coins = coins;
+	}
 
 	public LoginBean(){}
 
@@ -60,4 +82,5 @@ public class LoginBean{
 //			return "fail";
 //		}
 	}
+
 }
