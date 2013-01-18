@@ -42,8 +42,8 @@ public class PeerService
 	public PeerList getNeighbors(LoginRequest request)
 	{
 		log.info("Got neigbor request for " + request.getUsername());
-
-		return peerHandler.getRandomPeerList(10);
+		return new PeerList();
+		//return peerHandler.getRandomPeerList(10);
 	}
 
 	@POST

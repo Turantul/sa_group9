@@ -97,12 +97,12 @@ public class Kernel
             }
             else
             {
-                System.out.println("Invalid username/password combination!");
+                log.info("Invalid username/password combination!");
             }
         }
         catch (Exception e)
         {
-            System.out.println("The server could not be reached.\nPlease try again later.");
+            log.error("The server could not be reached.\nPlease try again later.");
             e.printStackTrace();
         }
     }
@@ -203,7 +203,7 @@ public class Kernel
     				}
     			}
     		} catch (IOException e) {
-    			System.out.println("Socket to Proxy has been closed. Press <ENTER> to shutdown Client");
+    			log.error("Error while Commandhandling");
     			e.printStackTrace();
     		}
         }

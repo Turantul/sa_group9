@@ -23,6 +23,8 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 	@Override
 	public boolean verifyLogin(IsAliveNotification request, String remoteAddress) {
 		
+		return true;
+		/*
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		
@@ -49,7 +51,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 		else{
 			return false;
 		}
-		
+		*/
 		
 	}
 
