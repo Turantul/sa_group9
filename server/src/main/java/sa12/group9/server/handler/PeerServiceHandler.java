@@ -3,6 +3,7 @@ package sa12.group9.server.handler;
 import java.util.ArrayList;
 import java.util.Random;
 
+import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
 import sa12.group9.commons.dto.UserDTO;
@@ -14,25 +15,28 @@ import sa12.group9.server.dao.MongoUserDAO;
 public class PeerServiceHandler implements IPeerServiceHandler {
 
 	@Override
-	public boolean verifyLogin(String username, String password) {
+	public boolean verifyLogin(IsAliveNotification request) {
 		
 		IUserDAO userdao = MongoUserDAO.getInstance();
+		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		
-		UserDTO fetcheduser = userdao.searchUser(username);
+		UserDTO fetcheduser = userdao.searchUser(request.getUsername());
 	
 		if(fetcheduser == null){
 			return false;
 		}
 		
 		
-		if(username.equals(fetcheduser.getUsername()) && 
-		password.equals(fetcheduser.getPassword())){
+		if(request.getUsername().equals(fetcheduser.getUsername()) && 
+		request.getPassword().equals(fetcheduser.getPassword())){
 			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
 			return true;
 		}
 		else{
 			return false;
 		}
+		
+		peerdao.storePeer(request.g)
 	}
 
 	@Override

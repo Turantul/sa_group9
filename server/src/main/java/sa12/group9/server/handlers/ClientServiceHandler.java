@@ -1,5 +1,6 @@
 package sa12.group9.server.handlers;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoUserDAO;
+import sun.security.provider.MD5;
 
 public class ClientServiceHandler implements IClientServiceHandler {
 
@@ -22,7 +24,11 @@ public class ClientServiceHandler implements IClientServiceHandler {
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		
 		UserDTO fetcheduser = userdao.searchUser(username);
-	
+		
+
+		//MessageDigest mdEnc = MessageDigest.getInstance("MD5");
+		
+		
 		if(fetcheduser == null){
 			return false;
 		}
@@ -112,7 +118,5 @@ public class ClientServiceHandler implements IClientServiceHandler {
 		return returnPeerList;
 		
 	}
-
-
 
 }

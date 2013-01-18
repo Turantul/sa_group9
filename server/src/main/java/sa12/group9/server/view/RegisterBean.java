@@ -1,5 +1,7 @@
 package sa12.group9.server.view;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
@@ -51,7 +53,18 @@ public String getPassword(){
 		  UserDTO newlyRegisteredUser = new UserDTO();
 		  
 		  newlyRegisteredUser.setUsername(loginname);
-		  newlyRegisteredUser.setPassword(password);
+		  
+			try {
+				
+				MessageDigest mdEnc = MessageDigest.getInstance("MD5");
+				mdEnc.update(password.getBytes(), 0, password.length());
+				String md5sum = new BigInteger(1, mdEnc.digest()).toString(16); // Encrypted string
+				
+				newlyRegisteredUser.setPassword(md5sum);
+				
+			}catch (Exception e) {
+				return "registerfail";
+			}
 		  newlyRegisteredUser.setCoins(20);
 		
 		  userdao.storeUser(newlyRegisteredUser);

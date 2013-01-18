@@ -4,6 +4,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,11 +27,11 @@ public class PeerService
 	@POST
 	@Path("login")
 	@Consumes("application/json")
-	public boolean login(LoginRequest request)
+	public boolean login(IsAliveNotification request)
 	{
 		log.info("Got login request for " + request.getUsername());
 
-		return peerHandler.verifyLogin(request.getUsername(), request.getPassword());
+		return peerHandler.verifyLogin(request);
 	}
 
 	@POST

@@ -1,5 +1,6 @@
 package sa12.group9.server.handler;
 
+import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.PeerList;
 
 public interface IPeerServiceHandler
@@ -11,7 +12,7 @@ public interface IPeerServiceHandler
 	 * @param password
 	 * @return 
 	 */
-	boolean verifyLogin(String username, String password);
+	boolean verifyLogin(String username, String passwordrequest);
 
 	/**
 	 * 
@@ -20,4 +21,6 @@ public interface IPeerServiceHandler
 	 * @return 
 	 */
 	PeerList getRandomPeerList(int numberOfWantedPeers);
+
+	boolean verifyLogin(IsAliveNotification request);
 }
