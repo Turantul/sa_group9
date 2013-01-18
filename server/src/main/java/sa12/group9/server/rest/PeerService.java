@@ -1,9 +1,11 @@
 package sa12.group9.server.rest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +28,7 @@ public class PeerService
 	@POST
 	@Path("login")
 	@Consumes("application/json")
-	public boolean login(LoginRequest request)
+	public boolean login(@Context HttpServletRequest hsr, LoginRequest request)
 	{
 		log.info("Got login request for " + request.getUsername());
 
