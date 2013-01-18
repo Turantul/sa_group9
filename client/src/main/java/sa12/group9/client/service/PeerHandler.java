@@ -1,10 +1,13 @@
 package sa12.group9.client.service;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import sa12.group9.common.beans.FoundInformation;
+import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
@@ -49,12 +52,21 @@ public class PeerHandler implements IPeerHandler
         serverSocket.close();
     }
 
-    public void sendSearchRequest(PeerEndpoint peer, Fingerprint fingerprint) throws IOException
+    public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint) throws IOException
     {
         Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
-
-        // TODO: send out request with fingerprint, client callback address and
-        // ttl
+        
+        P2PSearchRequest request = new P2PSearchRequest();
+        request.setId(id);
+        request.setFingerprint(fingerprint);
+        request.setRequesterAddress(InetAddress.getLocalHost());
+        request.setRequesterPort(listeningPort);
+        //TODO: get TTL from server
+        request.setTtl(5);
+        
+        ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+        socketout.writeObject(request);
+        socketout.close();
 
         socket.close();
     }

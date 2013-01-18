@@ -41,7 +41,7 @@ public class RequestHandler extends Thread
 				calculateMatch(input);
 			}
 		}catch(IOException e){
-			System.out.println("Error reading IO Command in ManagementHandler. \n"+e.getMessage());
+			System.out.println("Error reading IO Command in RequestHandler. \n"+e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println("Problem reading fingerprint. \n"+e.getMessage());
 		}
