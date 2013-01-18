@@ -53,7 +53,8 @@ public class RequestHandler extends Thread
 		System.out.println(new Date(System.currentTimeMillis())+" - trying to calculate match with "+fingerprintList.size()+" fingerprints.");
 		for(Fingerprint fp : fingerprintList){
 			Double match = fp.match(input.getFingerprint());
-			if(match>0.5){
+			//if(match>0.5)
+			{
 				System.out.println("Fingerprint match found. Send Success to client.");
 				try {
 					Socket socket = new Socket(input.getRequesterAddress(), input.getRequesterPort());

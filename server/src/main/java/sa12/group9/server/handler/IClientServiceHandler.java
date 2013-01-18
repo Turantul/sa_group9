@@ -12,7 +12,7 @@ public interface IClientServiceHandler
 	 * 
 	 * @param username
 	 * @param password
-	 * @return 
+	 * @return
 	 */
 	boolean verifyLogin(String username, String password);
 
@@ -21,14 +21,12 @@ public interface IClientServiceHandler
 	 * @param request
 	 * @return
 	 */
-	
 	public SearchIssueResponse issueSearchRequest(SearchIssueRequest request);
-	
+
 	/**
 	 * 
 	 * @param request
 	 */
-	
 	public void notifySuccess(SuccessRequest request);
 
 	/**
@@ -36,7 +34,5 @@ public interface IClientServiceHandler
 	 * @param numberOfWantedPeers
 	 * @return
 	 */
-	
 	PeerList getRandomPeerList(int numberOfWantedPeers);
-    
 }

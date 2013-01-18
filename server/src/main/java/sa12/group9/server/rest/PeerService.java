@@ -28,9 +28,7 @@ public class PeerService
 	@POST
 	@Path("login")
 	@Consumes("application/json")
-
 	public boolean login(IsAliveNotification request, @Context HttpServletRequest hsr)
-
 	{
 		log.info("Got login request for " + request.getUsername());
 
