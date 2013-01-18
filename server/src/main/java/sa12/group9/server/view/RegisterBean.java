@@ -64,6 +64,29 @@ public String getPassword(){
 		  return "registerfail";
 	  }
   }
+  
+  public String UpdateUser() {
+	  
+	  try{
+		  User registeredUser = new User();
+		  IUserDAO userdao = MongoUserDAO.getInstance();
+		  
+		  registeredUser = userdao.searchUser(loginname);
+		  registeredUser.setUsername(loginname);
+		  registeredUser.setPassword(Encrypter.encryptString(password));
+		  
+		  userdao.storeUser(registeredUser);
+		  
+		  return "editsuccess";
+		  
+	  }catch (Exception e) {
+		e.printStackTrace();
+		return "editfail";
+	}
+	  
+	  
+  }
+
   private Boolean checkPasswordMatch(){
 	 
 	  if(password.equals(retypePassword)){

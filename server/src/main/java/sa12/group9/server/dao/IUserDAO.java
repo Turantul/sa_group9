@@ -9,5 +9,7 @@ public interface IUserDAO {
 	public abstract void storeUser(List<User> users);
 	public abstract User searchUser(String userName);
 	public abstract List<User> getAllUser();
+	public abstract void updateUser(User user);
+	public abstract void deleteUser(String userName);
 
 }

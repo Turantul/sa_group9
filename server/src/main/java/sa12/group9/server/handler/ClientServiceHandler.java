@@ -24,10 +24,7 @@ public class ClientServiceHandler implements IClientServiceHandler {
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		
 		User fetcheduser = userdao.searchUser(username);
-		
 
-		//MessageDigest mdEnc = MessageDigest.getInstance("MD5");
-		
 		
 		if(fetcheduser == null){
 			return false;

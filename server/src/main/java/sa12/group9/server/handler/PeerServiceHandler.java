@@ -36,6 +36,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 		
 		if(request.getUsername().equals(fetcheduser.getUsername()) && 
 		Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword())){
+			
 			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
 			
 			PeerEndpoint pdto = new PeerEndpoint();

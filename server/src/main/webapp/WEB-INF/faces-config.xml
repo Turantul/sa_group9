@@ -9,7 +9,7 @@
 	<managed-bean>
 		<managed-bean-name>login</managed-bean-name>
 		<managed-bean-class>sa12.group9.server.view.LoginBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
 	<managed-bean>
@@ -17,6 +17,7 @@
 		<managed-bean-class>sa12.group9.server.view.RegisterBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+
 	
 	
 	<navigation-rule>
@@ -31,6 +32,7 @@
 			<from-outcome>fail</from-outcome>
 			<to-view-id>loginfail.xhtml</to-view-id>
 		</navigation-case>
+
 	</navigation-rule>
 	
 	
@@ -46,6 +48,32 @@
 			<from-outcome>registerfail</from-outcome>
 			<to-view-id>registerfail.xhtml</to-view-id>
 		</navigation-case>
+
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/edit.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{login.UpdateUser}</from-action>
+			<from-outcome>updatesuccess</from-outcome>
+			<to-view-id>editsuccess.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.UpdateUser}</from-action>
+			<from-outcome>updatefail</from-outcome>
+			<to-view-id>editfail.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.DeleteUser}</from-action>
+			<from-outcome>deletesuccess</from-outcome>
+			<to-view-id>deletesuccess.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.DeleteUser}</from-action>
+			<from-outcome>deletefail</from-outcome>
+			<to-view-id>deletefail.xhtml</to-view-id>
+		</navigation-case>
+
 	</navigation-rule>
 	
 </faces-config>

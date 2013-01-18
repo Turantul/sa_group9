@@ -1,7 +1,7 @@
 package sa12.group9.server.view;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
@@ -9,10 +9,11 @@ import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class LoginBean{
 	String loginname;
 	String password;
+	String retypePassword;
 	int coins;
 
 	public int getCoins() {
@@ -51,6 +52,13 @@ public class LoginBean{
 	public void setPassword(String password){
 		this.password = password;
 	}
+	public String getRetypePassword() {
+		return retypePassword;
+	}
+
+	public void setRetypePassword(String retypePassword) {
+		this.retypePassword = retypePassword;
+	}
 
 	public String CheckValidUser(){
 
@@ -72,5 +80,50 @@ public class LoginBean{
 			return "fail";
 		}	
 	}
+	public String DeleteUser() {
+		  
+		  try{
+			  IUserDAO userdao = MongoUserDAO.getInstance();
+			  
+			  
+			  userdao.deleteUser(loginname);	  
+			  return "deletesuccess";
+			  
+		  }catch (Exception e) {
+			e.printStackTrace();
+			return "deletefail";
+		}
+	}
+	public String UpdateUser() {
+		  
+		  try{
+			  
+			  if(password.equals(retypePassword)){
+				  IUserDAO userdao = MongoUserDAO.getInstance();
+					
+					
+				  User updatedUser = new User();
+				  
+				  
+				  updatedUser.setUsername(loginname);
+				  updatedUser.setPassword(password);
+				  
+				  userdao.updateUser(updatedUser);
+				  
+				  
+				  return "updatesuccess";
+			  
+			  }else{
+				  return "updatefail";
+			  }
+			  	  
+		  }catch (Exception e) {
+			e.printStackTrace();
+			return "updatefail";
+		}
+	}
 
+	
+		  
+		 
 }

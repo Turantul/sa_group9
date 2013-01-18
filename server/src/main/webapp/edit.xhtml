@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Swazam</title>
+</h:head>
+<h:body>
+<h:form>
+Edit your Swazam account <br/>
+<table>
+	<tr>
+		<td><h:outputText value="Change account credentials for" /></td>
+		<td><h:outputText
+			value="#{login.loginname}" />
+		</td>
+	</tr>
+	<tr>
+		<td><h:outputText value="Enter new desired password: " /></td>
+		<td><h:inputSecret id="password" 
+		value="#{login.password}" />
+		</td>
+	</tr>
+	<tr>
+		<td><h:outputText value="Reenter new desired password: " /></td>
+		<td><h:inputSecret id="retypePassword" 
+		value="#{login.retypePassword}" />
+		</td>
+	</tr>
+	<tr>
+		<td> </td>
+		<td><h:commandButton value="Update Account" 
+		action="#{login.UpdateUser}"/>
+		</td>
+	</tr>
+		<tr>
+		<td> </td>
+		<td><h:commandButton value="Delete Account" 
+		action="#{login.DeleteUser}"/>
+		</td>
+	</tr>
+</table>
+</h:form>
+
+</h:body>
+</html>

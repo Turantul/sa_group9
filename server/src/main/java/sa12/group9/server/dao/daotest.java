@@ -14,8 +14,26 @@ public class daotest {
 	 */
 	public static void main(String[] args) {
 		
-		testpeerdao();
+		//testpeerdao();
 		//testuserdao();
+		//removeuser();
+		updateuser();
+	}
+	
+	public static void updateuser(){
+		IUserDAO userdao = MongoUserDAO.getInstance();
+		User affe = new User();
+		affe.setUsername("affe");
+		affe.setPassword("herbert1234566");
+		
+		userdao.updateUser(affe);
+		
+	}
+	
+	public static void removeuser(){
+		IUserDAO userdao = MongoUserDAO.getInstance();
+		userdao.deleteUser("smoun");
+		
 	}
 	
 	public static void testuserdao(){
