@@ -25,10 +25,13 @@ public class RequestHandler extends Thread
     private Socket socket;
     private Kernel kernel;
     
-    public RequestHandler(Socket socket, Kernel kernel)
+    private int forwardPeerNumber;
+    
+    public RequestHandler(Socket socket, Kernel kernel, int forwardPeerNumber)
     {
         this.socket = socket;
         this.kernel = kernel;
+        this.forwardPeerNumber = forwardPeerNumber;
     }
     
     @Override
@@ -92,7 +95,7 @@ public class RequestHandler extends Thread
             request.setRequesterAddress(input.getRequesterAddress());
             request.setRequesterPort(input.getRequesterPort());
             request.setTtl(input.getTtl()-1);
-			List<PeerEndpoint> peerList = selectRandomPeers(4);
+			List<PeerEndpoint> peerList = selectRandomPeers(forwardPeerNumber);
 			for(PeerEndpoint pe : peerList){
 				forwardRequest(request, pe);
 			}

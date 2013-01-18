@@ -19,6 +19,7 @@ public class RequestThread extends Thread {
 	private ExecutorService pool;
 	private Kernel kernel;
 	private int listeningPort;
+	private int forwardPeerNumber;
 	
 	public RequestThread(){
 		pool = Executors.newCachedThreadPool();
@@ -36,7 +37,7 @@ public class RequestThread extends Thread {
                 {
                     Socket socket = serverSocket.accept();
                     System.out.println("Accepting connection");
-                    pool.execute(new RequestHandler(socket, kernel));
+                    pool.execute(new RequestHandler(socket, kernel, forwardPeerNumber));
                 }
                 catch (IOException e)
                 {
@@ -59,6 +60,10 @@ public class RequestThread extends Thread {
 
 	public void setListeningPort(int listeningPort) {
 		this.listeningPort = listeningPort;
+	}
+
+	public void setForwardPeerNumber(int forwardPeerNumber) {
+		this.forwardPeerNumber = forwardPeerNumber;
 	}
 
 	public void shutdown() {
