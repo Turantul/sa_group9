@@ -12,6 +12,8 @@ import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
+import sa12.group9.server.handlers.IClientServiceHandler;
+import sa12.group9.server.handlers.IPeerServiceHandler;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -20,6 +22,7 @@ import com.sun.jersey.spi.resource.Singleton;
 public class ClientService
 {
     private static Log log = LogFactory.getLog(ClientService.class);
+    private IClientServiceHandler clientHandler;
 
     @POST
     @Path("login")
@@ -28,9 +31,8 @@ public class ClientService
     {
         log.info("Got login request for " + request.getUsername());
 
-        // TODO: check and log
+        return clientHandler.verifyLogin(request.getUsername(), request.getPassword());
 
-        return true;
     }
 
     @POST
@@ -56,6 +58,8 @@ public class ClientService
     {
         log.info("Got success notification from " + request.getUsername());
 
+        
+        
         // TODO: update coins (peer and client) and log
     }
 }
