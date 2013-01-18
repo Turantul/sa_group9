@@ -36,10 +36,17 @@ public class RequestHandler extends Thread
 		
 		try {
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			P2PSearchRequest input = (P2PSearchRequest) in.readObject();
-			System.out.println("Got Request "+input.getId());
-			forwardToPeers(input);
-			calculateMatch(input);
+			Object inputObj = in.readObject();
+			if(inputObj.getClass()==P2PSearchRequest.class){
+				P2PSearchRequest input = (P2PSearchRequest) inputObj;
+				System.out.println("Got Request "+input.getId());
+				forwardToPeers(input);
+				calculateMatch(input);
+			}
+			if(inputObj.getClass()==FoundInformation.class){
+				FoundInformation input = (FoundInformation) inputObj;
+				System.out.println("Got Sucessful response from "+input.getPeerUsername());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,8 +60,7 @@ public class RequestHandler extends Thread
 		System.out.println(new Date(System.currentTimeMillis())+" - trying to calculate match with "+fingerprintList.size()+" fingerprints.");
 		for(Fingerprint fp : fingerprintList){
 			Double match = fp.match(input.getFingerprint());
-			//if(match>0.5)
-			{
+			if(match>=0){
 				System.out.println("Fingerprint match found. Send Success to client.");
 				try {
 					Socket socket = new Socket(input.getRequesterAddress(), input.getRequesterPort());
