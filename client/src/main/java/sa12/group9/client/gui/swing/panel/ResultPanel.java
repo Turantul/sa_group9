@@ -29,7 +29,7 @@ public class ResultPanel extends AbstractWorkingPanel
         calc.setForeground(Color.WHITE);
         add(calc, "gaptop 100, align center, wrap");
 
-        // TODO: take infos and show them
+        // TODO: take infos and show them 
 
         JButton button = new JButton("New Request");
         button.setActionCommand(ActionCommands.NEW);
