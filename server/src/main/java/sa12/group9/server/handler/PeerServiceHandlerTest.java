@@ -2,6 +2,7 @@ package sa12.group9.server.handler;
 
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
+import sa12.group9.commons.dto.PeerDTO;
 
 public class PeerServiceHandlerTest {
 
@@ -13,7 +14,7 @@ public class PeerServiceHandlerTest {
 		
 		PeerList randompeers = handler.getRandomPeerList(2);
 		
-		for(PeerEndpoint p : randompeers.getPeers()){
+		for(PeerDTO p : randompeers.getPeers()){
 			System.out.println(p.getAddress().toString());
 		}
 

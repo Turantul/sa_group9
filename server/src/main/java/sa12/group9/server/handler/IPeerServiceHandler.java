@@ -6,7 +6,6 @@ import sa12.group9.common.beans.PeerList;
 public interface IPeerServiceHandler
 {
 
-
 	/**
 	 * 
 	 * 
@@ -18,7 +17,8 @@ public interface IPeerServiceHandler
 	/**
 	 * 
 	 * @param request
+	 * @param string 
 	 * @return
 	 */
-	boolean verifyLogin(IsAliveNotification request);
+	boolean verifyLogin(IsAliveNotification request, String remoteAddress );
 }

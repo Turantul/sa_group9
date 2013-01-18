@@ -1,8 +1,10 @@
 package sa12.group9.server.dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.commons.dto.PeerDTO;
 import sa12.group9.commons.dto.UserDTO;
 
 
@@ -35,18 +37,25 @@ public class daotest {
 	
 	public static void testpeerdao(){
 		
-		PeerEndpoint peer = new PeerEndpoint();
+		PeerDTO peer = new PeerDTO();
+		peer.setUuid(UUID.randomUUID().toString());
 		peer.setAddress("10.0.0.1");
 		peer.setKeepAlivePort(4444);
 		peer.setListeningPort(3333);
 		
-		PeerEndpoint peer2 = new PeerEndpoint();
+		PeerDTO peer2 = new PeerDTO();
+		peer2.setUuid(UUID.randomUUID().toString());
+
 		peer2.setAddress("10.0.0.2");
 		
-		PeerEndpoint peer3 = new PeerEndpoint();
+		PeerDTO peer3 = new PeerDTO();
+		peer3.setUuid(UUID.randomUUID().toString());
+
 		peer3.setAddress("10.0.0.3");
 		
-		PeerEndpoint peer4 = new PeerEndpoint();
+		PeerDTO peer4 = new PeerDTO();
+		peer4.setUuid(UUID.randomUUID().toString());
+
 		peer4.setAddress("10.0.0.4");
 		
 		

@@ -32,7 +32,7 @@ public class PeerService
 	{
 		log.info("Got login request for " + request.getUsername());
 
-		return peerHandler.verifyLogin(request);
+		return peerHandler.verifyLogin(request, hsr.getRemoteAddr());
 	}
 
 	@POST

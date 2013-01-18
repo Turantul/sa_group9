@@ -2,6 +2,7 @@ package sa12.group9.server.handler;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import sa12.group9.common.beans.PeerEndpoint;
@@ -9,6 +10,7 @@ import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
+import sa12.group9.commons.dto.PeerDTO;
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
@@ -95,7 +97,7 @@ public class ClientServiceHandler implements IClientServiceHandler {
 
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		PeerList allPeers = new PeerList();
-		ArrayList<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
+		List<PeerDTO> randomPeersSelection = new ArrayList<PeerDTO>();
 		allPeers.setPeers(peerdao.getAllPeers());
 		
 		

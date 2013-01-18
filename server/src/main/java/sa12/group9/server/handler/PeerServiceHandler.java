@@ -1,11 +1,15 @@
 package sa12.group9.server.handler;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
+import sa12.group9.commons.dto.PeerDTO;
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
@@ -15,7 +19,7 @@ import sa12.group9.server.dao.MongoUserDAO;
 public class PeerServiceHandler implements IPeerServiceHandler {
 
 	@Override
-	public boolean verifyLogin(IsAliveNotification request) {
+	public boolean verifyLogin(IsAliveNotification request, String remoteAddress) {
 		
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
@@ -30,13 +34,22 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 		if(request.getUsername().equals(fetcheduser.getUsername()) && 
 		request.getPassword().equals(fetcheduser.getPassword())){
 			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
+			
+			PeerDTO pdto = new PeerDTO();
+			pdto.setAddress(remoteAddress);
+			pdto.setUuid(UUID.randomUUID().toString());
+			pdto.setKeepAlivePort(request.getKeepAlivePort());
+			pdto.setListeningPort(request.getListeningPort());
+			pdto.setLastKeepAlive(new Date());
+			
+			peerdao.storePeer(pdto);
 			return true;
 		}
 		else{
 			return false;
 		}
 		
-		//peerdao.storePeer(request.g)
+		
 	}
 
 	@Override
@@ -44,7 +57,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		PeerList allPeers = new PeerList();
-		ArrayList<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
+		List<PeerDTO> randomPeersSelection = new ArrayList<PeerDTO>();
 		allPeers.setPeers(peerdao.getAllPeers());
 		
 		

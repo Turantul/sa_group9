@@ -1,17 +1,37 @@
-package sa12.group9.common.beans;
+package sa12.group9.commons.dto;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
-public class PeerEndpoint
+@Document(collection="peers")
+public class PeerDTO
 {
-    private String address;
+	@Id
+	private String uuid;
+	private String address;
     private int listeningPort;
     private int keepAlivePort;
     private Date lastKeepAlive;
+    private String userid;
+    
+    public String getUuid() {
+ 		return uuid;
+ 	}
 
-    public String getAddress()
+ 	public void setUuid(String uuid) {
+ 		this.uuid = uuid;
+ 	}
+    
+    public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getAddress()
     {
         return address;
     }
