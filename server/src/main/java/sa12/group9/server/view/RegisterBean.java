@@ -56,7 +56,7 @@ public String getPassword(){
 		  newlyRegisteredUser.setUsername(loginname);
 		  
 				
-		  newlyRegisteredUser.setPassword(new Encrypter(password).getEncryptedPassword());
+		  newlyRegisteredUser.setPassword(Encrypter.encryptString(password));
 				
 			
 		  newlyRegisteredUser.setCoins(20);

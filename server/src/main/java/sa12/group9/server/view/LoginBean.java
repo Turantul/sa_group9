@@ -68,7 +68,7 @@ public class LoginBean{
 	
 		
 		if(loginname.equals(fetcheduser.getUsername()) && 
-		new Encrypter(password).getEncryptedPassword().equals(fetcheduser.getPassword())){
+		Encrypter.encryptString(password).equals(fetcheduser.getPassword())){
 			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
 					return "success";
 		}
