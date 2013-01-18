@@ -20,7 +20,7 @@ import com.sun.jersey.spi.resource.Singleton;
 public class PeerService
 {
 	private static Log log = LogFactory.getLog(PeerService.class);
-	private IPeerServiceHandler clientHandler;
+	private IPeerServiceHandler peerHandler;
 
 	@POST
 	@Path("login")
@@ -29,7 +29,7 @@ public class PeerService
 	{
 		log.info("Got login request for " + request.getUsername());
 
-		return clientHandler.verifyLogin(request.getUsername(), request.getPassword());
+		return peerHandler.verifyLogin(request.getUsername(), request.getPassword());
 	}
 
 	@POST
@@ -40,7 +40,7 @@ public class PeerService
 	{
 		log.info("Got neigbor request for " + request.getUsername());
 
-		return clientHandler.getRandomPeerList(10);
+		return peerHandler.getRandomPeerList(10);
 	}
 
 	@POST
@@ -55,6 +55,6 @@ public class PeerService
 
 	public void setClientHandler(IPeerServiceHandler clientHandler)
 	{
-		this.clientHandler = clientHandler;
+		this.peerHandler = clientHandler;
 	}
 }
