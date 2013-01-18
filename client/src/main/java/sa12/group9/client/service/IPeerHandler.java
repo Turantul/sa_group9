@@ -14,10 +14,9 @@ public interface IPeerHandler
      * Opens a socket to listen for incoming replies from peers
      * 
      * @param mainAction object to be called back when a reply comes in
-     * @param seconds how long the port should listen
      * @throws IOException
      */
-    void openListeningSocket(ICallback mainAction, int seconds) throws IOException;
+    void openListeningSocket(ICallback mainAction) throws IOException;
 
     /**
      * Issues a search request and sends it to the respective peer
@@ -30,4 +29,9 @@ public interface IPeerHandler
      * @throws IOException
      */
     void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException;
+    
+    /**
+     * Stop listening to the server
+     */
+    void shutdown();
 }

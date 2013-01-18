@@ -5,14 +5,7 @@ import sa12.group9.common.beans.PeerList;
 
 public interface IPeerServiceHandler
 {
-	/**
-	 * 
-	 * 
-	 * @param username
-	 * @param password
-	 * @return 
-	 */
-	boolean verifyLogin(String username, String passwordrequest);
+
 
 	/**
 	 * 
@@ -22,5 +15,10 @@ public interface IPeerServiceHandler
 	 */
 	PeerList getRandomPeerList(int numberOfWantedPeers);
 
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	boolean verifyLogin(IsAliveNotification request);
 }

@@ -36,7 +36,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 			return false;
 		}
 		
-		peerdao.storePeer(request.g)
+		//peerdao.storePeer(request.g)
 	}
 
 	@Override
@@ -67,5 +67,6 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 		return returnPeerList;
 		
 	}
+
 
 }

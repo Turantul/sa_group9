@@ -1,6 +1,7 @@
 package sa12.group9.client.service;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -13,65 +14,78 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class PeerHandler implements IPeerHandler
 {
-    private int listeningPort;
+	private int listeningPort;
+	private ServerSocket serverSocket;
 
-    public void openListeningSocket(final ICallback mainAction, int seconds) throws IOException
-    {
-        ServerSocket serverSocket = new ServerSocket(listeningPort);
+	public void openListeningSocket(final ICallback mainAction) throws IOException
+	{
+		serverSocket = new ServerSocket(listeningPort);
 
-        long start = System.currentTimeMillis();
-        do
-        {
-            try
-            {
-                Socket socket = serverSocket.accept();
+		try
+		{
+			while (true)
+			{
+				try
+				{
+					Socket socket = serverSocket.accept();
 
-                new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        // TODO: process response
+					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+					FoundInformation found = (FoundInformation) in.readObject();
 
-                        FoundInformation information = new FoundInformation();
-                        mainAction.receivingCallback(information);
-                    }
-                }.start();
+					mainAction.receivingCallback(found);
 
-                socket.close();
-            }
-            catch (IOException e)
-            {
-                if (!serverSocket.isClosed())
-                {
-                    System.out.println("Error reading from TCP socket!");
-                }
-            }
-        } while (System.currentTimeMillis() - start < seconds * 1000);
+					socket.close();
+				}
+				catch (ClassNotFoundException e)
+				{
+					System.out.println("Error reading from TCP socket!");
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			if (!serverSocket.isClosed())
+			{
+				System.out.println("Error reading from TCP socket!");
+			}
+		}
+		
+		serverSocket.close();
+	}
 
-        serverSocket.close();
-    }
+	public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException
+	{
+		Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
 
-    public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException
-    {
-        Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
-        
-        P2PSearchRequest request = new P2PSearchRequest();
-        request.setId(id);
-        request.setFingerprint(fingerprint);
-        request.setRequesterAddress(InetAddress.getLocalHost());
-        request.setRequesterPort(listeningPort);
-        request.setTtl(ttl);
-        
-        ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-        socketout.writeObject(request);
-        socketout.close();
+		P2PSearchRequest request = new P2PSearchRequest();
+		request.setId(id);
+		request.setFingerprint(fingerprint);
+		request.setRequesterAddress(InetAddress.getLocalHost());
+		request.setRequesterPort(listeningPort);
+		request.setTtl(ttl);
 
-        socket.close();
-    }
+		ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+		socketout.writeObject(request);
+		socketout.close();
 
-    public void setListeningPort(int listeningPort)
-    {
-        this.listeningPort = listeningPort;
-    }
+		socket.close();
+	}
+
+	public void setListeningPort(int listeningPort)
+	{
+		this.listeningPort = listeningPort;
+	}
+
+	public void shutdown()
+	{
+		if (serverSocket != null && !serverSocket.isClosed())
+		{
+			try
+			{
+				serverSocket.close();
+			}
+			catch (IOException e)
+			{}
+		}
+	}
 }

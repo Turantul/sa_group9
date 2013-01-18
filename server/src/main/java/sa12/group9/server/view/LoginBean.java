@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import sa12.group9.common.util.Encrypter;
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoUserDAO;
@@ -56,35 +57,24 @@ public class LoginBean{
 	}
 
 	public String CheckValidUser(){
-        
-		try {
-			
-			MessageDigest mdEnc = MessageDigest.getInstance("MD5");
-			mdEnc.update(password.getBytes(), 0, password.length());
-			String md5sum = new BigInteger(1, mdEnc.digest()).toString(16); // Encrypted string
+
+		IUserDAO userdao = MongoUserDAO.getInstance();
+		
+		UserDTO fetcheduser = userdao.searchUser(loginname);
 	
-		
-			IUserDAO userdao = MongoUserDAO.getInstance();
-			
-			UserDTO fetcheduser = userdao.searchUser(loginname);
-		
-			if(fetcheduser == null){
-				return "fail";
-			}
-		
-			if(loginname.equals(fetcheduser.getUsername()) && 
-			md5sum.equals(fetcheduser.getPassword())){
-				System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
-						return "success";
-			}
-			else{
-				return "fail";
-			}
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+		if(fetcheduser == null){
 			return "fail";
 		}
 	
+		
+		if(loginname.equals(fetcheduser.getUsername()) && 
+		new Encrypter(password).getEncryptedPassword().equals(fetcheduser.getPassword())){
+			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
+					return "success";
+		}
+		else{
+			return "fail";
+		}	
 	}
 
 }

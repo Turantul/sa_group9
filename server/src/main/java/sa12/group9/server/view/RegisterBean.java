@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import sa12.group9.common.util.Encrypter;
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoUserDAO;
@@ -54,17 +55,10 @@ public String getPassword(){
 		  
 		  newlyRegisteredUser.setUsername(loginname);
 		  
-			try {
 				
-				MessageDigest mdEnc = MessageDigest.getInstance("MD5");
-				mdEnc.update(password.getBytes(), 0, password.length());
-				String md5sum = new BigInteger(1, mdEnc.digest()).toString(16); // Encrypted string
+		  newlyRegisteredUser.setPassword(new Encrypter(password).getEncryptedPassword());
 				
-				newlyRegisteredUser.setPassword(md5sum);
-				
-			}catch (Exception e) {
-				return "registerfail";
-			}
+			
 		  newlyRegisteredUser.setCoins(20);
 		
 		  userdao.storeUser(newlyRegisteredUser);

@@ -1,5 +1,6 @@
 package sa12.group9.server.rest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -27,7 +28,9 @@ public class PeerService
 	@POST
 	@Path("login")
 	@Consumes("application/json")
-	public boolean login(IsAliveNotification request)
+
+	public boolean login(IsAliveNotification request, @Context HttpServletRequest hsr)
+
 	{
 		log.info("Got login request for " + request.getUsername());
 

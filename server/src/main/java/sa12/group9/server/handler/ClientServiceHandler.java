@@ -1,4 +1,4 @@
-package sa12.group9.server.handlers;
+package sa12.group9.server.handler;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;

@@ -82,7 +82,7 @@ public class Console implements ICallback
 
                         try
                         {
-                            peerHandler.openListeningSocket(this, response.getSecondsToWait());
+                            peerHandler.openListeningSocket(this);
 
                             int i = 0;
                             for (PeerEndpoint peer : response.getPeers().getPeers())
@@ -106,6 +106,7 @@ public class Console implements ICallback
                             {
                                 System.out.println("Waiting for responses...");
                                 Thread.sleep(response.getSecondsToWait() * 1000);
+                                peerHandler.shutdown();
 
                                 if (songs.size() == 0)
                                 {
