@@ -1,4 +1,4 @@
-package sa12.group9.server.handlers;
+package sa12.group9.server.handler;
 
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
