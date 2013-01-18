@@ -13,6 +13,7 @@ import java.util.Set;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
+import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
@@ -32,28 +33,45 @@ public class RequestHandler extends Thread
     @Override
     public void run()
     {
-    	try{
+		
+		try {
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			while(!socket.isClosed()){
-				P2PSearchRequest input = (P2PSearchRequest) in.readObject();
-				System.out.println("Got Request "+input.getId());
-				forwardToPeers(input);
-				calculateMatch(input);
-			}
-		}catch(IOException e){
-			System.out.println("Error reading IO Command in RequestHandler. \n"+e.getMessage());
-		} catch (ClassNotFoundException e) {
-			System.out.println("Problem reading fingerprint. \n"+e.getMessage());
+			P2PSearchRequest input = (P2PSearchRequest) in.readObject();
+			System.out.println("Got Request "+input.getId());
+			forwardToPeers(input);
+			calculateMatch(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
     }
     
     private void calculateMatch(P2PSearchRequest input) {
 		List<Fingerprint> fingerprintList = kernel.getFingerprintSnapshot();
 		System.out.println(new Date(System.currentTimeMillis())+" - trying to calculate match with "+fingerprintList.size()+" fingerprints.");
 		for(Fingerprint fp : fingerprintList){
-			if(fp.equals(input.getFingerprint())){
+			Double match = fp.match(input.getFingerprint());
+			if(match>0.5){
 				System.out.println("Fingerprint match found. Send Success to client.");
-				//Send success to client
+				try {
+					Socket socket = new Socket(input.getRequesterAddress(), input.getRequesterPort());
+					ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+					FoundInformation response = new FoundInformation();
+					response.setAlbum("Affen");
+					response.setGenre("Affensongs");
+					response.setInterpret("Gorillaz");
+					response.setLength(230);
+					response.setTitle("Michi der kleine Affe");
+					response.setMatch(match);
+		            socketout.writeObject(response);
+		            socketout.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		}
 		System.out.println(new Date(System.currentTimeMillis())+" - matching done.");

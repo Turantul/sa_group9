@@ -41,16 +41,75 @@ public class ClientServiceHandler implements IClientServiceHandler {
 	public SearchIssueResponse issueSearchRequest(SearchIssueRequest request) {
 
 		
+		SearchIssueResponse response = new SearchIssueResponse();
 		
+		try{
+			IUserDAO userdao = MongoUserDAO.getInstance();
+			
+			UserDTO fetcheduser = userdao.searchUser(request.getUsername());
+			
+			
+			if(fetcheduser.getCoins() <=0){
+				response.setErrorMsg("No coins left");
+			}
+			else{
+			    response.setPeers(this.getRandomPeerList(10));
+			}
+			
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
 		
         // TODO: check coins and log
         // also provide reasonable TTL, seconds to wait and amount of peers for forwarding!
-		return null;
+		return response;
 	}
 
 	@Override
 	public void notifySuccess(SuccessRequest request) {
-		// TODO update coins (peer and client) and log
+		
+		try{
+			IUserDAO userdao = MongoUserDAO.getInstance();
+			
+			UserDTO fetcheduser = userdao.searchUser(request.getUsername());
+		
+			fetcheduser.setCoins(fetcheduser.getCoins() - 1);
+					
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	}
+	@Override
+	public PeerList getRandomPeerList(int numberOfWantedPeers) {
+
+		IPeerDAO peerdao = MongoPeerDAO.getInstance();
+		PeerList allPeers = new PeerList();
+		ArrayList<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
+		allPeers.setPeers(peerdao.getAllPeers());
+		
+		
+		Random random = new Random();
+		int randomlyChosenPeersCount = 0;
+		
+		
+		//iterate as long as either the wanted number is reached or the maximum number of peers in database return
+		while((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < allPeers.getPeers().size())){
+
+			randomPeersSelection.add(allPeers.getPeers().get(random.nextInt(allPeers.getPeers().size())));
+			
+			randomlyChosenPeersCount++;
+		}
+
+		
+		PeerList returnPeerList = new PeerList();
+		returnPeerList.setPeers(randomPeersSelection);
+
+		return returnPeerList;
 		
 	}
 
