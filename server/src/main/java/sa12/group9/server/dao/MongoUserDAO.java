@@ -7,8 +7,10 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import sa12.group9.common.beans.User;
+import sa12.group9.common.util.Encrypter;
 
 
 public class MongoUserDAO implements IUserDAO{
@@ -43,5 +45,20 @@ public class MongoUserDAO implements IUserDAO{
 	public List<User> getAllUser() {
 		return mongoOperation.findAll(User.class, "users");
 	}
+
+	@Override
+	public void updateUser(User user) {
+	
+		 
+		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(user.getUsername())), Update.update("password", Encrypter.encryptString(user.getPassword())) , User.class);
+		
+	}
+	
+	@Override
+	public void deleteUser(String userName){
+		mongoOperation.remove(new Query(Criteria.where("username").is(userName)), User.class);
+
+	}
+	
 
 }
