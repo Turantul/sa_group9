@@ -56,6 +56,6 @@ public class ClientService
     {
         log.info("Got success notification from " + request.getUsername());
 
-        // TODO: update coins and log
+        // TODO: update coins (peer and client) and log
     }
 }

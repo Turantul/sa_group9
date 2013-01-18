@@ -89,7 +89,7 @@ public class Console implements ICallback
                             {
                                 try
                                 {
-                                    peerHandler.sendSearchRequest(id, peer, finger);
+                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl());
                                     i++;
                                 }
                                 catch (IOException e)
@@ -135,7 +135,12 @@ public class Console implements ICallback
 
                                     serverHandler.notifySuccess(username, password, id, songs.get(0));
 
-                                    // TODO print songs.get(0) to console
+                                    System.out.println("Your search was successful. The song was found by " + songs.get(0).getPeerUsername() + " with a match of " + songs.get(0).getMatch());
+                                    System.out.println("Title: " + songs.get(0).getTitle());
+                                    System.out.println("Interpret: " + songs.get(0).getInterpret());
+                                    System.out.println("Album: " + songs.get(0).getAlbum() == null || songs.get(0).getAlbum().equals("") ? "-" : songs.get(0).getAlbum());
+                                    System.out.println("Genre: " + songs.get(0).getGenre() == null || songs.get(0).getGenre().equals("") ? "-" : songs.get(0).getGenre());
+                                    System.out.println("Length: " + (songs.get(0).getLength() == 0 ? "-" : (songs.get(0).getLength() / 60 + ":" + songs.get(0).getLength() % 60)));
                                 }
                             }
                         }

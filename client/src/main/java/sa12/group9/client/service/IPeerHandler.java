@@ -26,7 +26,8 @@ public interface IPeerHandler
      * @param id of the request
      * @param peer which gets the search request
      * @param fingerprint of the song to be searched
+     * @param ttl TTL
      * @throws IOException
      */
-    void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint) throws IOException;
+    void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException;
 }

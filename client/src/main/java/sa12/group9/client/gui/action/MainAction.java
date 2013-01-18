@@ -42,7 +42,7 @@ public class MainAction implements ActionListener, ICallback
 
     private MainFrame frame;
     private Thread processing;
-    
+
     private IServerHandler serverHandler;
     private IPeerHandler peerHandler;
     private IFingerprintService fingerprintService;
@@ -53,7 +53,7 @@ public class MainAction implements ActionListener, ICallback
 
         frame = new MainFrame(this);
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -97,6 +97,7 @@ public class MainAction implements ActionListener, ICallback
                     frame.showError("You must select an audio file first!", "No file selected");
                 }
                 break;
+
             case ActionCommands.NEW:
                 frame.swapPanel(new MainPanel(this));
                 break;
@@ -106,10 +107,10 @@ public class MainAction implements ActionListener, ICallback
     public void loginSuccessful(String username, String password)
     {
         log.info("User logged in");
-        
+
         this.username = username;
         this.password = password;
-        
+
         frame.swapPanel(new MainPanel(this));
     }
 
@@ -151,7 +152,7 @@ public class MainAction implements ActionListener, ICallback
                             {
                                 try
                                 {
-                                    peerHandler.sendSearchRequest(id, peer, finger);
+                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl());
                                     log.info("Request sent to peer at " + peer.getAddress() + " at port " + peer.getListeningPort());
                                     i++;
                                 }

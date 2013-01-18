@@ -13,6 +13,9 @@ public abstract class AbstractWorkingPanel extends JPanel
     protected ActionListener actlist;
     protected JPanel panel;
 
+    protected AbstractWorkingPanel()
+    {}
+
     protected AbstractWorkingPanel(ActionListener actlist)
     {
         super();
@@ -21,7 +24,7 @@ public abstract class AbstractWorkingPanel extends JPanel
         draw();
     }
 
-    private void initialize()
+    protected void initialize()
     {
         setLayout(new MigLayout());
         setBorder(BorderFactory.createLoweredBevelBorder());

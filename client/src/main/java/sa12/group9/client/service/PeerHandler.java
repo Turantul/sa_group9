@@ -52,7 +52,7 @@ public class PeerHandler implements IPeerHandler
         serverSocket.close();
     }
 
-    public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint) throws IOException
+    public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException
     {
         Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
         
@@ -61,8 +61,7 @@ public class PeerHandler implements IPeerHandler
         request.setFingerprint(fingerprint);
         request.setRequesterAddress(InetAddress.getLocalHost());
         request.setRequesterPort(listeningPort);
-        //TODO: get TTL from server
-        request.setTtl(5);
+        request.setTtl(ttl);
         
         ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
         socketout.writeObject(request);
