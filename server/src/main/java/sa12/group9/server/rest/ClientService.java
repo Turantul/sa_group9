@@ -12,6 +12,7 @@ import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
+import sa12.group9.server.handlers.ClientServiceHandler;
 import sa12.group9.server.handlers.IClientServiceHandler;
 
 
@@ -22,7 +23,7 @@ import com.sun.jersey.spi.resource.Singleton;
 public class ClientService
 {
     private static Log log = LogFactory.getLog(ClientService.class);
-    private IClientServiceHandler clientHandler;
+    private IClientServiceHandler clientHandler = new ClientServiceHandler();
 
     @POST
     @Path("login")

@@ -16,7 +16,10 @@ public class FoundInformation extends SongMetadata implements Serializable
     	title = meta.title;
     }
 
-    public String getPeerUsername()
+    public FoundInformation()
+	{}
+
+	public String getPeerUsername()
     {
         return peerUsername;
     }
