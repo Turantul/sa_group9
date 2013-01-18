@@ -9,7 +9,11 @@ import java.util.UUID;
 import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
+
 import sa12.group9.commons.dto.PeerDTO;
+
+import sa12.group9.common.util.Encrypter;
+
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
@@ -30,9 +34,8 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 			return false;
 		}
 		
-		
 		if(request.getUsername().equals(fetcheduser.getUsername()) && 
-		request.getPassword().equals(fetcheduser.getPassword())){
+		Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword())){
 			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
 			
 			PeerDTO pdto = new PeerDTO();
