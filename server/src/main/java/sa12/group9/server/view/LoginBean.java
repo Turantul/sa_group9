@@ -5,8 +5,8 @@ import javax.faces.bean.RequestScoped;
 
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.MongoUserDAO;
-import sa12.group9.server.handlers.PeerServiceHandler;
-import sa12.group9.server.handlers.IPeerServiceHandler;
+import sa12.group9.server.handler.IPeerServiceHandler;
+import sa12.group9.server.handler.PeerServiceHandler;
 
 @ManagedBean
 @RequestScoped

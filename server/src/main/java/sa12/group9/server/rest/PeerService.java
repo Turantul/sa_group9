@@ -11,7 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.IsAliveNotification;
-import sa12.group9.server.handlers.IPeerServiceHandler;
+import sa12.group9.server.handler.IPeerServiceHandler;
+import sa12.group9.server.handler.PeerServiceHandler;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -20,7 +21,7 @@ import com.sun.jersey.spi.resource.Singleton;
 public class PeerService
 {
 	private static Log log = LogFactory.getLog(PeerService.class);
-	private IPeerServiceHandler peerHandler;
+	private IPeerServiceHandler peerHandler = new PeerServiceHandler();
 
 	@POST
 	@Path("login")
@@ -51,10 +52,5 @@ public class PeerService
 		log.debug("Got isAlive from " + notification.getUsername());
 
 		// TODO: mark as alive
-	}
-
-	public void setClientHandler(IPeerServiceHandler clientHandler)
-	{
-		this.peerHandler = clientHandler;
 	}
 }
