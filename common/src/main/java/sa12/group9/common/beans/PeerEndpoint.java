@@ -4,14 +4,34 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
+@Document(collection="peers")
 public class PeerEndpoint
 {
+	@Id
+	private String uuid;
     private String address;
     private int listeningPort;
     private int keepAlivePort;
     private Date lastKeepAlive;
+    private String userid;
 
-    public String getAddress()
+    public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getAddress()
     {
         return address;
     }

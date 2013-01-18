@@ -8,8 +8,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import sa12.group9.commons.dto.UserDTO;
-
+import sa12.group9.common.beans.User;
 
 
 public class MongoUserDAO implements IUserDAO{
@@ -28,21 +27,21 @@ public class MongoUserDAO implements IUserDAO{
 		return instance;
 	}
 
-	public void storeUser(UserDTO user) {
+	public void storeUser(User user) {
 		mongoOperation.save(user, "users");
 	}
 
-	public void storeUser(List<UserDTO> users) {
+	public void storeUser(List<User> users) {
 		mongoOperation.save(users, "users");
 	}
 
-	public UserDTO searchUser(String userName) {
-		return mongoOperation.findOne(new Query(Criteria.where("username").is(userName)),UserDTO.class, "users");		
+	public User searchUser(String userName) {
+		return mongoOperation.findOne(new Query(Criteria.where("username").is(userName)),User.class, "users");		
 	}
 
 	@Override
-	public List<UserDTO> getAllUser() {
-		return mongoOperation.findAll(UserDTO.class, "users");
+	public List<User> getAllUser() {
+		return mongoOperation.findAll(User.class, "users");
 	}
 
 }

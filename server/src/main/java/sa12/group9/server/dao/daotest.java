@@ -1,11 +1,9 @@
 package sa12.group9.server.dao;
 
-import java.util.List;
 import java.util.UUID;
 
 import sa12.group9.common.beans.PeerEndpoint;
-import sa12.group9.commons.dto.PeerDTO;
-import sa12.group9.commons.dto.UserDTO;
+import sa12.group9.common.beans.User;
 
 
 
@@ -21,7 +19,7 @@ public class daotest {
 	}
 	
 	public static void testuserdao(){
-		UserDTO user = new UserDTO();
+		User user = new User();
 		
 		user.setUsername("hugo");
 		user.setPassword("password");
@@ -37,23 +35,23 @@ public class daotest {
 	
 	public static void testpeerdao(){
 		
-		PeerDTO peer = new PeerDTO();
+		PeerEndpoint peer = new PeerEndpoint();
 		peer.setUuid(UUID.randomUUID().toString());
 		peer.setAddress("10.0.0.1");
 		peer.setKeepAlivePort(4444);
 		peer.setListeningPort(3333);
 		
-		PeerDTO peer2 = new PeerDTO();
+		PeerEndpoint peer2 = new PeerEndpoint();
 		peer2.setUuid(UUID.randomUUID().toString());
 
 		peer2.setAddress("10.0.0.2");
 		
-		PeerDTO peer3 = new PeerDTO();
+		PeerEndpoint peer3 = new PeerEndpoint();
 		peer3.setUuid(UUID.randomUUID().toString());
 
 		peer3.setAddress("10.0.0.3");
 		
-		PeerDTO peer4 = new PeerDTO();
+		PeerEndpoint peer4 = new PeerEndpoint();
 		peer4.setUuid(UUID.randomUUID().toString());
 
 		peer4.setAddress("10.0.0.4");

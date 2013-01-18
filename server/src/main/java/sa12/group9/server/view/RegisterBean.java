@@ -1,14 +1,10 @@
 package sa12.group9.server.view;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.util.Date;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
-import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 
@@ -51,7 +47,7 @@ public String getPassword(){
 	  IUserDAO userdao = MongoUserDAO.getInstance();
 	  
 	  if(checkPasswordMatch()){
-		  UserDTO newlyRegisteredUser = new UserDTO();
+		  User newlyRegisteredUser = new User();
 		  
 		  newlyRegisteredUser.setUsername(loginname);
 		  

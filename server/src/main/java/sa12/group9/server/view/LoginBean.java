@@ -1,14 +1,10 @@
 package sa12.group9.server.view;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
-import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 
@@ -24,7 +20,7 @@ public class LoginBean{
 		try {
 			MongoUserDAO usersdao = MongoUserDAO.getInstance();
 			
-			UserDTO loggedinuser = usersdao.searchUser(loginname);
+			User loggedinuser = usersdao.searchUser(loginname);
 			
 			return loggedinuser.getCoins();
 		} catch (Exception e) {
@@ -60,7 +56,7 @@ public class LoginBean{
 
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		
-		UserDTO fetcheduser = userdao.searchUser(loginname);
+		User fetcheduser = userdao.searchUser(loginname);
 	
 		if(fetcheduser == null){
 			return "fail";

@@ -9,12 +9,10 @@ import java.util.UUID;
 import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
-
-import sa12.group9.commons.dto.PeerDTO;
+import sa12.group9.common.beans.User;
 
 import sa12.group9.common.util.Encrypter;
 
-import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
@@ -28,7 +26,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		
-		UserDTO fetcheduser = userdao.searchUser(request.getUsername());
+		User fetcheduser = userdao.searchUser(request.getUsername());
 	
 		if(fetcheduser == null){
 			return false;
@@ -38,7 +36,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 		Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword())){
 			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
 			
-			PeerDTO pdto = new PeerDTO();
+			PeerEndpoint pdto = new PeerEndpoint();
 			pdto.setAddress(remoteAddress);
 			pdto.setUuid(UUID.randomUUID().toString());
 			pdto.setKeepAlivePort(request.getKeepAlivePort());
@@ -60,7 +58,7 @@ public class PeerServiceHandler implements IPeerServiceHandler {
 
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		PeerList allPeers = new PeerList();
-		List<PeerDTO> randomPeersSelection = new ArrayList<PeerDTO>();
+		List<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
 		allPeers.setPeers(peerdao.getAllPeers());
 		
 		

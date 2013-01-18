@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import sa12.group9.common.beans.PeerEndpoint;
-import sa12.group9.commons.dto.PeerDTO;
-import sa12.group9.commons.dto.UserDTO;
 
 public class MongoPeerDAO implements IPeerDAO {
 	private static MongoPeerDAO instance = new MongoPeerDAO();
@@ -29,25 +27,25 @@ public class MongoPeerDAO implements IPeerDAO {
 		
 	
 	@Override
-	public void storePeer(PeerDTO peer) {
+	public void storePeer(PeerEndpoint peer) {
 		mongoOperation.save(peer, "peers");
 		
 	}
 
 	@Override
-	public void storePeer(List<PeerDTO> peers) {
+	public void storePeer(List<PeerEndpoint> peers) {
 		mongoOperation.save(peers, "peers");
 		
 	}
 
 	@Override
-	public PeerDTO searchPeer(String address) {
-		return mongoOperation.findOne(new Query(Criteria.where("address").is(address)),PeerDTO.class, "peers");
+	public PeerEndpoint searchPeer(String address) {
+		return mongoOperation.findOne(new Query(Criteria.where("address").is(address)),PeerEndpoint.class, "peers");
 	}
 
 	@Override
-	public List<PeerDTO> getAllPeers() {
-		return mongoOperation.findAll(PeerDTO.class, "peers");
+	public List<PeerEndpoint> getAllPeers() {
+		return mongoOperation.findAll(PeerEndpoint.class, "peers");
 		
 	}
 

@@ -10,13 +10,11 @@ import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
-import sa12.group9.commons.dto.PeerDTO;
-import sa12.group9.commons.dto.UserDTO;
+import sa12.group9.common.beans.User;
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoUserDAO;
-import sun.security.provider.MD5;
 
 public class ClientServiceHandler implements IClientServiceHandler {
 
@@ -25,7 +23,7 @@ public class ClientServiceHandler implements IClientServiceHandler {
 		
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		
-		UserDTO fetcheduser = userdao.searchUser(username);
+		User fetcheduser = userdao.searchUser(username);
 		
 
 		//MessageDigest mdEnc = MessageDigest.getInstance("MD5");
@@ -54,7 +52,7 @@ public class ClientServiceHandler implements IClientServiceHandler {
 		try{
 			IUserDAO userdao = MongoUserDAO.getInstance();
 			
-			UserDTO fetcheduser = userdao.searchUser(request.getUsername());
+			User fetcheduser = userdao.searchUser(request.getUsername());
 			
 			
 			if(fetcheduser.getCoins() <=0){
@@ -82,7 +80,7 @@ public class ClientServiceHandler implements IClientServiceHandler {
 		try{
 			IUserDAO userdao = MongoUserDAO.getInstance();
 			
-			UserDTO fetcheduser = userdao.searchUser(request.getUsername());
+			User fetcheduser = userdao.searchUser(request.getUsername());
 		
 			fetcheduser.setCoins(fetcheduser.getCoins() - 1);
 					
@@ -97,7 +95,7 @@ public class ClientServiceHandler implements IClientServiceHandler {
 
 		IPeerDAO peerdao = MongoPeerDAO.getInstance();
 		PeerList allPeers = new PeerList();
-		List<PeerDTO> randomPeersSelection = new ArrayList<PeerDTO>();
+		List<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
 		allPeers.setPeers(peerdao.getAllPeers());
 		
 		
