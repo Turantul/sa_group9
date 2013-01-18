@@ -13,7 +13,7 @@ import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.server.handlers.IClientServiceHandler;
-import sa12.group9.server.handlers.IPeerServiceHandler;
+
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -43,10 +43,13 @@ public class ClientService
     {
         log.info("Got search issue request for " + request.getUsername());
 
+        
+        SearchIssueResponse response = clientHandler.issueSearchRequest(request);
+        
         // TODO: check coins and log
         // also provide reasonable TTL, seconds to wait and amount of peers for forwarding!
 
-        SearchIssueResponse response = new SearchIssueResponse();
+        
         response.setErrorMsg("No peers available!");
         return response;
     }
@@ -58,6 +61,7 @@ public class ClientService
     {
         log.info("Got success notification from " + request.getUsername());
 
+        clientHandler.notifySuccess(request);
         
         
         // TODO: update coins (peer and client) and log
