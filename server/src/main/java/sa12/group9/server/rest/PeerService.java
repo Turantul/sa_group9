@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.IsAliveNotification;
+import sa12.group9.server.handlers.ClientServiceHandler;
+import sa12.group9.server.handlers.IClientServiceHandler;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -26,10 +28,14 @@ public class PeerService
     public boolean login(LoginRequest request)
     {
         log.info("Got login request for " + request.getUsername());
-
+        
+        IClientServiceHandler serviceHandler = new ClientServiceHandler();
+        
+        return serviceHandler.verifyLogin(request.getUsername(), request.getPassword());
+        
         // TODO: check
 
-        return true;
+        //return true;
     }
 
     @POST
@@ -40,10 +46,14 @@ public class PeerService
     {
         log.info("Got neigbor request for " + request.getUsername());
 
-        // TODO: select neighbors
+        IClientServiceHandler serviceHandler = new ClientServiceHandler();
+        
+        System.out.println(serviceHandler.getRandomPeerList(10));
+        
+        return serviceHandler.getRandomPeerList(10);
 
-        PeerList response = new PeerList();
-        return response;
+        //PeerList response = new PeerList();
+        //return response;
     }
     
     @POST
