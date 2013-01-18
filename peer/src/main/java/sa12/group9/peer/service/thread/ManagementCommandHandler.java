@@ -4,11 +4,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import sa12.group9.peer.service.Kernel;
 
 public class ManagementCommandHandler extends Thread {
+	
+	private static Log log = LogFactory.getLog(ManagementCommandHandler.class);
 	
 	private Socket socket;
 	private Kernel kernel;
@@ -27,17 +32,20 @@ public class ManagementCommandHandler extends Thread {
 				kernel.addFingerprint(input);
 			}
 		}catch(IOException e){
-			System.out.println("Error reading IO Command in ManagementHandler. \n"+e.getMessage());
+			if(!socket.isClosed()){
+				log.error("Error reading IO Command in ManagementHandler. \n"+e.getMessage());
+			}
 		} catch (ClassNotFoundException e) {
-			System.out.println("Problem reading fingerprint. \n"+e.getMessage());
+			log.error("Problem reading fingerprint. \n"+e.getMessage());
 		}
 	}
 	
 	public void shutdown(){
+		log.debug("Shutdown ManagementCommandHandler");
 		try {
 			socket.close();
 		} catch (IOException e) {
-			System.out.println("Error closing management handler socket\n"+e.getMessage());
+			log.error("Error closing management handler socket\n"+e.getMessage());
 		}
 	}
 }

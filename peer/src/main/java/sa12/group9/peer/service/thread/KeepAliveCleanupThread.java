@@ -9,11 +9,16 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.peer.service.Kernel;
 
 public class KeepAliveCleanupThread extends Thread
 {
+	private static Log log = LogFactory.getLog(KeepAliveCleanupThread.class);
+	
     private Kernel kernel;
     private boolean running=true;
     private int keepAliveCleanupInterval;
@@ -40,7 +45,7 @@ public class KeepAliveCleanupThread extends Thread
 	    		}
 	    		Thread.sleep(keepAliveCleanupInterval);				
 			} catch (InterruptedException e) {
-				System.out.println("Exception in KeepAliveCleanupThread\n"+e.getMessage());
+				log.error("Exception in KeepAliveCleanupThread\n"+e.getMessage());
 			}
     	}
     }
@@ -58,6 +63,7 @@ public class KeepAliveCleanupThread extends Thread
 	}
 
 	public void shutdown(){
+		log.debug("Shutdown KeepAliveCleanupThread");
     	running = false;
     }
 }

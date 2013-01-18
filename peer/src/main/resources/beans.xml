@@ -27,6 +27,9 @@
     <property name="listeningPort">
       <util:constant static-field="${root}.peer.Launcher.LISTENINGPORT" />
     </property>
+    <property name="keepAlivePort">
+      <util:constant static-field="${root}.peer.Launcher.KEEPALIVEPORT" />
+    </property>
   </bean>
 
   <bean id="serverHandler" class="${root}.peer.service.ServerHandler">

@@ -6,10 +6,14 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import sa12.group9.peer.service.Kernel;
 
 public class RequestThread extends Thread {
 	
+	private static Log log = LogFactory.getLog(RequestThread.class);
 	
 	private ServerSocket serverSocket;
 	private ExecutorService pool;
@@ -38,14 +42,14 @@ public class RequestThread extends Thread {
                 {
                     if (!serverSocket.isClosed())
                     {
-                        System.out.println("Error reading from TCP socket!");
+                        log.error("Error reading from TCP socket!");
                     }
                 }
             }
         }
         catch (IOException e)
         {
-            System.out.println("Error opening TCP socket!");
+            log.error("Error opening TCP socket on port "+listeningPort);
         }
     }
 
@@ -58,11 +62,12 @@ public class RequestThread extends Thread {
 	}
 
 	public void shutdown() {
+		log.debug("Shutdown RequestThread");
 		pool.shutdown();
 		try {
 			serverSocket.close();
 		} catch (IOException e) {
-			System.out.println("Error closing Socket.\n"+e.getMessage());
+			log.error("Error closing Socket.\n"+e.getMessage());
 		}		
 	}
     

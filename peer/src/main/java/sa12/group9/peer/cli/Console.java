@@ -15,6 +15,7 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class Console
 {
+	
     private int managementPort;
     private String location;
 

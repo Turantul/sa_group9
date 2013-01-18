@@ -10,6 +10,9 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import sa12.group9.common.beans.PeerEndpoint;
@@ -17,8 +20,8 @@ import sa12.group9.peer.service.IServerHandler;
 
 public class KeepAliveOutgoingThread extends AliveThread
 {
-    private IServerHandler serverHandler;
-
+	private static Log log = LogFactory.getLog(KeepAliveOutgoingThread.class);
+	
     private int listeningPort;
     private int keepAlivePort;
     private int keepAliveOutgoingInterval;
@@ -37,26 +40,21 @@ public class KeepAliveOutgoingThread extends AliveThread
 					byte[] buf = message.getBytes();
 					DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(pe.getAddress()), pe.getKeepAlivePort());
 					datagram.send(packet);
-					//System.out.println("Sent KeepAlive to "+packet.getAddress()+":"+packet.getPort()+"-"+packet.getSocketAddress());
 				} catch (SocketException e) {
-					System.out.println("Error sending keepAlive to "+pe.getAddress()+":"+pe.getKeepAlivePort()+"\n"+e.getMessage());
+					log.error("Error sending keepAlive to "+pe.getAddress()+":"+pe.getKeepAlivePort()+"\n"+e.getMessage());
 				} catch (UnknownHostException e) {
-					System.out.println("Cannot sent keepAlive to adress "+pe.getAddress()+"\n"+e.getMessage());
+					log.error("Cannot sent keepAlive to adress "+pe.getAddress()+"\n"+e.getMessage());
 				} catch (IOException e) {
-					System.out.println("Failed to send keepAlive message\n"+e.getMessage());
+					log.error("Failed to send keepAlive message\n"+e.getMessage());
 				}
 	        }
+	        kernel.sendKeepAliveToServer();
 	        try {
 				Thread.sleep(keepAliveOutgoingInterval);
 			} catch (InterruptedException e) {
-				System.out.println("Keep Alive Thread has been interrupted.\n"+e.getMessage());
+				log.error("Keep Alive Thread has been interrupted.\n"+e.getMessage());
 			}
         }while(sending);
-    }
-
-    public void setServerHandler(IServerHandler serverHandler)
-    {
-        this.serverHandler = serverHandler;
     }
 
     public void setListeningPort(int listeningPort)
@@ -74,6 +72,7 @@ public class KeepAliveOutgoingThread extends AliveThread
 	}
 
 	public void shutdown(){
+		log.debug("Shutdown KeepAliveOutgoingThread.");
     	sending = false;
     }
     

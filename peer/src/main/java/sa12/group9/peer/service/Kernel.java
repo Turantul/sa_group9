@@ -46,6 +46,7 @@ public class Kernel
     private String username;
     private String password;
     private int listeningPort;
+    private int keepAlivePort;
 
     private AliveThread keepAliveOutgoing;
     private AliveThread keepAliveIncoming;
@@ -223,12 +224,15 @@ public class Kernel
         this.password = password;
     }
 
-    public void setListeningPort(int listeningPort)
-    {
-        this.listeningPort = listeningPort;
-    }
+    public void setListeningPort(int listeningPort) {
+		this.listeningPort = listeningPort;
+	}
 
-    public void setKeepAliveOutgoing(AliveThread keepAliveOutgoing)
+	public void setKeepAlivePort(int keepAlivePort) {
+		this.keepAlivePort = keepAlivePort;
+	}
+
+	public void setKeepAliveOutgoing(AliveThread keepAliveOutgoing)
     {
         this.keepAliveOutgoing = keepAliveOutgoing;
     }
@@ -302,6 +306,10 @@ public class Kernel
         for(PeerEndpoint pe : peers){
         	addPeerEndpoint(pe);
         }
+	}
+
+	public void sendKeepAliveToServer() {
+		serverHandler.isAlive(username, password, listeningPort, keepAlivePort);	
 	}
     
 }
