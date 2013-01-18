@@ -5,8 +5,8 @@ import javax.faces.bean.RequestScoped;
 
 import sa12.group9.commons.dto.UserDTO;
 import sa12.group9.server.dao.MongoUserDAO;
-import sa12.group9.server.handlers.ClientServiceHandler;
-import sa12.group9.server.handlers.IClientServiceHandler;
+import sa12.group9.server.handlers.PeerServiceHandler;
+import sa12.group9.server.handlers.IPeerServiceHandler;
 
 @ManagedBean
 @RequestScoped
@@ -55,7 +55,7 @@ public class LoginBean{
 	public String CheckValidUser(){
         
 		
-		IClientServiceHandler servicehandler = new ClientServiceHandler();
+		IPeerServiceHandler servicehandler = new PeerServiceHandler();
 		
 		if (servicehandler.verifyLogin(loginname, password)){
 			return "success";

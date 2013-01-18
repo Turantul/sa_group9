@@ -11,7 +11,7 @@ import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 
-public class ClientServiceHandler implements IClientServiceHandler {
+public class PeerServiceHandler implements IPeerServiceHandler {
 
 	@Override
 	public boolean verifyLogin(String username, String password) {

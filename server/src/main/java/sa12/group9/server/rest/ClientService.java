@@ -42,7 +42,7 @@ public class ClientService
         log.info("Got search issue request for " + request.getUsername());
 
         // TODO: check coins and log
-        // also provide reasonable TTL and seconds to wait!
+        // also provide reasonable TTL, seconds to wait and amount of peers for forwarding!
 
         SearchIssueResponse response = new SearchIssueResponse();
         response.setErrorMsg("No peers available!");
