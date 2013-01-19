@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
 public class RequestThread extends Thread {
@@ -19,6 +20,7 @@ public class RequestThread extends Thread {
 	private ExecutorService pool;
 	private Kernel kernel;
 	private int listeningPort;
+	private IPeerManager peerManager;
 	
 	public RequestThread(){
 		pool = Executors.newCachedThreadPool();
@@ -36,7 +38,7 @@ public class RequestThread extends Thread {
                 {
                     Socket socket = serverSocket.accept();
                     System.out.println("Accepting connection");
-                    pool.execute(new RequestHandler(socket, kernel));
+                    pool.execute(new RequestHandler(socket, kernel, peerManager));
                 }
                 catch (IOException e)
                 {
@@ -59,6 +61,10 @@ public class RequestThread extends Thread {
 
 	public void setListeningPort(int listeningPort) {
 		this.listeningPort = listeningPort;
+	}
+
+	public void setPeerManager(IPeerManager peerManager) {
+		this.peerManager = peerManager;
 	}
 
 	public void shutdown() {

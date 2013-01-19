@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
 public class KeepAliveCleanupThread extends Thread
@@ -23,6 +24,7 @@ public class KeepAliveCleanupThread extends Thread
     private boolean running=true;
     private int keepAliveCleanupInterval;
     private int requestNewPeerThreshold;
+    private IPeerManager peerManager;
     
     public KeepAliveCleanupThread(){
     }
@@ -32,15 +34,15 @@ public class KeepAliveCleanupThread extends Thread
     {
     	while(running){
 	    	try {
-	    		Set<String> peerList = kernel.getPeerSnapshot();
+	    		Set<String> peerList = peerManager.getPeerSnapshot();
 	    		for(String key : peerList){
-	    			PeerEndpoint pe = kernel.getPeerEndpoint(key);
+	    			PeerEndpoint pe = peerManager.getPeerEndpoint(key);
 	    			if(pe.getLastKeepAlive() != null && pe.getLastKeepAlive().getTime()<System.currentTimeMillis()-10000){
-	    				kernel.removePeerEndpoint(pe.getAddress()+":"+pe.getListeningPort());
+	    				peerManager.removePeerEndpoint(pe.getAddress()+":"+pe.getListeningPort());
 	    				System.out.println("Removed peer "+pe.getAddress()+":"+pe.getListeningPort());
 	    			}
 	    		}
-	    		if(kernel.getPeerCount()<requestNewPeerThreshold){
+	    		if(peerManager.getPeerCount()<requestNewPeerThreshold){
 	    			kernel.requestNewPeersFromServer();
 	    		}
 	    		Thread.sleep(keepAliveCleanupInterval);				
@@ -60,6 +62,10 @@ public class KeepAliveCleanupThread extends Thread
 
 	public void setKeepAliveCleanupInterval(int keepAliveCleanupInterval) {
 		this.keepAliveCleanupInterval = keepAliveCleanupInterval;
+	}
+
+	public void setPeerManager(IPeerManager peerManager) {
+		this.peerManager = peerManager;
 	}
 
 	public void shutdown(){

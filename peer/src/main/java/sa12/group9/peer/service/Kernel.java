@@ -42,6 +42,7 @@ public class Kernel
     private static Log log = LogFactory.getLog(Kernel.class);
 
     private IServerHandler serverHandler;
+    private IPeerManager peerManager;
 
     private String username;
     private String password;
@@ -56,7 +57,6 @@ public class Kernel
     private ManagementThread management;
 
     private List<Fingerprint> fingerprintList;
-    private Map<String, PeerEndpoint> peerMap;
 
     @SuppressWarnings("unused")
     private void initialize()
@@ -71,9 +71,8 @@ public class Kernel
             {
                 List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
                
-                peerMap = Collections.synchronizedMap(new HashMap<String, PeerEndpoint>());
                 for(PeerEndpoint pe : peers){
-                	addPeerEndpoint(pe);
+                	peerManager.addPeerEndpoint(pe);
                 }
 
                 keepAliveOutgoing.setKernel(this);
@@ -129,9 +128,9 @@ public class Kernel
     			}
     			if(in.equals("!peers")){
     				System.out.println("Current known peers:");
-    				Set<String> peerList = getPeerSnapshot();
+    				Set<String> peerList = peerManager.getPeerSnapshot();
     				for(String key : peerList){
-    					PeerEndpoint pe = getPeerEndpoint(key);
+    					PeerEndpoint pe = peerManager.getPeerEndpoint(key);
     					System.out.println(pe.getAddress()+":"+pe.getListeningPort()+":"+pe.getKeepAlivePort()+" - "+pe.getLastKeepAlive());
     				}
     			}
@@ -152,7 +151,7 @@ public class Kernel
     					peer.setListeningPort(Integer.parseInt(split[2].trim()));
     					peer.setKeepAlivePort(Integer.parseInt(split[3].trim()));
     					peer.setLastKeepAlive(new Date(System.currentTimeMillis()));
-    					addPeerEndpoint(peer);
+    					peerManager.addPeerEndpoint(peer);
     					System.out.println("New peer has been added");
     				}
     			}
@@ -207,6 +206,31 @@ public class Kernel
         }
     }
 
+	public void addFingerprint(Fingerprint fingerprint){
+    	System.out.println("Adding Fingerprint: "+fingerprint.getShiftDuration());
+    	synchronized(fingerprintList){
+    		fingerprintList.add(fingerprint);
+    	}
+    }
+    
+    public List<Fingerprint> getFingerprintSnapshot(){
+    	synchronized(fingerprintList){
+    		List<Fingerprint> ret = new ArrayList<Fingerprint>(fingerprintList);
+    		return ret;
+    	}
+    }
+    
+	public void requestNewPeersFromServer() {
+		List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
+        for(PeerEndpoint pe : peers){
+        	peerManager.addPeerEndpoint(pe);
+        }
+	}
+
+	public boolean sendKeepAliveToServer() {
+		return serverHandler.isAlive(username, password, listeningPort, keepAlivePort);	
+	}
+
     public void setServerHandler(IServerHandler serverHandler)
     {
         this.serverHandler = serverHandler;
@@ -253,61 +277,7 @@ public class Kernel
 		this.requestThread = requestThread;
 	}
 
-	public void addFingerprint(Fingerprint fingerprint){
-    	System.out.println("Adding Fingerprint: "+fingerprint.getShiftDuration());
-    	synchronized(fingerprintList){
-    		fingerprintList.add(fingerprint);
-    	}
-    }
-    
-    public void addPeerEndpoint(PeerEndpoint peer){
-    	synchronized(peerMap){
-    		peerMap.put(peer.getAddress()+":"+peer.getListeningPort(), peer);
-    	}
-    }
-    
-    public Set<String> getPeerSnapshot(){
-    	synchronized(peerMap){
-    		return new HashSet<String>(peerMap.keySet());
-    	}
-    }
-    
-    public PeerEndpoint getPeerEndpoint(String key){
-    	synchronized(peerMap){
-    		return peerMap.get(key);
-    	}
-    }
-    
-    public List<Fingerprint> getFingerprintSnapshot(){
-    	synchronized(fingerprintList){
-    		List<Fingerprint> ret = new ArrayList<Fingerprint>(fingerprintList);
-    		return ret;
-    	}
-    }
-    
-    public void removePeerEndpoint(String key) {
-		synchronized(peerMap){
-			if(peerMap.containsKey(key)){
-				peerMap.remove(key);
-			}
-		}
-	}
-
-	public int getPeerCount() {
-		synchronized(peerMap){
-			return peerMap.size();
-		}
-	}
-
-	public void requestNewPeersFromServer() {
-		List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
-        for(PeerEndpoint pe : peers){
-        	addPeerEndpoint(pe);
-        }
-	}
-
-	public boolean sendKeepAliveToServer() {
-		return serverHandler.isAlive(username, password, listeningPort, keepAlivePort);	
-	}
-    
+	public void setPeerManager(IPeerManager peerManager) {
+		this.peerManager = peerManager;
+	}    
 }
