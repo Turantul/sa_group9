@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.IServerHandler;
 
 public class KeepAliveOutgoingThread extends AliveThread
@@ -26,14 +27,16 @@ public class KeepAliveOutgoingThread extends AliveThread
     private int keepAlivePort;
     private int keepAliveOutgoingInterval;
     private Boolean sending = true;
+    
+    private IPeerManager peerManager;
 
     @Override
     public void run()
     {
     	do{
-	        Set<String> peerSnapshot = kernel.getPeerSnapshot();
+	        Set<String> peerSnapshot = peerManager.getPeerSnapshot();
 	        for(String key : peerSnapshot){
-	        	PeerEndpoint pe = kernel.getPeerEndpoint(key);
+	        	PeerEndpoint pe = peerManager.getPeerEndpoint(key);
 	        	try {
 					DatagramSocket datagram = new DatagramSocket();
 					String message = "!alive "+listeningPort+" "+keepAlivePort;
@@ -69,6 +72,10 @@ public class KeepAliveOutgoingThread extends AliveThread
 
 	public void setKeepAliveOutgoingInterval(int keepAliveOutgoingInterval) {
 		this.keepAliveOutgoingInterval = keepAliveOutgoingInterval;
+	}
+
+	public void setPeerManager(IPeerManager peerManager) {
+		this.peerManager = peerManager;
 	}
 
 	public void shutdown(){

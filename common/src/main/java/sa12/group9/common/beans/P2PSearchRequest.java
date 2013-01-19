@@ -1,14 +1,13 @@
 package sa12.group9.common.beans;
 
 import java.io.Serializable;
-import java.net.InetAddress;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class P2PSearchRequest implements Serializable
 {
     private String id;
-    private InetAddress requesterAddress;
+    private String requesterAddress;
     private int requesterPort;
     private Fingerprint fingerprint;
     private int ttl;
@@ -24,12 +23,12 @@ public class P2PSearchRequest implements Serializable
         this.id = id;
     }
 
-    public InetAddress getRequesterAddress()
+    public String getRequesterAddress()
     {
         return requesterAddress;
     }
 
-    public void setRequesterAddress(InetAddress requesterAddress)
+    public void setRequesterAddress(String requesterAddress)
     {
         this.requesterAddress = requesterAddress;
     }

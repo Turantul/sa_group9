@@ -8,12 +8,15 @@ import java.net.InetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sa12.group9.peer.service.IPeerManager;
+
 public class KeepAliveIncomingThread extends AliveThread
 {
 	private static Log log = LogFactory.getLog(KeepAliveIncomingThread.class);
 	
     private int keepAlivePort;
     private DatagramSocket datagram;
+    private IPeerManager peerManager;
     
     public KeepAliveIncomingThread(){
     	
@@ -33,7 +36,7 @@ public class KeepAliveIncomingThread extends AliveThread
 		while(!datagram.isClosed()){
 			try {
 				datagram.receive(packet);
-				new KeepAliveIncomingHandlerThread(packet, kernel).start();
+				new KeepAliveIncomingHandlerThread(packet, kernel, peerManager).start();
 			} catch (IOException e) {
 				if(!datagram.isClosed()){
 					log.error("Error receiving KeepAlive message\n"+e.getMessage());
@@ -47,7 +50,11 @@ public class KeepAliveIncomingThread extends AliveThread
         this.keepAlivePort = keepAlivePort;
     }
     
-    public void shutdown(){
+    public void setPeerManager(IPeerManager peerManager) {
+		this.peerManager = peerManager;
+	}
+
+	public void shutdown(){
     	log.debug("Shutdown KeepAliveIncomingThread.");
 		datagram.close();
 	}

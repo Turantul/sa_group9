@@ -10,6 +10,7 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
 public class ManagementThread extends Thread
@@ -19,6 +20,7 @@ public class ManagementThread extends Thread
     private int managementPort;
     private ServerSocket socket;
     private Kernel kernel;
+    private IPeerManager peerManager;
 
     @Override
     public void run()
@@ -34,7 +36,7 @@ public class ManagementThread extends Thread
 				System.out.println("Waiting for ManagementCommands on Port: "+managementPort);
 				Socket inSocket = socket.accept();
 				System.out.println("Recieved Connection");
-				new ManagementCommandHandler(inSocket, kernel).start();
+				new ManagementCommandHandler(inSocket, kernel, peerManager).start();
 			} catch (IOException e) {
 				if(!socket.isClosed()){
 					log.error("Exception while reading from ManagementSocket.\n"+e.getMessage());
@@ -52,7 +54,11 @@ public class ManagementThread extends Thread
     	this.kernel = kernel;
     }
     
-    public void shutdown(){
+    public void setPeerManager(IPeerManager peerManager) {
+		this.peerManager = peerManager;
+	}
+
+	public void shutdown(){
     	log.debug("Shutdown ManagementThread");
     	try {
 			socket.close();

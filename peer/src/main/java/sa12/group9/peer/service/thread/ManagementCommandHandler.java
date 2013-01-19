@@ -13,6 +13,7 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import sa12.group9.common.beans.ManagementCommand;
 import sa12.group9.common.beans.ManagementCommandResponse;
+import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
 public class ManagementCommandHandler extends Thread {
@@ -21,11 +22,13 @@ public class ManagementCommandHandler extends Thread {
 	
 	private Socket socket;
 	private Kernel kernel;
+	private IPeerManager peerManager;
 
-	public ManagementCommandHandler(Socket socket, Kernel kernel){
+	public ManagementCommandHandler(Socket socket, Kernel kernel, IPeerManager peerManager){
 		super();
 		this.socket = socket;
 		this.kernel = kernel;
+		this.peerManager = peerManager;
 	}
 	
 	public void run(){
@@ -50,7 +53,7 @@ public class ManagementCommandHandler extends Thread {
 		String[] split = command.getCommand().split(" ");
 		if(split[0].equals("!stats")){
 			response += kernel.getFingerprintSnapshot().size()+" fingerprints stored.\n";
-			response += kernel.getPeerCount()+" neighboring peers known.";
+			response += peerManager.getPeerCount()+" neighboring peers known.";
 		}
 		if(split[0].equals("!files")){
 			List<Fingerprint> fingerprintList = kernel.getFingerprintSnapshot();

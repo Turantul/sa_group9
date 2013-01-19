@@ -3,7 +3,6 @@ package sa12.group9.client.service;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,36 +20,51 @@ public class PeerHandler implements IPeerHandler
 	{
 		serverSocket = new ServerSocket(listeningPort);
 
-		try
-		{
-			while (true)
-			{
-				try
-				{
-					Socket socket = serverSocket.accept();
-
-					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-					FoundInformation found = (FoundInformation) in.readObject();
-
-					mainAction.receivingCallback(found);
-
-					socket.close();
-				}
-				catch (ClassNotFoundException e)
-				{
-					System.out.println("Error reading from TCP socket!");
-				}
-			}
-		}
-		catch (IOException e)
-		{
-			if (!serverSocket.isClosed())
-			{
-				System.out.println("Error reading from TCP socket!");
-			}
-		}
-		
-		serverSocket.close();
+		new Thread()
+        {
+            @Override
+            public void run()
+            {
+        		try
+        		{
+        			while (true)
+        			{
+        			    
+        				try
+        				{
+        					Socket socket = serverSocket.accept();
+        
+        					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        					FoundInformation found = (FoundInformation) in.readObject();
+        
+        					mainAction.receivingCallback(found);
+        
+        					socket.close();
+        				}
+        				catch (ClassNotFoundException e)
+        				{
+        					System.out.println("Error reading from TCP socket!");
+        				}
+        			}
+        		}
+        		catch (IOException e)
+        		{
+        			if (!serverSocket.isClosed())
+        			{
+        				System.out.println("Error reading from TCP socket!");
+        			}
+        		}
+        		finally
+        		{
+        		    try
+                    {
+                        serverSocket.close();
+                    }
+                    catch (IOException e)
+                    {}
+        		}
+            }
+        }.start();
 	}
 
 	public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl, int maxPeersForForwarding) throws IOException
@@ -60,7 +74,7 @@ public class PeerHandler implements IPeerHandler
 		P2PSearchRequest request = new P2PSearchRequest();
 		request.setId(id);
 		request.setFingerprint(fingerprint);
-		request.setRequesterAddress(InetAddress.getLocalHost());
+		request.setRequesterAddress(socket.getLocalAddress().toString().substring(1));
 		request.setRequesterPort(listeningPort);
 		request.setTtl(ttl);
 		request.setMaxPeersForForwarding(maxPeersForForwarding);
