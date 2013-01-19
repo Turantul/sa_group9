@@ -53,39 +53,51 @@ public class ClientServiceHandler implements IClientServiceHandler
             {
                 long count = peerdao.getCountOfPeers();
 
-                // Default desired coverage
-                double coveragePercentage = 0.5;
-
-                try
+                if (count < 2)
                 {
-                    Properties prop = new Properties();
-                    prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
-                    coveragePercentage = Double.parseDouble(prop.getProperty("coveragePercentage"));
-
+                    // Default values
+                    double coveragePercentage = 0.5;
+                    int minStepSize = 2;
+                    int maxStepSize = 20;
+                    // TODO: find reasonable duration per level
+                    int ducationPerLevel = 3;
+    
+                    try
+                    {
+                        Properties prop = new Properties();
+                        prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
+                        coveragePercentage = Double.parseDouble(prop.getProperty("coveragePercentage"));
+                        minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
+                        maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
+                        ducationPerLevel = Integer.parseInt(prop.getProperty("ducationPerLevel"));
+                    }
+                    catch (IOException ex)
+                    {}
+    
+                    int stepSize = (int) (count / 100);
+                    if (stepSize < minStepSize)
+                    {
+                        stepSize = minStepSize;
+                    }
+                    else if (stepSize > maxStepSize)
+                    {
+                        stepSize = maxStepSize;
+                    }
+    
+                    int ttl = (int) (Math.log(count * coveragePercentage) / Math.log(stepSize));
+                    int secondsToWait = ttl * ducationPerLevel;
+    
+                    response.setPeers(getRandomPeerList(stepSize));
+                    response.setMaxPeersForForwarding(stepSize);
+                    response.setTtl(ttl);
+                    response.setSecondsToWait(secondsToWait);
+    
+                    // TODO: log in the database
                 }
-                catch (IOException ex)
-                {}
-
-                int stepSize = (int) (count / 100);
-                if (stepSize < 2)
+                else
                 {
-                    stepSize = 2;
+                    response.setErrorMsg("There are not enough peers available");
                 }
-                else if (stepSize > 20)
-                {
-                    stepSize = 20;
-                }
-
-                int ttl = (int) (Math.log(count * coveragePercentage) / Math.log(stepSize));
-                // TODO: find reasonable duration per level
-                int secondsToWait = ttl * 5;
-
-                response.setPeers(getRandomPeerList(stepSize));
-                response.setMaxPeersForForwarding(stepSize);
-                response.setTtl(ttl);
-                response.setSecondsToWait(secondsToWait);
-
-                // TODO: log in the database
             }
         }
         else
