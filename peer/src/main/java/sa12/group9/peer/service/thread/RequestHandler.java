@@ -119,6 +119,7 @@ public class RequestHandler extends Thread
 		Random random = new Random();
 		int randomlyChosenPeersCount = 0;
 		
+		// TODO: check, ob das nicht in einer Endlossschleife münden kann
 		while((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < peerList.size())){
 			PeerEndpoint randomPeer = kernel.getPeerEndpoint(peerList.get(random.nextInt(peerList.size())));
 			if(!randomPeersSelection.contains(randomPeer)){

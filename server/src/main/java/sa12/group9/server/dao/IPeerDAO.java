@@ -4,12 +4,51 @@ import java.util.List;
 
 import sa12.group9.common.beans.PeerEndpoint;
 
+public interface IPeerDAO
+{
+    /**
+     * TODO
+     * 
+     * @param peer
+     */
+    void storePeer(PeerEndpoint peer);
 
+    /**
+     * TODO
+     * 
+     * @param peers
+     */
+    void storePeers(List<PeerEndpoint> peers);
 
-public interface IPeerDAO {
+    /**
+     * TODO
+     * 
+     * @param address
+     * @return
+     */
+    PeerEndpoint searchPeer(String address);
 
-	public abstract void storePeer(PeerEndpoint peer);
-	public abstract void storePeer(List<PeerEndpoint> peers);
-	public abstract PeerEndpoint searchPeer(String address);
-	public abstract List<PeerEndpoint> getAllPeers();
+    /**
+     * TODO
+     * 
+     * @return
+     */
+    List<PeerEndpoint> getAllPeers();
+
+    /**
+     * TODO
+     * 
+     * @return
+     */
+    long getCountOfPeers();
+    
+    /**
+     * TODO
+     * 
+     * @param address
+     * @param listeningPort
+     * @param keepAlivePort
+     * @return
+     */
+    PeerEndpoint getPeer(String address, int listeningPort, int keepAlivePort);
 }

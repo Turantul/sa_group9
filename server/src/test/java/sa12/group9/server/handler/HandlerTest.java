@@ -1,6 +1,6 @@
 package sa12.group9.server.handler;
 
-public class handlertest {
+public class HandlerTest {
 
 	/**
 	 * @param args

@@ -32,8 +32,7 @@ public class ClientService
     {
         log.info("Got login request for " + request.getUsername());
 
-        return clientHandler.verifyLogin(request.getUsername(), request.getPassword());
-
+        return clientHandler.verifyLogin(request);
     }
 
     @POST
@@ -43,14 +42,12 @@ public class ClientService
     public SearchIssueResponse issueSearchRequest(SearchIssueRequest request)
     {
         log.info("Got search issue request for " + request.getUsername());
-
         
         SearchIssueResponse response = clientHandler.issueSearchRequest(request);
         
         // TODO: check coins and log
         // also provide reasonable TTL, seconds to wait and amount of peers for forwarding!
 
-        
         response.setErrorMsg("No peers available!");
         return response;
     }
@@ -63,7 +60,6 @@ public class ClientService
         log.info("Got success notification from " + request.getUsername());
 
         clientHandler.notifySuccess(request);
-        
         
         // TODO: update coins (peer and client) and log
     }

@@ -11,11 +11,11 @@ public class PeerServiceHandlerTest {
 	public static void main(String[] args) {
 		IPeerServiceHandler handler = new PeerServiceHandler();
 		
-		PeerList randompeers = handler.getRandomPeerList(2);
-		
-		for(PeerEndpoint p : randompeers.getPeers()){
-			System.out.println(p.getAddress().toString());
-		}
+//		PeerList randompeers = handler.getRandomPeerList(2);
+//		
+//		for(PeerEndpoint p : randompeers.getPeers()){
+//			System.out.println(p.getAddress().toString());
+//		}
 
 	}
 

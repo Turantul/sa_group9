@@ -7,7 +7,7 @@ import sa12.group9.common.beans.User;
 
 
 
-public class daotest {
+public class DAOTest {
 
 	/**
 	 * @param args
