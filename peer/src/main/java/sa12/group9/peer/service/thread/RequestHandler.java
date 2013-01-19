@@ -16,6 +16,7 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
 public class RequestHandler extends Thread
@@ -24,11 +25,13 @@ public class RequestHandler extends Thread
 	
     private Socket socket;
     private Kernel kernel;
+    private IPeerManager peerManager;
     
-    public RequestHandler(Socket socket, Kernel kernel)
+    public RequestHandler(Socket socket, Kernel kernel, IPeerManager peerManager)
     {
         this.socket = socket;
         this.kernel = kernel;
+        this.peerManager = peerManager;
     }
     
     @Override
@@ -39,17 +42,14 @@ public class RequestHandler extends Thread
 			Object inputObj = in.readObject();
 			if(inputObj.getClass()==P2PSearchRequest.class){
 				P2PSearchRequest input = (P2PSearchRequest) inputObj;
-				System.out.println("Got Request "+input.getId());
+				log.info("Got Request "+input.getId());
 				
-				// TODO: ich glaube speziell bei kleinen netzen wie wir sie haben werden wird das zu einem massiven flooding
-				// führen wenn wir das vorher schon weiterleiten.. so wird jeder peer mehrere male angesprochen und das selbe
-				// ergebnis zu client geschickt.. eventuell vertauschen
 				forwardToPeers(input);
 				calculateMatch(input);
 			}
 			if(inputObj.getClass()==FoundInformation.class){
 				FoundInformation input = (FoundInformation) inputObj;
-				System.out.println("Got Sucessful response from "+input.getPeerUsername());
+				log.info("Got Sucessful response from "+input.getPeerUsername());
 			}
 		} catch (Exception e) {
 			log.error("Error reading request from "+socket.getInetAddress()+":"+socket.getPort());
@@ -70,7 +70,7 @@ public class RequestHandler extends Thread
 	}
 
 	private void sendResponseToRequester(P2PSearchRequest input, Double match) {
-		//need to Use song meta information from DB
+		//TODO need to Use song meta information from DB
 		try {
 			Socket socket = new Socket(input.getRequesterAddress(), input.getRequesterPort());
 			ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
@@ -115,13 +115,13 @@ public class RequestHandler extends Thread
 	}
 
 	private List<PeerEndpoint> selectRandomPeers(int numberOfWantedPeers){
-    	List<String> peerList = new ArrayList<String>(kernel.getPeerSnapshot());
+    	List<String> peerList = new ArrayList<String>(peerManager.getPeerSnapshot());
 		ArrayList<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
 		Random random = new Random();
 		int randomlyChosenPeersCount = 0;
 		
 		while((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < peerList.size())){
-			PeerEndpoint randomPeer = kernel.getPeerEndpoint(peerList.get(random.nextInt(peerList.size())));
+			PeerEndpoint randomPeer = peerManager.getPeerEndpoint(peerList.get(random.nextInt(peerList.size())));
 			if(!randomPeersSelection.contains(randomPeer)){
 				randomPeersSelection.add(randomPeer);
 				randomlyChosenPeersCount++;
