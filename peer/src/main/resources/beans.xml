@@ -123,7 +123,7 @@
     </property>
     <property name="sql_delete">
       <value>
-        DELETE FROM fingerprint WHERE user=? and metadata=?;
+        DELETE FROM fingerprint WHERE id=? and user=?;
       </value>
     </property>
     <property name="sql_findFingerprintByUserAndMetadata">

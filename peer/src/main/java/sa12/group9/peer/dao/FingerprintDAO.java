@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -40,11 +42,11 @@ public class FingerprintDAO implements IFingerprintDAO
         prep.execute();
     }
 
-    public void deleteFingerprint(String user, SongMetadata smd) throws SQLException
+    public void deleteFingerprint(Long id,String user) throws SQLException
     {
         PreparedStatement prep = dataSource.getConnection().prepareStatement(sql_delete);
-        prep.setString(1, user);
-        prep.setObject(2, smd);
+        prep.setLong(1, id);
+        prep.setObject(2, user);
         prep.executeUpdate();
     }
 
@@ -82,9 +84,9 @@ public class FingerprintDAO implements IFingerprintDAO
         return smd;
     }
 
-    public List<Fingerprint> getAllFingerprintsForUser(String user) throws SQLException
+    public Map<Long, Object[]> getAllFingerprintsForUser(String user) throws SQLException
     {
-        List<Fingerprint> fingerprints = new ArrayList<Fingerprint>();
+        Map<Long, Object[]> ret = new HashMap<Long, Object[]>();
 
         PreparedStatement prep = dataSource.getConnection().prepareStatement(sql_getAllFingerprintsForUser);
         prep.setString(1, user);
@@ -92,10 +94,11 @@ public class FingerprintDAO implements IFingerprintDAO
         ResultSet rs = prep.executeQuery();
         while (rs.next())
         {
-            fingerprints.add((Fingerprint) rs.getObject(4));
+        	Object[] data = new Object[]{rs.getObject(3), rs.getObject(4)};
+            ret.put((Long)rs.getObject(1), data);
         }
 
-        return fingerprints;
+        return ret;
     }
 
     public void setDataSource(DataSource dataSource)

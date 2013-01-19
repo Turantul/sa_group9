@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
@@ -16,6 +17,7 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.common.beans.SongMetadata;
 import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
@@ -49,7 +51,7 @@ public class RequestHandler extends Thread
 			}
 			if(inputObj.getClass()==FoundInformation.class){
 				FoundInformation input = (FoundInformation) inputObj;
-				log.info("Got Sucessful response from "+input.getPeerUsername());
+				log.info("Got Sucessful response from "+input.getPeerUsername()+" "+input.getInterpret()+"-"+input.getTitle());
 			}
 		} catch (Exception e) {
 			log.error("Error reading request from "+socket.getInetAddress()+":"+socket.getPort());
@@ -57,34 +59,36 @@ public class RequestHandler extends Thread
     }
     
     private void calculateMatch(P2PSearchRequest input) {
-		List<Fingerprint> fingerprintList = kernel.getFingerprintSnapshot();
-		log.info(new Date(System.currentTimeMillis())+" - trying to calculate match for request("+input.getId()+"(with "+fingerprintList.size()+" fingerprints.");
-		for(Fingerprint fp : fingerprintList){
+    	
+    	Map<Long, Object[]> fingerprintList = kernel.getFingerprintSnapshot();
+    	
+		log.info("Trying to calculate match for request("+input.getId()+"(with "+fingerprintList.size()+" fingerprints.");
+		for(Long key : fingerprintList.keySet()){
+			Object[] data = fingerprintList.get(key);
+			Fingerprint fp = (Fingerprint)data[1];
 			Double match = fp.match(input.getFingerprint());
 			if(match>=0){
 				log.info("Fingerprint match found. Send Success to client.");
-				sendResponseToRequester(input, match);
+				sendResponseToRequester(input, match, data);
 			}
 		}
-		System.out.println(new Date(System.currentTimeMillis())+" - matching done.");
+		log.info("matching done.");
 	}
 
-	private void sendResponseToRequester(P2PSearchRequest input, Double match) {
+	private void sendResponseToRequester(P2PSearchRequest input, Double match, Object[] data) {
 		//TODO need to Use song meta information from DB
 		try {
 			Socket socket = new Socket(input.getRequesterAddress(), input.getRequesterPort());
 			ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-			FoundInformation response = new FoundInformation();
-			response.setAlbum("Affen");
-			response.setGenre("Affensongs");
-			response.setInterpret("Gorillaz");
-			response.setLength(230);
-			response.setTitle("Michi der kleine Affe");
+			SongMetadata smd = (SongMetadata)data[0];
+			FoundInformation response = new FoundInformation(smd);
 			response.setMatch(match);
+			response.setPeerUsername(kernel.getUsername());
 		    socketout.writeObject(response);
 		    socketout.close();
 		    socket.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("Error sending FoundInformation response to requester");
 		}
 	}
