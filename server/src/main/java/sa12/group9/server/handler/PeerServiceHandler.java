@@ -1,8 +1,10 @@
 package sa12.group9.server.handler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 
@@ -25,47 +27,51 @@ public class PeerServiceHandler implements IPeerServiceHandler
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
 
     @Override
-    public boolean verifyLogin(IsAliveNotification request, String remoteAddress)
+    public PeerList getRandomPeerList(LoginRequest request)
     {
         if (authenticate(request))
         {
-            System.out.println("successfully logged in as " + request.getUsername().toString() + "");
+            long count = peerdao.getCountOfPeers();
+            
+            int minStepSize = 2;
+            int maxStepSize = 20;
 
-            PeerEndpoint pdto = new PeerEndpoint();
-            pdto.setAddress(remoteAddress);
-            pdto.setUuid(UUID.randomUUID().toString());
-            pdto.setKeepAlivePort(request.getKeepAlivePort());
-            pdto.setListeningPort(request.getListeningPort());
-            pdto.setLastKeepAlive(new Date());
-
-            peerdao.storePeer(pdto);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    @Override
-    public PeerList getRandomPeerList(LoginRequest request, int numberOfWantedPeers)
-    {
-        if (authenticate(request))
-        {
-            PeerList allPeers = new PeerList();
+            try
+            {
+                Properties prop = new Properties();
+                prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
+                minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
+                maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
+            }
+            catch (IOException ex)
+            {}
+            
+            int stepSize = (int) (count / 100);
+            if (stepSize < minStepSize)
+            {
+                stepSize = minStepSize;
+            }
+            else if (stepSize > maxStepSize)
+            {
+                stepSize = maxStepSize;
+            }
+            
             List<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
-            allPeers.setPeers(peerdao.getAllPeers());
+            List<PeerEndpoint> allPeers = peerdao.getAllPeers();
 
             Random random = new Random();
             int randomlyChosenPeersCount = 0;
 
             // iterate as long as either the wanted number is reached or the maximum
             // number of peers in database return
-            // TODO: jeder peer soll nach möglichkeit nur einmal ausgewählt werden
-            while ((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < allPeers.getPeers().size()))
+            while ((randomlyChosenPeersCount < stepSize) && (randomlyChosenPeersCount < allPeers.size()))
             {
-                randomPeersSelection.add(allPeers.getPeers().get(random.nextInt(allPeers.getPeers().size())));
-                randomlyChosenPeersCount++;
+                PeerEndpoint randomPeer = allPeers.get(random.nextInt(allPeers.size()));
+                if (!randomPeersSelection.contains(randomPeer))
+                {
+                    randomPeersSelection.add(randomPeer);
+                    randomlyChosenPeersCount++;
+                }
             }
 
             PeerList returnPeerList = new PeerList();
@@ -77,18 +83,32 @@ public class PeerServiceHandler implements IPeerServiceHandler
         {
             return null;
         }
-
     }
 
     @Override
-    public void markAsAlive(IsAliveNotification request, String remoteAddress)
+    public boolean markAsAlive(IsAliveNotification request, String remoteAddress)
     {
         if (authenticate(request))
         {
             PeerEndpoint peer = peerdao.getPeer(remoteAddress, request.getListeningPort(), request.getKeepAlivePort());
+            
+            if (peer == null)
+            {
+                System.out.println("successfully logged in as " + request.getUsername().toString() + "");
+
+                peer = new PeerEndpoint();
+                peer.setAddress(remoteAddress);
+                peer.setUuid(UUID.randomUUID().toString());
+                peer.setKeepAlivePort(request.getKeepAlivePort());
+                peer.setListeningPort(request.getListeningPort());
+            }
+            
             peer.setLastKeepAlive(new Date());
             peerdao.storePeer(peer);
+            
+            return true;
         }
+        return false;
     }
 
     private boolean authenticate(LoginRequest request)

@@ -26,16 +26,6 @@ public class PeerService
 	private IPeerServiceHandler peerHandler = new PeerServiceHandler();
 
 	@POST
-	@Path("login")
-	@Consumes("application/json")
-	public boolean login(IsAliveNotification request, @Context HttpServletRequest hsr)
-	{
-		log.info("Got login request for " + request.getUsername());
-
-		return peerHandler.verifyLogin(request, hsr.getRemoteAddr());
-	}
-
-	@POST
 	@Path("getNeighbors")
 	@Consumes("application/json")
 	@Produces("application/json")
@@ -43,17 +33,16 @@ public class PeerService
 	{
 		log.info("Got neigbor request for " + request.getUsername());
 		
-		// TODO: find reasonable number
-		return peerHandler.getRandomPeerList(request, 10);
+		return peerHandler.getRandomPeerList(request);
 	}
 
 	@POST
 	@Path("isAlive")
 	@Consumes("application/json")
-	public void isAlive(IsAliveNotification notification, @Context HttpServletRequest hsr)
+	public boolean isAlive(IsAliveNotification notification, @Context HttpServletRequest hsr)
 	{
 		log.debug("Got isAlive from " + notification.getUsername());
 
-		peerHandler.markAsAlive(notification, hsr.getRemoteAddr());
+		return peerHandler.markAsAlive(notification, hsr.getRemoteAddr());
 	}
 }

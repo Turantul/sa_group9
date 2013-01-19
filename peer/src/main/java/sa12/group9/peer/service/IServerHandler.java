@@ -10,15 +10,6 @@ import sa12.group9.common.beans.PeerEndpoint;
 public interface IServerHandler
 {
     /**
-     * Logs in a user if possible
-     * 
-     * @param username
-     * @param password
-     * @return true if successful
-     */
-    boolean loginAtServer(String username, String password);
-    
-    /**
      * Gets random neighbors for this peer
      * 
      * @param username
@@ -34,6 +25,7 @@ public interface IServerHandler
      * @param password
      * @param listeningPort
      * @param keepAlivePort
+     * @return success of notification
      */
-    void isAlive(String username, String password, int listeningPort, int keepAlivePort);
+    boolean isAlive(String username, String password, int listeningPort, int keepAlivePort);
 }
