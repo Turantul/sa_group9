@@ -23,7 +23,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sa12.group9.common.beans.ManagementCommand;
 import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.common.beans.SongMetadata;
 import sa12.group9.common.media.IFingerprintService;
+import sa12.group9.common.media.ISongMetadataService;
 import sa12.group9.common.util.Constants;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
@@ -115,6 +117,9 @@ public class Console
         					IFingerprintService fingerprintService = (IFingerprintService) ctx.getBean("fingerprintService");
         					Fingerprint finger = fingerprintService.generateFingerprint(fileLocation);
         					command.setFingerprint(finger);
+        					ISongMetadataService songmetadataService = (ISongMetadataService) ctx.getBean("songmetadataService");
+        					SongMetadata smd = songmetadataService.getSongMetadata(fileLocation);
+        					command.setSongMetadata(smd);
     						Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
         		            ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
         		            socketout.writeObject(command);

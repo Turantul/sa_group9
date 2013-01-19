@@ -64,7 +64,7 @@ public class ManagementCommandHandler extends Thread {
 			}
 		}
 		if(split[0].equals("!addfile")){
-			kernel.addFingerprint(command.getFingerprint());
+			kernel.addFingerprint(command.getSongMetadata(), command.getFingerprint());
 			response += "Added fingerprint to database.";
 		}
 		if(split[0].equals("!removefile")){

@@ -7,6 +7,7 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 public class ManagementCommand implements Serializable{
 	private String command;
 	private Fingerprint fingerprint = null;
+	private SongMetadata metadata = null;
 	
 	public ManagementCommand(String command){
 		this.command = command;
@@ -26,5 +27,13 @@ public class ManagementCommand implements Serializable{
 
 	public void setFingerprint(Fingerprint fingerprint) {
 		this.fingerprint = fingerprint;
+	}
+
+	public SongMetadata getSongMetadata() {
+		return metadata;
+	}
+	
+	public void setSongMetadata(SongMetadata smd) {
+		this.metadata = smd;
 	}
 }

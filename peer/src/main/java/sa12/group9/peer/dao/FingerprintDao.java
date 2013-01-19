@@ -3,7 +3,6 @@ package sa12.group9.peer.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -23,6 +22,22 @@ public class FingerprintDao {
 	{
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
 		DriverManagerDataSource dataSource = (DriverManagerDataSource) ctx.getBean("H2DataSource");
+		
+		try {
+			con = dataSource.getConnection();
+			Statement stat = con.createStatement();
+			stat.execute("CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public FingerprintDao(String jdbcUrl)
+	{
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
+		DriverManagerDataSource dataSource = (DriverManagerDataSource) ctx.getBean("H2DataSource");
+		dataSource.setUrl(jdbcUrl);
 		
 		try {
 			con = dataSource.getConnection();

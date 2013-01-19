@@ -7,18 +7,12 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,12 +23,14 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.common.beans.SongMetadata;
 import sa12.group9.common.media.IFingerprintService;
+import sa12.group9.common.media.ISongMetadataService;
 import sa12.group9.common.util.Constants;
+import sa12.group9.peer.dao.FingerprintDao;
 import sa12.group9.peer.service.thread.AliveThread;
 import sa12.group9.peer.service.thread.KeepAliveCleanupThread;
 import sa12.group9.peer.service.thread.ManagementThread;
-import sa12.group9.peer.service.thread.RequestHandler;
 import sa12.group9.peer.service.thread.RequestThread;
 
 public class Kernel
@@ -55,6 +51,8 @@ public class Kernel
     private RequestThread requestThread;
     
     private ManagementThread management;
+    
+    private FingerprintDao fpDao;
 
     private List<Fingerprint> fingerprintList;
 
@@ -89,6 +87,8 @@ public class Kernel
                 
                 requestThread.setKernel(this);
                 requestThread.start();
+                
+                fpDao = new FingerprintDao();
                 
                 handleRequests();
             }
@@ -160,10 +160,14 @@ public class Kernel
     				if(split.length!=2){
     					System.out.println("Correct usage is !addfile <location>");
     				}else{
-    					ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
+    					String location = split[1].trim();
+			        	
+						ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
+						ISongMetadataService songmetadataService = (ISongMetadataService) ctx.getBean("songmetadataService");
+						SongMetadata smd = songmetadataService.getSongMetadata(location);
     					IFingerprintService fingerprintService = (IFingerprintService) ctx.getBean("fingerprintService");
-    					Fingerprint finger = fingerprintService.generateFingerprint(split[1].trim());
-    					addFingerprint(finger);
+    					Fingerprint finger = fingerprintService.generateFingerprint(location);
+    					addFingerprint(smd, finger);
     					ByteArrayOutputStream bos = new ByteArrayOutputStream();
     					ObjectOutput out = null;
     					try {
@@ -206,11 +210,10 @@ public class Kernel
         }
     }
 
-	public void addFingerprint(Fingerprint fingerprint){
+	public void addFingerprint(SongMetadata smd, Fingerprint fingerprint){
     	System.out.println("Adding Fingerprint: "+fingerprint.getShiftDuration());
-    	synchronized(fingerprintList){
-    		fingerprintList.add(fingerprint);
-    	}
+    	
+    	fpDao.persistFingerprint(username, smd, fingerprint);
     }
     
     public List<Fingerprint> getFingerprintSnapshot(){
