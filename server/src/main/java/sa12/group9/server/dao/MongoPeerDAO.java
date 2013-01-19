@@ -55,15 +55,13 @@ public class MongoPeerDAO implements IPeerDAO
     @Override
     public long getCountOfPeers()
     {
-        // TODO: count here
-        return 100;
+        return mongoOperation.count(new Query(), "peers");
     }
 
     @Override
     public PeerEndpoint getPeer(String address, int listeningPort, int keepAlivePort)
     {
-        // TODO: select appropirate PeerEndpoint
-        return mongoOperation.findOne(new Query(Criteria.where("address").is(address)), PeerEndpoint.class, "peers");
+        return mongoOperation.findOne(new Query(Criteria.where("address").is(address).and("listeningPort").is(listeningPort).and("keepAlivePort").is(keepAlivePort)), PeerEndpoint.class, "peers");
     }
 
 }
