@@ -220,16 +220,19 @@ public class Kernel
     	try {
 			fpDao.persistFingerprint(username, smd, fingerprint);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			log.error("Error adding Fingerprint to database");
 			e.printStackTrace();
 		}
     }
     
     public List<Fingerprint> getFingerprintSnapshot(){
-    	synchronized(fingerprintList){
-    		List<Fingerprint> ret = new ArrayList<Fingerprint>(fingerprintList);
-    		return ret;
-    	}
+    	try {
+			return fpDao.getAllFingerprintsForUser(username);
+		} catch (SQLException e) {
+			log.error("Error while reading Fingerprints from database");
+			e.printStackTrace();
+		}
+		return null;
     }
     
 	public void requestNewPeersFromServer() {
