@@ -8,6 +8,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +29,7 @@ import sa12.group9.common.media.IFingerprintService;
 import sa12.group9.common.media.ISongMetadataService;
 import sa12.group9.common.util.Constants;
 import sa12.group9.peer.dao.FingerprintDao;
+import sa12.group9.peer.dao.IFingerprintDao;
 import sa12.group9.peer.service.thread.AliveThread;
 import sa12.group9.peer.service.thread.KeepAliveCleanupThread;
 import sa12.group9.peer.service.thread.ManagementThread;
@@ -52,7 +54,7 @@ public class Kernel
     
     private ManagementThread management;
     
-    private FingerprintDao fpDao;
+    private IFingerprintDao fpDao;
 
     private List<Fingerprint> fingerprintList;
 
@@ -88,6 +90,8 @@ public class Kernel
                 requestThread.setKernel(this);
                 requestThread.start();
                 
+                ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
+				//fpDao = (FingerprintDao) ctx.getBean("fingerprintDao");
                 fpDao = new FingerprintDao();
                 
                 handleRequests();
@@ -213,7 +217,12 @@ public class Kernel
 	public void addFingerprint(SongMetadata smd, Fingerprint fingerprint){
     	System.out.println("Adding Fingerprint: "+fingerprint.getShiftDuration());
     	
-    	fpDao.persistFingerprint(username, smd, fingerprint);
+    	try {
+			fpDao.persistFingerprint(username, smd, fingerprint);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public List<Fingerprint> getFingerprintSnapshot(){
