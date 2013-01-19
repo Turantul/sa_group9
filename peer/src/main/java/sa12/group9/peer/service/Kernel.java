@@ -54,9 +54,7 @@ public class Kernel
     private RequestThread requestThread;
     
     private ManagementThread management;
-    
-    
-    
+
     private List<Fingerprint> fingerprintList;
     private Map<String, PeerEndpoint> peerMap;
 
