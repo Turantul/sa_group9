@@ -1,7 +1,5 @@
 package sa12.group9.common.beans;
 
-import sa12.group9.common.util.Encrypter;
-
 public class LoginRequest
 {
     protected String username;
