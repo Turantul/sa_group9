@@ -152,7 +152,7 @@ public class MainAction implements ActionListener, ICallback
                             {
                                 try
                                 {
-                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl());
+                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl(), response.getMaxPeersForForwarding());
                                     log.info("Request sent to peer at " + peer.getAddress() + " at port " + peer.getListeningPort());
                                     i++;
                                 }

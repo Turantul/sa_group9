@@ -53,7 +53,7 @@ public class PeerHandler implements IPeerHandler
 		serverSocket.close();
 	}
 
-	public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException
+	public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl, int maxPeersForForwarding) throws IOException
 	{
 		Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
 
@@ -63,6 +63,7 @@ public class PeerHandler implements IPeerHandler
 		request.setRequesterAddress(InetAddress.getLocalHost());
 		request.setRequesterPort(listeningPort);
 		request.setTtl(ttl);
+		request.setMaxPeersForForwarding(maxPeersForForwarding);
 
 		ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
 		socketout.writeObject(request);

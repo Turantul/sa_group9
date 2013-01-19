@@ -68,7 +68,6 @@
     <property name="listeningPort">
       <util:constant static-field="${root}.peer.Launcher.LISTENINGPORT" />
     </property>
-    <property name="forwardPeerNumber" value="${forwardPeerNumber}" />
   </bean>
 
   <bean id="fingerprintService" class="${root}.common.media.FingerprintService">

@@ -42,17 +42,18 @@ public class PeerService
 	public PeerList getNeighbors(LoginRequest request)
 	{
 		log.info("Got neigbor request for " + request.getUsername());
-		return new PeerList();
-		//return peerHandler.getRandomPeerList(10);
+		
+		// TODO: find reasonable number
+		return peerHandler.getRandomPeerList(request, 10);
 	}
 
 	@POST
 	@Path("isAlive")
 	@Consumes("application/json")
-	public void isAlive(IsAliveNotification notification)
+	public void isAlive(IsAliveNotification notification, @Context HttpServletRequest hsr)
 	{
 		log.debug("Got isAlive from " + notification.getUsername());
 
-		// TODO: mark as alive
+		peerHandler.markAsAlive(notification, hsr.getRemoteAddr());
 	}
 }

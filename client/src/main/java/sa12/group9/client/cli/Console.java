@@ -89,7 +89,7 @@ public class Console implements ICallback
                             {
                                 try
                                 {
-                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl());
+                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl(), response.getMaxPeersForForwarding());
                                     i++;
                                 }
                                 catch (IOException e)
@@ -104,7 +104,7 @@ public class Console implements ICallback
                             }
                             else
                             {
-                                System.out.println("Waiting for responses...");
+                                System.out.println("Waiting " + response.getSecondsToWait() + " seconds for responses...");
                                 Thread.sleep(response.getSecondsToWait() * 1000);
                                 peerHandler.shutdown();
 
