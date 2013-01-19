@@ -25,13 +25,10 @@ public class RequestHandler extends Thread
     private Socket socket;
     private Kernel kernel;
     
-    private int forwardPeerNumber;
-    
-    public RequestHandler(Socket socket, Kernel kernel, int forwardPeerNumber)
+    public RequestHandler(Socket socket, Kernel kernel)
     {
         this.socket = socket;
         this.kernel = kernel;
-        this.forwardPeerNumber = forwardPeerNumber;
     }
     
     @Override
@@ -99,7 +96,7 @@ public class RequestHandler extends Thread
             request.setRequesterAddress(input.getRequesterAddress());
             request.setRequesterPort(input.getRequesterPort());
             request.setTtl(input.getTtl()-1);
-			List<PeerEndpoint> peerList = selectRandomPeers(forwardPeerNumber);
+			List<PeerEndpoint> peerList = selectRandomPeers(input.getMaxPeersForForwarding());
 			for(PeerEndpoint pe : peerList){
 				forwardRequest(request, pe);
 			}
@@ -123,7 +120,7 @@ public class RequestHandler extends Thread
 		Random random = new Random();
 		int randomlyChosenPeersCount = 0;
 		
-		// TODO: check, ob das nicht in einer Endlossschleife münden kann
+		// TODO: check, ob das nicht in einer Endlossschleife münden kann wenn es nicht genug gibt
 		while((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < peerList.size())){
 			PeerEndpoint randomPeer = kernel.getPeerEndpoint(peerList.get(random.nextInt(peerList.size())));
 			if(!randomPeersSelection.contains(randomPeer)){

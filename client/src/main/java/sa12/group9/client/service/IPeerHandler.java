@@ -20,15 +20,15 @@ public interface IPeerHandler
 
     /**
      * Issues a search request and sends it to the respective peer
-     * @param id 
      * 
      * @param id of the request
      * @param peer which gets the search request
      * @param fingerprint of the song to be searched
      * @param ttl TTL
+     * @param maxPeersForForwarding
      * @throws IOException
      */
-    void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl) throws IOException;
+    void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl, int maxPeersForForwarding) throws IOException;
     
     /**
      * Stop listening to the server
