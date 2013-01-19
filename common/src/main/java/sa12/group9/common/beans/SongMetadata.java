@@ -1,8 +1,12 @@
 package sa12.group9.common.beans;
 
-public class SongMetadata
+import java.io.Serializable;
+
+public class SongMetadata implements Serializable
 {
-    protected String interpret;
+	private static final long serialVersionUID = 3259205233705769862L;
+	
+	protected String interpret;
     protected String title;
     protected int length;
     protected String album;
