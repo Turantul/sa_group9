@@ -4,25 +4,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import sa12.group9.common.beans.IsAliveNotification;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.User;
-
 import sa12.group9.common.util.Encrypter;
-
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoUserDAO;
+import sa12.group9.server.util.PropertiesHelper;
 
 public class PeerServiceHandler implements IPeerServiceHandler
 {
+    private static Log log = LogFactory.getLog(PeerServiceHandler.class);
+    
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
 
@@ -38,13 +41,13 @@ public class PeerServiceHandler implements IPeerServiceHandler
 
             try
             {
-                Properties prop = new Properties();
-                prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
-                minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
-                maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
+                minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
+                maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
             }
             catch (IOException ex)
-            {}
+            {
+                log.info("Failed to read properties file");
+            }
             
             int stepSize = (int) (count / 100);
             if (stepSize < minStepSize)
