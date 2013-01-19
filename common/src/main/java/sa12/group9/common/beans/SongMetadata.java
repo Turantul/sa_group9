@@ -61,4 +61,16 @@ public class SongMetadata implements Serializable
     {
         this.genre = genre;
     }
+    
+    public String toString()
+    {
+    	String s = "";
+    	s += "Interpret: " + interpret;
+    	s += "\nTitle: " + title;
+    	s += "\nLength: " + length;
+    	s += "\nAlbum: " + album;
+    	s += "\nGenre: " + genre;
+    	
+    	return s;
+    }
 }
