@@ -3,6 +3,9 @@ package sa12.group9.server.view;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
 import sa12.group9.server.dao.IUserDAO;
@@ -10,120 +13,124 @@ import sa12.group9.server.dao.MongoUserDAO;
 
 @ManagedBean
 @SessionScoped
-public class LoginBean{
-	String loginname;
-	String password;
-	String retypePassword;
-	int coins;
+public class LoginBean
+{
+    private static Log log = LogFactory.getLog(LoginBean.class);
 
-	public int getCoins() {
-		
-		try {
-			MongoUserDAO usersdao = MongoUserDAO.getInstance();
-			
-			User loggedinuser = usersdao.searchUser(loginname);
-			
-			return loggedinuser.getCoins();
-		} catch (Exception e) {
-			System.out.println(e.getMessage() + "could not get coins");
-			return 0;
-		}
-		
-	}
+    private String loginname;
+    private String password;
+    private String retypePassword;
 
-	public void setCoins(int coins) {
-		this.coins = coins;
-	}
+    public int getCoins()
+    {
+        try
+        {
+            MongoUserDAO usersdao = MongoUserDAO.getInstance();
 
-	public LoginBean(){}
+            User loggedinuser = usersdao.searchUser(loginname);
 
-	public String getLoginname(){
-		return loginname;
-	}
+            return loggedinuser.getCoins();
+        }
+        catch (Exception e)
+        {
+            log.error("Could not get coins for user " + loginname);
+            return 0;
+        }
+    }
 
-	public void setLoginname(String loginname){
-		this.loginname = loginname;
-	}
+    public String getLoginname()
+    {
+        return loginname;
+    }
 
-	public String getPassword(){
-		return password;
-	}
+    public void setLoginname(String loginname)
+    {
+        this.loginname = loginname;
+    }
 
-	public void setPassword(String password){
-		this.password = password;
-	}
-	public String getRetypePassword() {
-		return retypePassword;
-	}
+    public String getPassword()
+    {
+        return password;
+    }
 
-	public void setRetypePassword(String retypePassword) {
-		this.retypePassword = retypePassword;
-	}
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
 
-	public String CheckValidUser(){
+    public String getRetypePassword()
+    {
+        return retypePassword;
+    }
 
-		IUserDAO userdao = MongoUserDAO.getInstance();
-		
-		User fetcheduser = userdao.searchUser(loginname);
-	
-		if(fetcheduser == null){
-			return "fail";
-		}
-	
-		
-		if(loginname.equals(fetcheduser.getUsername()) && 
-		Encrypter.encryptString(password).equals(fetcheduser.getPassword())){
-			System.out.println("successfully logged in as " + fetcheduser.getUsername().toString() + "");
-					return "success";
-		}
-		else{
-			return "fail";
-		}	
-	}
-	public String DeleteUser() {
-		  
-		  try{
-			  IUserDAO userdao = MongoUserDAO.getInstance();
-			  
-			  
-			  userdao.deleteUser(loginname);	  
-			  return "deletesuccess";
-			  
-		  }catch (Exception e) {
-			e.printStackTrace();
-			return "deletefail";
-		}
-	}
-	public String UpdateUser() {
-		  
-		  try{
-			  
-			  if(password.equals(retypePassword)){
-				  IUserDAO userdao = MongoUserDAO.getInstance();
-					
-					
-				  User updatedUser = new User();
-				  
-				  
-				  updatedUser.setUsername(loginname);
-				  updatedUser.setPassword(password);
-				  
-				  userdao.updateUser(updatedUser);
-				  
-				  
-				  return "updatesuccess";
-			  
-			  }else{
-				  return "updatefail";
-			  }
-			  	  
-		  }catch (Exception e) {
-			e.printStackTrace();
-			return "updatefail";
-		}
-	}
+    public void setRetypePassword(String retypePassword)
+    {
+        this.retypePassword = retypePassword;
+    }
 
-	
-		  
-		 
+    public String CheckValidUser()
+    {
+        IUserDAO userdao = MongoUserDAO.getInstance();
+
+        User fetcheduser = userdao.searchUser(loginname);
+
+        if (fetcheduser == null)
+        {
+            return "fail";
+        }
+
+        if (loginname.equals(fetcheduser.getUsername()) && Encrypter.encryptString(password).equals(fetcheduser.getPassword()))
+        {
+            log.debug("Successfully logged in as " + fetcheduser.getUsername());
+            return "success";
+        }
+        else
+        {
+            return "fail";
+        }
+    }
+    
+    public String updateUser()
+    {
+        try
+        {
+            User registeredUser = new User();
+            IUserDAO userdao = MongoUserDAO.getInstance();
+
+            registeredUser = userdao.searchUser(loginname);
+            registeredUser.setUsername(loginname);
+            registeredUser.setPassword(Encrypter.encryptString(password));
+
+            userdao.storeUser(registeredUser);
+
+            log.info("Successfully updated user " + loginname);
+
+            return "editsuccess";
+
+        }
+        catch (Exception e)
+        {
+            log.error("Failed to update user " + loginname);
+            return "editfail";
+        }
+    }
+    
+    public String deleteUser()
+    {
+        try
+        {
+            IUserDAO userdao = MongoUserDAO.getInstance();
+
+            userdao.deleteUser(loginname);
+            
+            log.info("Successfully deleted user " + loginname);
+            
+            return "deletesuccess";
+        }
+        catch (Exception e)
+        {
+            log.error("Error deleting user " + loginname);
+            return "deletefail";
+        }
+    }
 }

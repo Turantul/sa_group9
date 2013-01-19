@@ -3,7 +3,6 @@ package sa12.group9.server.handler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
@@ -21,6 +20,7 @@ import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoUserDAO;
+import sa12.group9.server.util.PropertiesHelper;
 
 public class ClientServiceHandler implements IClientServiceHandler
 {
@@ -62,20 +62,19 @@ public class ClientServiceHandler implements IClientServiceHandler
                 double coveragePercentage = 0.5;
                 int minStepSize = 2;
                 int maxStepSize = 20;
-                // TODO: find reasonable duration per level
-                int ducationPerLevel = 3;
+                int ducationPerLevel = 1;
 
                 try
                 {
-                    Properties prop = new Properties();
-                    prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
-                    coveragePercentage = Double.parseDouble(prop.getProperty("coveragePercentage"));
-                    minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
-                    maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
-                    ducationPerLevel = Integer.parseInt(prop.getProperty("ducationPerLevel"));
+                    coveragePercentage = Double.parseDouble(PropertiesHelper.getProperty("coveragePercentage"));
+                    minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
+                    maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
+                    ducationPerLevel = Integer.parseInt(PropertiesHelper.getProperty("ducationPerLevel"));
                 }
                 catch (IOException ex)
-                {}
+                {
+                    log.info("Failed to read properties file");
+                }
                 
                 if (count >= minStepSize)
                 {
