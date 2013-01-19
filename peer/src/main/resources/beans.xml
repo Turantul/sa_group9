@@ -19,6 +19,9 @@
     <property name="keepAliveCleanup" ref="keepAliveCleanup" />
     <property name="management" ref="management" />
     <property name="requestThread" ref="requestThread" />
+    <property name="fingerprintService" ref="fingerprintService" />
+    <property name="songMetadataService" ref="songMetadataService" />
+    <property name="fpDao" ref="fpDao" />
     <property name="username">
       <util:constant static-field="${root}.peer.Launcher.USERNAME" />
     </property>
@@ -33,10 +36,17 @@
     </property>
   </bean>
 
+  <bean id="songMetadataService" class="${root}.common.media.SongMetadataService">
+  </bean>
+
+  <bean id="fingerprintService" class="${root}.common.media.FingerprintService">
+    <property name="herz" value="${herz}" />
+  </bean>
+
   <bean id="serverHandler" class="${root}.peer.service.ServerHandler">
     <property name="serverUrl" value="${serverUrl}" />
   </bean>
-  
+
   <bean id="peerManager" class="${root}.peer.service.PeerManager">
   </bean>
 
@@ -57,11 +67,11 @@
     </property>
     <property name="peerManager" ref="peerManager" />
   </bean>
-  
+
   <bean id="keepAliveCleanup" class="${root}.peer.service.thread.KeepAliveCleanupThread">
-  	<property name="keepAliveCleanupInterval" value="${keepAlive.cleanup.interval}" />
-  	<property name="requestNewPeerThreshold" value="${requestNewPeersThreshold}" />
-  	<property name="peerManager" ref="peerManager" />
+    <property name="keepAliveCleanupInterval" value="${keepAlive.cleanup.interval}" />
+    <property name="requestNewPeerThreshold" value="${requestNewPeersThreshold}" />
+    <property name="peerManager" ref="peerManager" />
   </bean>
 
   <bean id="management" class="${root}.peer.service.thread.ManagementThread">
@@ -70,19 +80,12 @@
     </property>
     <property name="peerManager" ref="peerManager" />
   </bean>
-  
+
   <bean id="requestThread" class="${root}.peer.service.thread.RequestThread">
     <property name="listeningPort">
       <util:constant static-field="${root}.peer.Launcher.LISTENINGPORT" />
     </property>
     <property name="peerManager" ref="peerManager" />
-  </bean>
-
-  <bean id="fingerprintService" class="${root}.common.media.FingerprintService">
-    <property name="herz" value="${herz}" />
-  </bean>
-  
-  <bean id="songmetadataService" class="${root}.common.media.SongMetadataService">
   </bean>
 
   <!-- This is a datasource for usage with h2 in server mode -->
@@ -106,9 +109,38 @@
     </property>
   </bean>
 
-  <!-- This Transaction Manager is needed for SQL Transactions: it uses a SQL Datasource (see above) -->
-  <bean id="TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <bean id="fpDao" class="${root}.peer.dao.FingerprintDAO" scope="singleton" init-method="init">
     <property name="dataSource" ref="H2DataSource" />
+    <property name="sql_create">
+      <value>
+        CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);
+      </value>
+    </property>
+    <property name="sql_insert">
+      <value>
+        INSERT INTO fingerprint (user, metadata, fingerprint) values(?,?,?);
+      </value>
+    </property>
+    <property name="sql_delete">
+      <value>
+        DELETE FROM fingerprint WHERE user=? and metadata=?;
+      </value>
+    </property>
+    <property name="sql_findFingerprintByUserAndMetadata">
+      <value>
+        SELECT * FROM fingerprint WHERE user=? and metadata=?;
+      </value>
+    </property>
+    <property name="sql_getSongForUserAndFingerprint">
+      <value>
+        SELECT * FROM fingerprint WHERE user=? and fingerprint=?;
+      </value>
+    </property>
+    <property name="sql_getAllFingerprintsForUser">
+      <value>
+        SELECT * FROM fingerprint WHERE user=?;
+      </value>
+    </property>
   </bean>
 
 </beans>

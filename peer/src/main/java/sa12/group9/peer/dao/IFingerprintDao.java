@@ -1,13 +1,12 @@
 package sa12.group9.peer.dao;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 import sa12.group9.common.beans.SongMetadata;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
-public interface IFingerprintDao {
+public interface IFingerprintDAO {
 
 	/**
      * Persists a Fingerprint in the database
@@ -17,7 +16,7 @@ public interface IFingerprintDao {
      * @param the Fingerprint
      * @throws SQLException if there occurs a database error
      */
-	public void persistFingerprint(String user, SongMetadata smd, Fingerprint fp) throws SQLException;
+	void persistFingerprint(String user, SongMetadata smd, Fingerprint fp) throws SQLException;
 	
 	/**
      * Deletes a Fingerprint from the database
@@ -26,7 +25,7 @@ public interface IFingerprintDao {
      * @param the metadata object for the Fingerprint
      * @throws SQLException if there occurs a database error
      */
-	public void deleteFingerprint(String user, SongMetadata smd) throws SQLException;
+	void deleteFingerprint(String user, SongMetadata smd) throws SQLException;
 	
 	/**
      * Retrieves a Fingerprint associated with username and metadata from the database
@@ -36,7 +35,7 @@ public interface IFingerprintDao {
      * @return the Fingerprint
      * @throws SQLException if there occurs a database error
      */
-	public Fingerprint findFingerprintByUserAndMetadata(String user, SongMetadata smd) throws SQLException;
+	Fingerprint findFingerprintByUserAndMetadata(String user, SongMetadata smd) throws SQLException;
 	
 	/**
      * Retrieves metadata for a user and associated Fingerprint
@@ -46,7 +45,7 @@ public interface IFingerprintDao {
      * @return the metadata object for the Fingerprint
      * @throws SQLException if there occurs a database error
      */
-	public SongMetadata getSongForUserAndFingerprint(String user, Fingerprint fp) throws SQLException;
+	SongMetadata getSongForUserAndFingerprint(String user, Fingerprint fp) throws SQLException;
 	
 	/**
      * Retrieves a list of Fingerprints for a user
@@ -55,5 +54,5 @@ public interface IFingerprintDao {
      * @return the list of Fingerprints
      * @throws SQLException if there occurs a database error
      */
-	public List<Fingerprint> getAllFingerprintsForUser(String user) throws SQLException;
+	List<Fingerprint> getAllFingerprintsForUser(String user) throws SQLException;
 }

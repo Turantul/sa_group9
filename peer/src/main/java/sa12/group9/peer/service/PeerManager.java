@@ -13,7 +13,7 @@ public class PeerManager implements IPeerManager{
 	private Map<String, PeerEndpoint> peerMap;
 	
 	public PeerManager(){
-		this.peerMap = peerMap = Collections.synchronizedMap(new HashMap<String, PeerEndpoint>());
+		peerMap = Collections.synchronizedMap(new HashMap<String, PeerEndpoint>());
 	}
 	
 	public void addPeerEndpoint(PeerEndpoint peer){

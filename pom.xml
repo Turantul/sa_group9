@@ -25,6 +25,7 @@
     <module>server</module>
     <module>common</module>
     <module>fingerprinting</module>
+    <module>peermanagement</module>
   </modules>
   
   <scm>
