@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -15,82 +17,86 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import sa12.group9.common.beans.SongMetadata;
 import sa12.group9.common.util.Constants;
 
-public class FingerprintDao {
+public class FingerprintDao implements IFingerprintDao {
 	private Connection con;
 	
-	public FingerprintDao()
+	public FingerprintDao() throws SQLException
 	{
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
 		DriverManagerDataSource dataSource = (DriverManagerDataSource) ctx.getBean("H2DataSource");
 		
-		try {
-			con = dataSource.getConnection();
-			Statement stat = con.createStatement();
-			stat.execute("CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		con = dataSource.getConnection();
+		Statement stat = con.createStatement();
+		stat.execute("CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);");
 	}
 	
-	public FingerprintDao(String jdbcUrl)
+	public FingerprintDao(String jdbcUrl) throws SQLException
 	{
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(Constants.SPRINGBEANS);
 		DriverManagerDataSource dataSource = (DriverManagerDataSource) ctx.getBean("H2DataSource");
 		dataSource.setUrl(jdbcUrl);
 		
-		try {
-			con = dataSource.getConnection();
-			Statement stat = con.createStatement();
-			stat.execute("CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		con = dataSource.getConnection();
+		Statement stat = con.createStatement();
+		stat.execute("CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);");
 	}
 	
-	public void persistFingerprint(String user, SongMetadata smd, Fingerprint fp) {
-		try {
-			PreparedStatement prep = con.prepareStatement("INSERT INTO fingerprint (user, metadata, fingerprint) values(?,?,?);");
-			prep.setString(1, user);
-			prep.setObject(2, smd);
-			prep.setObject(3, fp);
-			prep.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void persistFingerprint(String user, SongMetadata smd, Fingerprint fp) throws SQLException {
+		PreparedStatement prep = con.prepareStatement("INSERT INTO fingerprint (user, metadata, fingerprint) values(?,?,?);");
+		prep.setString(1, user);
+		prep.setObject(2, smd);
+		prep.setObject(3, fp);
+		prep.execute();
 	}
 	
-	public void deleteFingerprint(String user, SongMetadata smd) {
-		try {
-			PreparedStatement prep = con.prepareStatement("DELETE FROM fingerprint WHERE user=? and metadata=?;");
-			prep.setString(1, user);
-			prep.setObject(2, smd);
-			prep.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void deleteFingerprint(String user, SongMetadata smd) throws SQLException {
+		PreparedStatement prep = con.prepareStatement("DELETE FROM fingerprint WHERE user=? and metadata=?;");
+		prep.setString(1, user);
+		prep.setObject(2, smd);
+		prep.executeUpdate();
 	}
 	
-	public Fingerprint findFingerprintByUserLoc(String user, SongMetadata smd) {
+	public Fingerprint findFingerprintByUserAndMetadata(String user, SongMetadata smd) throws SQLException {
 		Fingerprint fp = null;
 		
-		try {
-			PreparedStatement prep = con.prepareStatement("SELECT * FROM fingerprint WHERE user=? and metadata=?;");
-			prep.setString(1, user);
-			prep.setObject(2, smd);
-			
-			ResultSet rs = prep.executeQuery();
-			if (rs.next()) {
-				fp = (Fingerprint) rs.getObject(3);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		PreparedStatement prep = con.prepareStatement("SELECT * FROM fingerprint WHERE user=? and metadata=?;");
+		prep.setString(1, user);
+		prep.setObject(2, smd);
+
+		ResultSet rs = prep.executeQuery();
+		if (rs.next()) {
+			fp = (Fingerprint) rs.getObject(3);
 		}
 
 		return fp;
+	}
+	
+	public SongMetadata getSongForUserAndFingerprint(String user, Fingerprint fp) throws SQLException {
+		SongMetadata smd = null;
+		
+		PreparedStatement prep = con.prepareStatement("SELECT * FROM fingerprint WHERE user=? and fingerprint=?;");
+		prep.setString(1, user);
+		prep.setObject(2, fp);
+
+		ResultSet rs = prep.executeQuery();
+		if (rs.next()) {
+			smd = (SongMetadata) rs.getObject(3);
+		}
+		
+		return smd;
+	}
+	
+	public List<Fingerprint> getAllFingerprintsForUser(String user) throws SQLException {
+		List<Fingerprint> fingerprints = new ArrayList<Fingerprint>();
+		
+		PreparedStatement prep = con.prepareStatement("SELECT * FROM fingerprint WHERE user=?;");
+		prep.setString(1, user);
+
+		ResultSet rs = prep.executeQuery();
+		while (rs.next()) {
+			fingerprints.add((Fingerprint) rs.getObject(2));
+		}
+		
+		return fingerprints;
 	}
 }
