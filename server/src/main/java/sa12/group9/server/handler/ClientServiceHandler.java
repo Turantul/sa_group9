@@ -55,32 +55,37 @@ public class ClientServiceHandler implements IClientServiceHandler
 
                 if (count < 2)
                 {
-                    // Default desired coverage
+                    // Default values
                     double coveragePercentage = 0.5;
+                    int minStepSize = 2;
+                    int maxStepSize = 20;
+                    // TODO: find reasonable duration per level
+                    int ducationPerLevel = 3;
     
                     try
                     {
                         Properties prop = new Properties();
                         prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
                         coveragePercentage = Double.parseDouble(prop.getProperty("coveragePercentage"));
-    
+                        minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
+                        maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
+                        ducationPerLevel = Integer.parseInt(prop.getProperty("ducationPerLevel"));
                     }
                     catch (IOException ex)
                     {}
     
                     int stepSize = (int) (count / 100);
-                    if (stepSize < 2)
+                    if (stepSize < minStepSize)
                     {
-                        stepSize = 2;
+                        stepSize = minStepSize;
                     }
-                    else if (stepSize > 20)
+                    else if (stepSize > maxStepSize)
                     {
-                        stepSize = 20;
+                        stepSize = maxStepSize;
                     }
     
                     int ttl = (int) (Math.log(count * coveragePercentage) / Math.log(stepSize));
-                    // TODO: find reasonable duration per level
-                    int secondsToWait = ttl * 5;
+                    int secondsToWait = ttl * ducationPerLevel;
     
                     response.setPeers(getRandomPeerList(stepSize));
                     response.setMaxPeersForForwarding(stepSize);
