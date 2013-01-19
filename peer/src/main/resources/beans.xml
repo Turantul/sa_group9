@@ -81,6 +81,9 @@
   <bean id="fingerprintService" class="${root}.common.media.FingerprintService">
     <property name="herz" value="${herz}" />
   </bean>
+  
+  <bean id="songmetadataService" class="${root}.common.media.SongMetadataService">
+  </bean>
 
   <!-- This is a datasource for usage with h2 in server mode -->
   <bean id="org.h2.tools.Server" class="org.h2.tools.Server" factory-method="createTcpServer" init-method="start"
