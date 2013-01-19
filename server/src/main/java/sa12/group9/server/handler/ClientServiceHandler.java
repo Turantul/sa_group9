@@ -61,7 +61,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     int maxStepSize = 20;
                     // TODO: find reasonable duration per level
                     int ducationPerLevel = 3;
-    
+
                     try
                     {
                         Properties prop = new Properties();
@@ -73,7 +73,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     }
                     catch (IOException ex)
                     {}
-    
+
                     int stepSize = (int) (count / 100);
                     if (stepSize < minStepSize)
                     {
@@ -83,15 +83,15 @@ public class ClientServiceHandler implements IClientServiceHandler
                     {
                         stepSize = maxStepSize;
                     }
-    
+
                     int ttl = (int) (Math.log(count * coveragePercentage) / Math.log(stepSize));
                     int secondsToWait = ttl * ducationPerLevel;
-    
+
                     response.setPeers(getRandomPeerList(stepSize));
                     response.setMaxPeersForForwarding(stepSize);
                     response.setTtl(ttl);
                     response.setSecondsToWait(secondsToWait);
-    
+
                     // TODO: log in the database
                 }
                 else
@@ -125,20 +125,22 @@ public class ClientServiceHandler implements IClientServiceHandler
     public PeerList getRandomPeerList(int numberOfWantedPeers)
     {
         IPeerDAO peerdao = MongoPeerDAO.getInstance();
-        PeerList allPeers = new PeerList();
+        List<PeerEndpoint> allPeers = peerdao.getAllPeers();
         List<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
-        allPeers.setPeers(peerdao.getAllPeers());
 
         Random random = new Random();
         int randomlyChosenPeersCount = 0;
 
         // iterate as long as either the wanted number is reached or the maximum
         // number of peers in database return
-        // TODO: jeder peer soll nach möglichkeit nur einmal ausgewählt werden
-        while ((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < allPeers.getPeers().size()))
+        while ((randomlyChosenPeersCount < numberOfWantedPeers) && (randomlyChosenPeersCount < allPeers.size()))
         {
-            randomPeersSelection.add(allPeers.getPeers().get(random.nextInt(allPeers.getPeers().size())));
-            randomlyChosenPeersCount++;
+            PeerEndpoint randomPeer = allPeers.get(random.nextInt(allPeers.size()));
+            if (!randomPeersSelection.contains(randomPeer))
+            {
+                randomPeersSelection.add(randomPeer);
+                randomlyChosenPeersCount++;
+            }
         }
 
         PeerList returnPeerList = new PeerList();

@@ -65,7 +65,7 @@ public class Kernel
         fingerprintList = Collections.synchronizedList(new ArrayList<Fingerprint>());
         try
         {
-            boolean success = serverHandler.loginAtServer(username, password);
+            boolean success = sendKeepAliveToServer();
 
             if (success)
             {
@@ -306,8 +306,8 @@ public class Kernel
         }
 	}
 
-	public void sendKeepAliveToServer() {
-		serverHandler.isAlive(username, password, listeningPort, keepAlivePort);	
+	public boolean sendKeepAliveToServer() {
+		return serverHandler.isAlive(username, password, listeningPort, keepAlivePort);	
 	}
     
 }

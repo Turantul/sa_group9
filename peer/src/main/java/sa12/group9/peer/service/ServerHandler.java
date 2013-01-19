@@ -30,18 +30,7 @@ public class ServerHandler implements IServerHandler
         client = Client.create(config);
     }
     
-    public boolean loginAtServer(String username, String password)
-    {
-        LoginRequest request = new LoginRequest();
-        request.setUsername(username);
-        request.setPassword(password);
-
-        WebResource resource = client.resource(serverUrl + "login");
-        boolean response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(Boolean.class, request);
-
-        return response;
-    }
-    
+    @Override
     public List<PeerEndpoint> getNeighbors(String username, String password)
     {
         LoginRequest request = new LoginRequest();
@@ -57,7 +46,7 @@ public class ServerHandler implements IServerHandler
     }
     
     @Override
-    public void isAlive(String username, String password, int listeningPort, int keepAlivePort)
+    public boolean isAlive(String username, String password, int listeningPort, int keepAlivePort)
     {
         IsAliveNotification request = new IsAliveNotification();
         request.setUsername(username);
@@ -66,7 +55,9 @@ public class ServerHandler implements IServerHandler
         request.setKeepAlivePort(keepAlivePort);
 
         WebResource resource = client.resource(serverUrl + "isAlive");
-        resource.type(MediaType.APPLICATION_JSON).post(request);
+        boolean response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(Boolean.class, request);
+        
+        return response;
     }
     
     public void setServerUrl(String serverUrl)

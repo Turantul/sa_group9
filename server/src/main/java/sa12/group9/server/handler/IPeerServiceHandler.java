@@ -10,25 +10,16 @@ public interface IPeerServiceHandler
 	 * TODO
 	 * 
 	 * @param request
-	 * @param numberOfWantedPeers
 	 * @return
 	 */
-	PeerList getRandomPeerList(LoginRequest request, int numberOfWantedPeers);
+	PeerList getRandomPeerList(LoginRequest request);
 
 	/**
 	 * TODO
 	 * 
 	 * @param request
-	 * @param string 
+	 * @param remoteAddress 
 	 * @return
 	 */
-	boolean verifyLogin(IsAliveNotification request, String remoteAddress);
-	
-	/**
-	 * TODO
-	 * 
-	 * @param request
-	 * @param remoteAddress 
-	 */
-	void markAsAlive(IsAliveNotification request, String remoteAddress);
+	boolean markAsAlive(IsAliveNotification request, String remoteAddress);
 }
