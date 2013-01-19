@@ -1,5 +1,6 @@
 package sa12.group9.server.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -66,7 +67,7 @@ public class MongoPeerDAO implements IPeerDAO
 
 	@Override
 	public void cleanupPeers(int cleanupPeriod) {
-		mongoOperation.remove(new Query(Criteria.where("lastKeepAlive").lt(System.currentTimeMillis()-cleanupPeriod)), "peers");	
+		mongoOperation.remove(new Query(Criteria.where("lastKeepAlive").lt(new Date(System.currentTimeMillis()-cleanupPeriod))), "peers");	
 	}
 
 }

@@ -193,8 +193,8 @@ public class Kernel
     		            P2PSearchRequest request = new P2PSearchRequest();
     		            request.setId("test");
     		            request.setFingerprint(finger);
-    		            request.setRequesterAddress(adress);
-    		            request.setRequesterPort(port);
+    		            request.setRequesterAddress(socket.getLocalSocketAddress().toString());
+    		            request.setRequesterPort(listeningPort);
     		            request.setTtl(10);
     		            socketout.writeObject(request);
     		            socketout.close();
@@ -311,5 +311,3 @@ public class Kernel
 	}
     
 }
-
-	

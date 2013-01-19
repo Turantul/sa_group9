@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
@@ -21,6 +24,8 @@ import sa12.group9.server.dao.MongoUserDAO;
 
 public class ClientServiceHandler implements IClientServiceHandler
 {
+    private static Log log = LogFactory.getLog(ClientServiceHandler.class);
+    
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
 
@@ -53,27 +58,27 @@ public class ClientServiceHandler implements IClientServiceHandler
             {
                 long count = peerdao.getCountOfPeers();
 
-                if (count < 2)
+                // Default values
+                double coveragePercentage = 0.5;
+                int minStepSize = 2;
+                int maxStepSize = 20;
+                // TODO: find reasonable duration per level
+                int ducationPerLevel = 3;
+
+                try
                 {
-                    // Default values
-                    double coveragePercentage = 0.5;
-                    int minStepSize = 2;
-                    int maxStepSize = 20;
-                    // TODO: find reasonable duration per level
-                    int ducationPerLevel = 3;
-
-                    try
-                    {
-                        Properties prop = new Properties();
-                        prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
-                        coveragePercentage = Double.parseDouble(prop.getProperty("coveragePercentage"));
-                        minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
-                        maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
-                        ducationPerLevel = Integer.parseInt(prop.getProperty("ducationPerLevel"));
-                    }
-                    catch (IOException ex)
-                    {}
-
+                    Properties prop = new Properties();
+                    prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
+                    coveragePercentage = Double.parseDouble(prop.getProperty("coveragePercentage"));
+                    minStepSize = Integer.parseInt(prop.getProperty("minStepSize"));
+                    maxStepSize = Integer.parseInt(prop.getProperty("maxStepSize"));
+                    ducationPerLevel = Integer.parseInt(prop.getProperty("ducationPerLevel"));
+                }
+                catch (IOException ex)
+                {}
+                
+                if (count >= minStepSize)
+                {
                     int stepSize = (int) (count / 100);
                     if (stepSize < minStepSize)
                     {
@@ -85,12 +90,14 @@ public class ClientServiceHandler implements IClientServiceHandler
                     }
 
                     int ttl = (int) (Math.log(count * coveragePercentage) / Math.log(stepSize));
-                    int secondsToWait = ttl * ducationPerLevel;
+                    int secondsToWait = (ttl + 1) * ducationPerLevel;
 
                     response.setPeers(getRandomPeerList(stepSize));
                     response.setMaxPeersForForwarding(stepSize);
                     response.setTtl(ttl);
                     response.setSecondsToWait(secondsToWait);
+                    
+                    log.info("Created new request for " + request.getUsername() + " with a stepsize of " + stepSize + ", TTL of " + ttl + " and " + secondsToWait + " seconds to wait.");
 
                     // TODO: log in the database
                 }
