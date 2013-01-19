@@ -51,4 +51,6 @@ public interface IPeerDAO
      * @return
      */
     PeerEndpoint getPeer(String address, int listeningPort, int keepAlivePort);
+    
+    void cleanupPeers(int cleanupPeriod);
 }

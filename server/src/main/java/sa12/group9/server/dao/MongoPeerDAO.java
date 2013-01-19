@@ -64,4 +64,9 @@ public class MongoPeerDAO implements IPeerDAO
         return mongoOperation.findOne(new Query(Criteria.where("address").is(address).and("listeningPort").is(listeningPort).and("keepAlivePort").is(keepAlivePort)), PeerEndpoint.class, "peers");
     }
 
+	@Override
+	public void cleanupPeers(int cleanupPeriod) {
+		mongoOperation.remove(new Query(Criteria.where("lastKeepAlive").lt(System.currentTimeMillis()-cleanupPeriod)), "peers");	
+	}
+
 }
