@@ -43,6 +43,10 @@ public class RequestHandler extends Thread
 			if(inputObj.getClass()==P2PSearchRequest.class){
 				P2PSearchRequest input = (P2PSearchRequest) inputObj;
 				System.out.println("Got Request "+input.getId());
+				
+				// TODO: ich glaube speziell bei kleinen netzen wie wir sie haben werden wird das zu einem massiven flooding
+				// führen wenn wir das vorher schon weiterleiten.. so wird jeder peer mehrere male angesprochen und das selbe
+				// ergebnis zu client geschickt.. eventuell vertauschen
 				forwardToPeers(input);
 				calculateMatch(input);
 			}

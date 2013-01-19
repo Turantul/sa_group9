@@ -104,7 +104,7 @@ public class Console implements ICallback
                             }
                             else
                             {
-                                System.out.println("Waiting for responses...");
+                                System.out.println("Waiting " + response.getSecondsToWait() + " seconds for responses...");
                                 Thread.sleep(response.getSecondsToWait() * 1000);
                                 peerHandler.shutdown();
 
