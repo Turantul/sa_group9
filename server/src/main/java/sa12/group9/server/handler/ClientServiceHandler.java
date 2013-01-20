@@ -39,7 +39,7 @@ public class ClientServiceHandler implements IClientServiceHandler
         coveragePercentage = 0.5;
         minStepSize = 2;
         maxStepSize = 20;
-        durationPerLevel = 5;
+        durationPerLevel = 3;
         
         try
         {

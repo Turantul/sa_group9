@@ -49,7 +49,7 @@ public class RequestHandler extends Thread
                 P2PSearchRequest input = (P2PSearchRequest) inputObj;
                 if (requestManager.wasAlreadyHandled(input.getId()))
                 {
-                    log.debug("Request with id " + input.getId() + " already handled. Skipping...");
+                    log.info("Request with id " + input.getId() + " already handled. Skipping...");
                 }
                 else
                 {
