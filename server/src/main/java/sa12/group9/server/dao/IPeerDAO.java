@@ -7,21 +7,18 @@ import sa12.group9.common.beans.PeerEndpoint;
 public interface IPeerDAO
 {
     /**
-     * TODO
      * 
      * @param peer
      */
     void storePeer(PeerEndpoint peer);
 
     /**
-     * TODO
      * 
      * @param peers
      */
     void storePeers(List<PeerEndpoint> peers);
 
     /**
-     * TODO
      * 
      * @param address
      * @return
@@ -29,21 +26,18 @@ public interface IPeerDAO
     PeerEndpoint searchPeer(String address);
 
     /**
-     * TODO
      * 
      * @return
      */
     List<PeerEndpoint> getAllPeers();
 
     /**
-     * TODO
      * 
      * @return
      */
     long getCountOfPeers();
     
     /**
-     * TODO
      * 
      * @param address
      * @param listeningPort

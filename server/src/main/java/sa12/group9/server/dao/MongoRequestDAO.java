@@ -10,9 +10,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import sa12.group9.common.beans.Request;
-import sa12.group9.common.beans.SearchIssueRequest;
-import sa12.group9.common.beans.User;
-import sa12.group9.common.util.Encrypter;
 
 public class MongoRequestDAO implements IRequestDAO
 {

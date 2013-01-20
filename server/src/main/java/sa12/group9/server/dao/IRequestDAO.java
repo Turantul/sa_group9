@@ -17,7 +17,6 @@ public interface IRequestDAO
     void storeRequest(Request request);
 
     /**
-     * TODO
      * 
      * @param requests
      */
