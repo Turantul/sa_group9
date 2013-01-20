@@ -1,0 +1,12 @@
+Welcome to the test suite for the SWAzam software project of group 9.
+
+In order to start our project, you need:
+  .) MongoDB, downloadable at http://www.mongodb.org/downloads
+  .) Maven in the classpath
+
+Please execute 1-startservers.bat first. This script starts the MongoDB and a Tomcat instance.
+In this file you need to provide the path to your MongoDB installation directory (including "/bin").
+
+Then execute 2-startpeers.bat. There, the five peers are started.
+
+Finally using 3-startclient.bat you can start the client GUI to start issuing requests.
