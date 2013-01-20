@@ -103,6 +103,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     
                     log.info("Created new request for " + request.getUsername() + " with a stepsize of " + stepSize + ", TTL of " + ttl + " and " + secondsToWait + " seconds to wait.");
 
+                    //set request log parameters
                     Request requestToLog = new Request();
                     
                     requestToLog.setId(request.getId());
@@ -112,6 +113,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     
                     try{
                 
+                    	//create request in db
                     	requestdao.storeRequest(requestToLog);
                         
                     }catch (Exception e) {
@@ -137,15 +139,16 @@ public class ClientServiceHandler implements IClientServiceHandler
     @Override
     public void notifySuccess(SuccessRequest request)
     {
+    	
         if (authenticate(request))
         {
             
+        	System.out.println("authenticated");
         	//update the coins of client that issued the request!
         	try {
             	User user = userdao.searchUser(request.getUsername());
                 user.setCoins(user.getCoins() - 1);
                 userdao.updateUser(user);
-                
                 
                 
 			} catch (Exception e) {
@@ -166,13 +169,13 @@ public class ClientServiceHandler implements IClientServiceHandler
 			}
             
         	//log in the database
-        	
             try {
 				
             	Request requestToLog = requestdao.searchRequestById(request.getId());
             	
             	requestToLog.setFinishedDate(new Date());
             	requestToLog.setStatus("finished");
+            	requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());
             	
             	requestdao.updateRequest(requestToLog);
             	
@@ -180,9 +183,6 @@ public class ClientServiceHandler implements IClientServiceHandler
 				e.printStackTrace();
 				log.info("failed to save request for user: " + request.getUsername() + ", due to error with MongoRequestDAO");
 			}
-            
-         
-            
         }
     }
 
@@ -222,6 +222,14 @@ public class ClientServiceHandler implements IClientServiceHandler
         {
             return false;
         }
+        
+        System.out.println("requestusername:" + request.getUsername());
+        System.out.println("requestpassword:" + Encrypter.encryptString(request.getPassword()));
+        
+        System.out.println("fetchedusername:" + fetcheduser.getUsername());
+        System.out.println("fetchedpassword:" + fetcheduser.getPassword());        
+        
+        System.out.println(request.getUsername().equals(fetcheduser.getUsername()) && Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword()));
         return request.getUsername().equals(fetcheduser.getUsername()) && Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword());
     }
 }

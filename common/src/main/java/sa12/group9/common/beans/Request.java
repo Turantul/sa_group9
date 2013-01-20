@@ -15,9 +15,16 @@ public class Request {
 	private Date issuedate;
 	private Date finisheddate;
 	private String status;
+	private String foundbyuser;
 
 	
 	
+	public String getFoundbyuser() {
+		return foundbyuser;
+	}
+	public void setFoundbyuser(String foundbyuser) {
+		this.foundbyuser = foundbyuser;
+	}
 	public String getUsername() {
 		return username;
 	}
