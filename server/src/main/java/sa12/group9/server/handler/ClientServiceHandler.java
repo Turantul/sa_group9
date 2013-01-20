@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sa12.group9.common.beans.CoinHistory;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
@@ -18,9 +20,11 @@ import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
+import sa12.group9.server.dao.ICoinHistoryDAO;
 import sa12.group9.server.dao.IPeerDAO;
 import sa12.group9.server.dao.IRequestDAO;
 import sa12.group9.server.dao.IUserDAO;
+import sa12.group9.server.dao.MongoCoinHistoryDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
 import sa12.group9.server.dao.MongoRequestDAO;
 import sa12.group9.server.dao.MongoUserDAO;
@@ -32,8 +36,8 @@ public class ClientServiceHandler implements IClientServiceHandler
 
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
-
     private IRequestDAO requestdao = MongoRequestDAO.getInstance();
+    private ICoinHistoryDAO coinhistorydao = MongoCoinHistoryDAO.getInstance();
 
     private double coveragePercentage;
     private int minStepSize;
@@ -162,6 +166,18 @@ public class ClientServiceHandler implements IClientServiceHandler
                 User user = userdao.searchUser(request.getUsername());
                 user.setCoins(user.getCoins() - 1);
                 userdao.updateUser(user);
+                
+                //save history to coins
+                
+                CoinHistory coinhistory = new CoinHistory();
+                
+                coinhistory.setChangedate(new Date());
+                coinhistory.setCoins(user.getCoins());
+                coinhistory.setRequestid(request.getId());
+                coinhistory.setUsername(request.getUsername());
+                coinhistory.setUuid(UUID.randomUUID());
+                
+                coinhistorydao.storeCoinHistory(coinhistory);
 
             }
             catch (Exception e)
@@ -176,6 +192,16 @@ public class ClientServiceHandler implements IClientServiceHandler
                 User user = userdao.searchUser(request.getInformation().getPeerUsername());
                 user.setCoins(user.getCoins() + 3);
                 userdao.updateUser(user);
+                
+                CoinHistory coinhistory = new CoinHistory();
+                
+                coinhistory.setChangedate(new Date());
+                coinhistory.setCoins(user.getCoins());
+                coinhistory.setRequestid(request.getId());
+                coinhistory.setUsername(request.getInformation().getPeerUsername());
+                coinhistory.setUuid(UUID.randomUUID());
+                
+                coinhistorydao.storeCoinHistory(coinhistory);
 
             }
             catch (Exception e)
