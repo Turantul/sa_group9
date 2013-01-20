@@ -10,10 +10,14 @@ import javax.faces.bean.SessionScoped;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sa12.group9.common.beans.CoinHistory;
 import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
+import sa12.group9.server.dao.ICoinHistoryDAO;
 import sa12.group9.server.dao.IRequestDAO;
+import sa12.group9.server.dao.IUserDAO;
+import sa12.group9.server.dao.MongoCoinHistoryDAO;
 import sa12.group9.server.dao.MongoRequestDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 
@@ -23,13 +27,16 @@ public class LoginBean implements Serializable
 {
     private static Log log = LogFactory.getLog(LoginBean.class);
 
-    private MongoUserDAO usersdao = MongoUserDAO.getInstance();
+    private IUserDAO usersdao = MongoUserDAO.getInstance(); 
     private IRequestDAO requestdao = MongoRequestDAO.getInstance();
-
+    private ICoinHistoryDAO coinhistorydao = MongoCoinHistoryDAO.getInstance();
+    
+    
     private String loginname;
     private String password;
     private String retypePassword;
     private List<Request> requestsforuser;
+    private List<CoinHistory> coinhistoryforuser;
 
     public int getCoins()
     {
@@ -172,4 +179,29 @@ public class LoginBean implements Serializable
             return "fail";
         }
     }
+    
+//    public String GetCoinHistoryForUser()
+//    {
+//        try
+//        {
+//        	coinhistoryforuser = new ArrayList<CoinHistory>();
+//            List<CoinHistory> allcoinhistories = coinhistorydao.getAllCoinHistories();
+//
+//            for (Request request : allrequests)
+//            {
+//                if (request.getUsername().toString().equals(loginname))
+//                {
+//                    requestsforuser.add(request);
+//                }
+//            }
+//
+//            return "success";
+//
+//        }
+//        catch (Exception e)
+//        {
+//            log.info("problem with fetching requests for user, could not get all requests for a user");
+//            return "fail";
+//        }
+//    }
 }

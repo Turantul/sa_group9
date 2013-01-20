@@ -53,7 +53,7 @@ public class MongoUserDAO implements IUserDAO
     @Override
     public void updateUser(User user)
     {
-        mongoOperation.updateFirst(new Query(Criteria.where("_id").is(user.getUsername())), Update.update("password", Encrypter.encryptString(user.getPassword())), User.class);
+        mongoOperation.updateFirst(new Query(Criteria.where("_id").is(user.getUsername())), Update.update("password", user.getPassword()), User.class);
         mongoOperation.updateFirst(new Query(Criteria.where("_id").is(user.getUsername())), Update.update("coins", user.getCoins()), User.class);
     }
 
