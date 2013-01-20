@@ -9,7 +9,7 @@ public class PropertiesHelper
 
     static
     {
-        Properties prop = new Properties();
+        prop = new Properties();
         try
         {
             prop.load(PropertiesHelper.class.getClassLoader().getResourceAsStream("config.properties"));
