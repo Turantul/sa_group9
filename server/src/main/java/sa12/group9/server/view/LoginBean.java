@@ -38,7 +38,9 @@ public class LoginBean implements Serializable
     private List<Request> requestsforuser;
     private List<CoinHistory> coinhistoryforuser;
 
-    public int getCoins()
+
+
+	public int getCoins()
     {
         try
         {
@@ -92,6 +94,14 @@ public class LoginBean implements Serializable
     {
         this.requestsforuser = requestsforuser;
     }
+    
+    public List<CoinHistory> getCoinhistoryforuser() {
+		return coinhistoryforuser;
+	}
+
+	public void setCoinhistoryforuser(List<CoinHistory> coinhistoryforuser) {
+		this.coinhistoryforuser = coinhistoryforuser;
+	}
 
     public String CheckValidUser()
     {
