@@ -28,6 +28,25 @@ public class PeerServiceHandler implements IPeerServiceHandler
     
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
+    
+    private int minStepSize = 2;
+    private int maxStepSize = 20;
+    
+    public PeerServiceHandler()
+    {
+        minStepSize = 2;
+        maxStepSize = 20;
+        
+        try
+        {
+            minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
+            maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
+        }
+        catch (IOException ex)
+        {
+            log.info("Failed to read properties file");
+        }
+    }
 
     @Override
     public PeerList getRandomPeerList(LoginRequest request)
@@ -35,19 +54,6 @@ public class PeerServiceHandler implements IPeerServiceHandler
         if (authenticate(request))
         {
             long count = peerdao.getCountOfPeers();
-            
-            int minStepSize = 2;
-            int maxStepSize = 20;
-
-            try
-            {
-                minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
-                maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
-            }
-            catch (IOException ex)
-            {
-                log.info("Failed to read properties file");
-            }
             
             int stepSize = (int) (count / 100);
             if (stepSize < minStepSize)

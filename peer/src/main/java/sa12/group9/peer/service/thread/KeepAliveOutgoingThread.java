@@ -1,23 +1,18 @@
 package sa12.group9.peer.service.thread;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.peer.service.IPeerManager;
-import sa12.group9.peer.service.IServerHandler;
 
 public class KeepAliveOutgoingThread extends AliveThread
 {
@@ -43,6 +38,7 @@ public class KeepAliveOutgoingThread extends AliveThread
 					byte[] buf = message.getBytes();
 					DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(pe.getAddress()), pe.getKeepAlivePort());
 					datagram.send(packet);
+					datagram.close();
 				} catch (SocketException e) {
 					log.error("Error sending keepAlive to "+pe.getAddress()+":"+pe.getKeepAlivePort()+"\n"+e.getMessage());
 				} catch (UnknownHostException e) {

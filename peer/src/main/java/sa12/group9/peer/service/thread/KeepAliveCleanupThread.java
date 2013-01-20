@@ -1,12 +1,5 @@
 package sa12.group9.peer.service.thread;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -26,9 +19,6 @@ public class KeepAliveCleanupThread extends Thread
     private int requestNewPeerThreshold;
     private IPeerManager peerManager;
     
-    public KeepAliveCleanupThread(){
-    }
-    
     @Override
     public void run()
     {
@@ -39,7 +29,7 @@ public class KeepAliveCleanupThread extends Thread
 	    			PeerEndpoint pe = peerManager.getPeerEndpoint(key);
 	    			if(pe.getLastKeepAlive() != null && pe.getLastKeepAlive().getTime()<System.currentTimeMillis()-10000){
 	    				peerManager.removePeerEndpoint(pe.getAddress()+":"+pe.getListeningPort());
-	    				System.out.println("Removed peer "+pe.getAddress()+":"+pe.getListeningPort());
+	    				log.debug("Removed peer "+pe.getAddress()+":"+pe.getListeningPort());
 	    			}
 	    		}
 	    		if(peerManager.getPeerCount()<requestNewPeerThreshold){

@@ -50,10 +50,10 @@ public class ResultPanel extends AbstractWorkingPanel
         interpret.setForeground(Color.WHITE);
         add(interpret, "gapright 80, wrap 10");
         
-        JLabel album = new JLabel("Album:   " + information.getAlbum() == null || information.getAlbum().equals("") ? "-" : information.getAlbum());
+        JLabel album = new JLabel("Album:   " + (information.getAlbum() == null || information.getAlbum().equals("") ? "-" : information.getAlbum()));
         album.setForeground(Color.WHITE);
         add(album, "gapleft 100");
-        JLabel genre = new JLabel("Genre:   " + information.getGenre() == null || information.getGenre().equals("") ? "-" : information.getGenre());
+        JLabel genre = new JLabel("Genre:   " + (information.getGenre() == null || information.getGenre().equals("") ? "-" : information.getGenre()));
         genre.setForeground(Color.WHITE);
         add(genre, "gapright 80, wrap 10");
         

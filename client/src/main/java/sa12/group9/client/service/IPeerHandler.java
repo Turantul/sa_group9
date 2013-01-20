@@ -3,6 +3,7 @@ package sa12.group9.client.service;
 import java.io.IOException;
 
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.common.beans.SearchIssueResponse;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 /**
@@ -24,11 +25,10 @@ public interface IPeerHandler
      * @param id of the request
      * @param peer which gets the search request
      * @param fingerprint of the song to be searched
-     * @param ttl TTL
-     * @param maxPeersForForwarding
+     * @param response Response of the server
      * @throws IOException
      */
-    void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl, int maxPeersForForwarding) throws IOException;
+    void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, SearchIssueResponse response) throws IOException;
     
     /**
      * Stop listening to the server
