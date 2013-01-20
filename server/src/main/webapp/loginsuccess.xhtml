@@ -9,20 +9,26 @@
 	<title>Swazam sucessfully log in</title>
 </h:head>
 <h:body>
+<h:form>
 
-
-	Successfully logged in as User : "
-	<h:outputText id="outtxt" value="#{login.loginname}"/>"<br/><br/>
+		Successfully logged in as User : "
+		<h:outputText id="outtxt" value="#{login.loginname}"/>"<br/><br/>
+		
+		your number of coins:
+		
+		<h:outputText id="outtxt2" value="#{login.coins}"/><br/><br/>
+		
+		your requests:<br/>
+		
+			<h:commandButton value="Show Requests" 
+				action="#{login.GetRequestsForUser}"/><br/>
 	
-	your number of coins:
+		
+		edit your account:
+		<br/>
+		<h:link value="Edit" outcome="edit" /><br/>
+		<h:link value="logout" outcome="login"/>
 	
-	<h:outputText id="outtxt" value="#{login.coins}"/><br/><br/>
-	
-	edit your account:
-	
-	<h:link value="Edit" outcome="edit" /><br/>
-	<h:link value="logout" outcome="login"/>
-	
-	
-	</h:body>
+</h:form>
+</h:body>
 </html>
