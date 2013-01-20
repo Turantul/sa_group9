@@ -30,9 +30,7 @@ public class ManagementThread extends Thread
     	
     	while(!socket.isClosed()){
 			try {
-				System.out.println("Waiting for ManagementCommands on Port: "+managementPort);
 				Socket inSocket = socket.accept();
-				System.out.println("Recieved Connection");
 				new ManagementCommandHandler(inSocket, kernel, peerManager).start();
 			} catch (IOException e) {
 				if(!socket.isClosed()){

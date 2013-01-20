@@ -32,7 +32,7 @@ public class KeepAliveIncomingThread extends AliveThread
 		}
     	byte[] buf= new byte[50];
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-		System.out.println("Waiting for other peers on "+datagram.getLocalAddress()+" "+datagram.getLocalPort());
+		//System.out.println("Waiting for other peers on "+datagram.getLocalAddress()+" "+datagram.getLocalPort());
 		while(!datagram.isClosed()){
 			try {
 				datagram.receive(packet);
