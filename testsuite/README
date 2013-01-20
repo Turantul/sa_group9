@@ -9,5 +9,7 @@ In this file you need to provide the path to your MongoDB installation directory
 
 Then execute 2-startpeers.bat. There, the five peers and a management console for them are started.
 
-Finally using 3-startclient.bat you can start the client GUI to start issuing requests.
+Finally using 3a-startclient.bat you can start the client GUI to start issuing requests.
 You can log in using any credentials as used for the peers (see 2-startpeers.bat).
+
+Alternatively you can start 3b-issuetestrequest.bat to use the client console and launch a request.
