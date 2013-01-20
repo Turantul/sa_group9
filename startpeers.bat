@@ -7,6 +7,8 @@ set peer3="test3 testpw 12300 12301 12302"
 set peer4="test4 testpw 12400 12401 12402"
 set peer5="test5 testpw 12500 12501 12502"
 
+copy "%~dp0swazam.h2.db" "%~dp0peer\target\classes\data\"
+
 cd peer
 
 REM start peers via maven
