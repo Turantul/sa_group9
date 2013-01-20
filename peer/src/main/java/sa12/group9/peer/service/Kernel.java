@@ -132,6 +132,7 @@ public class Kernel
                     keepAliveIncoming.shutdown();
                     keepAliveOutgoing.shutdown();
                     management.shutdown();
+                    requestCleanup.shutdown();
                     requestThread.shutdown();
                 }
                 if (in.equals("!peers"))

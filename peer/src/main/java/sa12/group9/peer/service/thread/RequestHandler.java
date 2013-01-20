@@ -72,7 +72,7 @@ public class RequestHandler extends Thread
     	
     	Map<Long, Object[]> fingerprintList = kernel.getFingerprintSnapshot();
     	
-		log.info("Trying to calculate match for request("+input.getId()+"(with "+fingerprintList.size()+" fingerprints.");
+		log.info("Trying to calculate match for request "+input.getId()+" with "+fingerprintList.size()+" fingerprints.");
 		for(Long key : fingerprintList.keySet()){
 			Object[] data = fingerprintList.get(key);
 			Fingerprint fp = (Fingerprint)data[1];

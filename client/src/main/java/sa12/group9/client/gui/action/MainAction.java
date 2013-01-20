@@ -203,7 +203,7 @@ public class MainAction implements ActionListener, ICallback
 
                                     serverHandler.notifySuccess(username, password, id, songs.get(0));
 
-                                    frame.swapPanel(new ResultPanel(MainAction.this, songs.get(0)));
+                                    frame.swapPanel(new ResultPanel(MainAction.this, songs.get(0), songs.size()));
                                 }
                             }
                         }

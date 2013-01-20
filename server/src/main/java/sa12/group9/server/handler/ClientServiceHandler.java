@@ -32,21 +32,21 @@ public class ClientServiceHandler implements IClientServiceHandler
     private double coveragePercentage;
     private int minStepSize;
     private int maxStepSize;
-    private int ducationPerLevel;
+    private int durationPerLevel;
     
     public ClientServiceHandler()
     {
         coveragePercentage = 0.5;
         minStepSize = 2;
         maxStepSize = 20;
-        ducationPerLevel = 1;
+        durationPerLevel = 5;
         
         try
         {
             coveragePercentage = Double.parseDouble(PropertiesHelper.getProperty("coveragePercentage"));
             minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
             maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
-            ducationPerLevel = Integer.parseInt(PropertiesHelper.getProperty("ducationPerLevel"));
+            durationPerLevel = Integer.parseInt(PropertiesHelper.getProperty("durationPerLevel"));
         }
         catch (IOException ex)
         {
@@ -96,7 +96,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     }
 
                     int ttl = new Double(Math.ceil(Math.log(count * coveragePercentage) / Math.log(stepSize))).intValue();
-                    int secondsToWait = (ttl + 1) * ducationPerLevel;
+                    int secondsToWait = (ttl + 1) * durationPerLevel;
 
                     response.setPeers(getRandomPeerList(stepSize));
                     response.setMaxPeersForForwarding(stepSize);
