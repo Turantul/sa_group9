@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -62,14 +63,7 @@ public class Console
                     else
                     {
                         ManagementCommand command = new ManagementCommand(in);
-                        try {
-                        	Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
-                        	ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-                            socketout.writeObject(command);
-                            new CommandResponseListener(socket).start();
-                        } catch (IllegalArgumentException iae) {
-                        	System.out.println("Enter a port in the range 1-65535");
-                        }
+                        sendCommand(split[1].trim(), Integer.parseInt(split[2].trim()), command);
                     }
                 }
                 if (in.startsWith("!addfile"))
@@ -115,10 +109,7 @@ public class Console
                             }
                             
                             command.setSongMetadata(smd);
-                            Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
-                            ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-                            socketout.writeObject(command);
-                            new CommandResponseListener(socket).start();
+                            sendCommand(split[1].trim(), Integer.parseInt(split[2].trim()), command);
                         }
                     }
                 }
@@ -132,10 +123,7 @@ public class Console
                     else
                     {
                         ManagementCommand command = new ManagementCommand(in);
-                        Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
-                        ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-                        socketout.writeObject(command);
-                        new CommandResponseListener(socket).start();
+                        sendCommand(split[1].trim(), Integer.parseInt(split[2].trim()), command);
                     }
                 }
                 if (in.startsWith("!stats"))
@@ -148,10 +136,7 @@ public class Console
                     else
                     {
                         ManagementCommand command = new ManagementCommand(in);
-                        Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
-                        ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-                        socketout.writeObject(command);
-                        new CommandResponseListener(socket).start();
+                        sendCommand(split[1].trim(), Integer.parseInt(split[2].trim()), command);
                     }
                 }
             }
@@ -161,7 +146,19 @@ public class Console
             }
         }
     }
-
+    
+    private void sendCommand(String host, int port, ManagementCommand command) throws UnknownHostException, IOException
+    {
+    	try {
+        	Socket socket = new Socket(host, port);
+        	ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+            socketout.writeObject(command);
+            new CommandResponseListener(socket).start();
+        } catch (IllegalArgumentException iae) {
+        	System.out.println("Enter a port in the range 1-65535");
+        }
+    }
+    
     public void setFingerprintService(IFingerprintService fingerprintService)
     {
         this.fingerprintService = fingerprintService;
