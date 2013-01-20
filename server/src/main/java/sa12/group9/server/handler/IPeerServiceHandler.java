@@ -7,7 +7,7 @@ import sa12.group9.common.beans.PeerList;
 public interface IPeerServiceHandler
 {
 	/**
-	 * TODO
+	 * returns a Random List of Peers 
 	 * 
 	 * @param request
 	 * @return
@@ -15,7 +15,8 @@ public interface IPeerServiceHandler
 	PeerList getRandomPeerList(LoginRequest request);
 
 	/**
-	 * TODO
+	 * 
+	 * Marks the peer as alive
 	 * 
 	 * @param request
 	 * @param remoteAddress 

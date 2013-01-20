@@ -9,7 +9,7 @@ import sa12.group9.common.beans.SuccessRequest;
 public interface IClientServiceHandler
 {
 	/**
-	 * TODO
+	 * verifies the login
 	 * 
 	 * @param request
 	 * @return
@@ -17,7 +17,8 @@ public interface IClientServiceHandler
 	boolean verifyLogin(LoginRequest request);
 
 	/**
-	 * TODO
+	 * 
+	 * issues a Search Request and returns a Response
 	 * 
 	 * @param request
 	 * @return
@@ -25,14 +26,16 @@ public interface IClientServiceHandler
 	public SearchIssueResponse issueSearchRequest(SearchIssueRequest request);
 
 	/**
-	 * TODO
+	 * 
+	 * notifies on successful match and updates the coins
 	 * 
 	 * @param request
 	 */
 	public void notifySuccess(SuccessRequest request);
 
 	/**
-	 * TODO
+	 * 
+	 * returns a random list of peers
 	 * 
 	 * @param numberOfWantedPeers
 	 * @return

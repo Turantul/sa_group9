@@ -2,14 +2,14 @@ package sa12.group9.server.dao;
 
 import java.util.List;
 
-import sa12.group9.common.beans.PeerEndpoint;
+
 import sa12.group9.common.beans.Request;
-import sa12.group9.common.beans.SearchIssueRequest;
-import sa12.group9.common.beans.User;
+
 
 public interface IRequestDAO
 {
     /**
+     * stores the Request in the database
      * 
      * @param request
      */
@@ -18,11 +18,15 @@ public interface IRequestDAO
 
     /**
      * 
+     * stores a List of Requests in the database
+     * 
      * @param requests
      */
     void storeRequests(List<Request> requests);
 
     /**
+     * 
+     * searches a Requests by username in the database
      * 
      * @param username
      * @return
@@ -32,6 +36,7 @@ public interface IRequestDAO
 
     /**
      *
+     * searches a Request by Id in the database
      * 
      * @return
      */
@@ -40,6 +45,7 @@ public interface IRequestDAO
 
     /**
      *
+     * returns all the Requests as a List from the database
      * 
      * @return
      */
@@ -47,12 +53,16 @@ public interface IRequestDAO
 
     /**
      * 
+     * returns the count of all requests for a user from the database
+     * 
      * @return
      */
 
 	long getCountOfRequestsForUser(String username);
 	
     /**
+     * 
+     * updates the Request in the database
      * 
      * @param request
      */

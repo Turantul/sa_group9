@@ -180,9 +180,7 @@ public class ClientServiceHandler implements IClientServiceHandler
             try {
 				
             	Request requestToLog = requestdao.searchRequestById(request.getId());
-            	
-            	
-            	
+
             	requestToLog.setFinisheddate(new Date());
             	requestToLog.setStatus("finished");
             	requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());

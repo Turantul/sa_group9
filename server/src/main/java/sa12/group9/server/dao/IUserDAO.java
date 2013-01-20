@@ -8,17 +8,23 @@ public interface IUserDAO
 {
     /**
      * 
+     * stores a User in the database
+     * 
      * @param user
      */
     void storeUser(User user);
 
     /**
      * 
+     * stores a list of users in the database
+     * 
      * @param users
      */
     void storeUser(List<User> users);
 
     /**
+     * 
+     * searches a user in the database by the username
      * 
      * @param userName
      * @return
@@ -27,17 +33,23 @@ public interface IUserDAO
 
     /**
      * 
+     * returns all Users as a List of Users
+     * 
      * @return
      */
     List<User> getAllUser();
 
     /**
      * 
+     * updates a User
+     * 
      * @param user
      */
     void updateUser(User user);
 
     /**
+     * 
+     * deletes a user
      * 
      * @param userName
      */
