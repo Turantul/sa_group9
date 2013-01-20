@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import sa12.group9.peer.service.IPeerManager;
+import sa12.group9.peer.service.IRequestManager;
 import sa12.group9.peer.service.Kernel;
 
 public class RequestThread extends Thread {
@@ -21,6 +22,7 @@ public class RequestThread extends Thread {
 	private Kernel kernel;
 	private int listeningPort;
 	private IPeerManager peerManager;
+	private IRequestManager requestManager;
 	
 	public RequestThread(){
 		pool = Executors.newCachedThreadPool();
@@ -38,7 +40,7 @@ public class RequestThread extends Thread {
                 {
                     Socket socket = serverSocket.accept();
                     System.out.println("Accepting connection");
-                    pool.execute(new RequestHandler(socket, kernel, peerManager));
+                    pool.execute(new RequestHandler(socket, kernel, peerManager, requestManager));
                 }
                 catch (IOException e)
                 {
@@ -66,6 +68,11 @@ public class RequestThread extends Thread {
 	public void setPeerManager(IPeerManager peerManager) {
 		this.peerManager = peerManager;
 	}
+	
+    public void setRequestManager(IRequestManager requestManager)
+    {
+        this.requestManager = requestManager;
+    }
 
 	public void shutdown() {
 		log.debug("Shutdown RequestThread");

@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-
 import sa12.group9.common.beans.ManagementCommand;
 import sa12.group9.common.beans.ManagementCommandResponse;
+import sa12.group9.common.beans.SongMetadata;
 import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.Kernel;
 
@@ -56,18 +55,23 @@ public class ManagementCommandHandler extends Thread {
 			response += peerManager.getPeerCount()+" neighboring peers known.";
 		}
 		if(split[0].equals("!files")){
-			List<Fingerprint> fingerprintList = kernel.getFingerprintSnapshot();
-			int num = 1;
-			for(Fingerprint fp : fingerprintList){
-				response+=num+" "+fp.hashCode()+"\n";
-				num++;
-			}
+			
+			Map<Long, Object[]> fingerprintList = kernel.getFingerprintSnapshot();
+            for (Long key : fingerprintList.keySet())
+            {
+            	Object[] data = fingerprintList.get(key);
+                response+=(key+" "+((SongMetadata)data[0]).getInterpret()+" "+((SongMetadata)data[0]).getTitle());
+            }
+            if(response.equals("")){
+            	response = "No files found on this peer.";
+            }
 		}
 		if(split[0].equals("!addfile")){
 			kernel.addFingerprint(command.getSongMetadata(), command.getFingerprint());
 			response += "Added fingerprint to database.";
 		}
 		if(split[0].equals("!removefile")){
+			kernel.removeFingerprint(Long.parseLong(split[3]));
 			response += "Removed peer from database.";
 		}
 		return new ManagementCommandResponse(response);

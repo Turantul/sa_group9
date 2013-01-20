@@ -28,7 +28,9 @@ public class SongMetadataService implements ISongMetadataService
             smd.setGenre(tag.getFirst(FieldKey.GENRE));
         }
         catch (Exception e)
-        {}
+        {
+        	System.out.println("Error determining song metadata.");
+        }
         return smd;
     }
 

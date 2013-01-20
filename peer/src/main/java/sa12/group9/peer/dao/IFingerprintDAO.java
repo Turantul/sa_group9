@@ -1,7 +1,7 @@
 package sa12.group9.peer.dao;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 
 import sa12.group9.common.beans.SongMetadata;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
@@ -25,7 +25,7 @@ public interface IFingerprintDAO {
      * @param the metadata object for the Fingerprint
      * @throws SQLException if there occurs a database error
      */
-	void deleteFingerprint(String user, SongMetadata smd) throws SQLException;
+	void deleteFingerprint(Long id, String user) throws SQLException;
 	
 	/**
      * Retrieves a Fingerprint associated with username and metadata from the database
@@ -54,5 +54,5 @@ public interface IFingerprintDAO {
      * @return the list of Fingerprints
      * @throws SQLException if there occurs a database error
      */
-	List<Fingerprint> getAllFingerprintsForUser(String user) throws SQLException;
+	Map<Long, Object[]> getAllFingerprintsForUser(String user) throws SQLException;
 }

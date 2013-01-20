@@ -12,6 +12,7 @@ public class P2PSearchRequest implements Serializable
     private Fingerprint fingerprint;
     private int ttl;
     private int maxPeersForForwarding;
+    private long validUntil;
 
     public String getId()
     {
@@ -71,6 +72,16 @@ public class P2PSearchRequest implements Serializable
     public void setMaxPeersForForwarding(int maxPeersForForwarding)
     {
         this.maxPeersForForwarding = maxPeersForForwarding;
+    }
+
+    public long getValidUntil()
+    {
+        return validUntil;
+    }
+
+    public void setValidUntil(long validUntil)
+    {
+        this.validUntil = validUntil;
     }
 
 }

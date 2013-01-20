@@ -89,7 +89,7 @@ public class Console implements ICallback
                             {
                                 try
                                 {
-                                    peerHandler.sendSearchRequest(id, peer, finger, response.getTtl(), response.getMaxPeersForForwarding());
+                                    peerHandler.sendSearchRequest(id, peer, finger, response);
                                     i++;
                                 }
                                 catch (IOException e)

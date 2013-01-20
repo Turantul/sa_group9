@@ -9,6 +9,7 @@ import java.net.Socket;
 import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.P2PSearchRequest;
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.common.beans.SearchIssueResponse;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class PeerHandler implements IPeerHandler
@@ -67,7 +68,7 @@ public class PeerHandler implements IPeerHandler
         }.start();
 	}
 
-	public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, int ttl, int maxPeersForForwarding) throws IOException
+	public void sendSearchRequest(String id, PeerEndpoint peer, Fingerprint fingerprint, SearchIssueResponse response) throws IOException
 	{
 		Socket socket = new Socket(peer.getAddress(), peer.getListeningPort());
 
@@ -76,8 +77,9 @@ public class PeerHandler implements IPeerHandler
 		request.setFingerprint(fingerprint);
 		request.setRequesterAddress(socket.getLocalAddress().toString().substring(1));
 		request.setRequesterPort(listeningPort);
-		request.setTtl(ttl);
-		request.setMaxPeersForForwarding(maxPeersForForwarding);
+		request.setTtl(response.getTtl());
+		request.setMaxPeersForForwarding(response.getMaxPeersForForwarding());
+		request.setValidUntil(System.currentTimeMillis() + (response.getSecondsToWait() * 1000));
 
 		ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
 		socketout.writeObject(request);

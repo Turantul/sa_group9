@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -28,6 +29,7 @@ import sa12.group9.peer.dao.IFingerprintDAO;
 import sa12.group9.peer.service.thread.AliveThread;
 import sa12.group9.peer.service.thread.KeepAliveCleanupThread;
 import sa12.group9.peer.service.thread.ManagementThread;
+import sa12.group9.peer.service.thread.RequestCleanupThread;
 import sa12.group9.peer.service.thread.RequestThread;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
@@ -46,6 +48,7 @@ public class Kernel
     private AliveThread keepAliveOutgoing;
     private AliveThread keepAliveIncoming;
     private KeepAliveCleanupThread keepAliveCleanup;
+    private RequestCleanupThread requestCleanup;
     private RequestThread requestThread;
 
     private ManagementThread management;
@@ -59,6 +62,7 @@ public class Kernel
     private void initialize()
     {
         log.info("Starting up");
+
         try
         {
             boolean success = sendKeepAliveToServer();
@@ -69,7 +73,10 @@ public class Kernel
 
                 for (PeerEndpoint pe : peers)
                 {
-                    peerManager.addPeerEndpoint(pe);
+                    if (!(pe.getAddress().equals("127.0.0.1") && pe.getListeningPort() == listeningPort && pe.getKeepAlivePort() == keepAlivePort))
+                    {
+                        peerManager.addPeerEndpoint(pe);
+                    }
                 }
 
                 keepAliveOutgoing.setKernel(this);
@@ -83,6 +90,8 @@ public class Kernel
 
                 keepAliveCleanup.setKernel(this);
                 keepAliveCleanup.start();
+
+                requestCleanup.start();
 
                 requestThread.setKernel(this);
                 requestThread.start();
@@ -138,10 +147,11 @@ public class Kernel
                 if (in.startsWith("!files"))
                 {
                     System.out.println("Current media files:");
-                    List<Fingerprint> fingerprintList = getFingerprintSnapshot();
-                    for (Fingerprint fp : fingerprintList)
+                    Map<Long, Object[]> fingerprintList = getFingerprintSnapshot();
+                    for (Long key : fingerprintList.keySet())
                     {
-                        System.out.println(fp.toString());
+                        Object[] data = fingerprintList.get(key);
+                        System.out.println(key + " " + ((SongMetadata) data[0]).getInterpret() + " " + ((SongMetadata) data[0]).getTitle());
                     }
                 }
                 if (in.startsWith("!addpeer"))
@@ -158,7 +168,7 @@ public class Kernel
                         peer.setListeningPort(Integer.parseInt(split[2].trim()));
                         peer.setKeepAlivePort(Integer.parseInt(split[3].trim()));
                         peer.setLastKeepAlive(new Date(System.currentTimeMillis()));
-                        peerManager.addPeerEndpoint(peer);
+                        // peerManager.addPeerEndpoint(peer);
                         System.out.println("New peer has been added");
                     }
                 }
@@ -242,7 +252,7 @@ public class Kernel
         }
     }
 
-    public List<Fingerprint> getFingerprintSnapshot()
+    public Map<Long, Object[]> getFingerprintSnapshot()
     {
         try
         {
@@ -260,13 +270,28 @@ public class Kernel
         List<PeerEndpoint> peers = serverHandler.getNeighbors(username, password);
         for (PeerEndpoint pe : peers)
         {
-            peerManager.addPeerEndpoint(pe);
+            if (!(pe.getAddress().equals("127.0.0.1") && pe.getListeningPort() == listeningPort && pe.getKeepAlivePort() == keepAlivePort))
+            {
+                peerManager.addPeerEndpoint(pe);
+            }
         }
     }
 
     public boolean sendKeepAliveToServer()
     {
         return serverHandler.isAlive(username, password, listeningPort, keepAlivePort);
+    }
+
+    public void removeFingerprint(long id)
+    {
+        try
+        {
+            fpDao.deleteFingerprint(id, username);
+        }
+        catch (SQLException e)
+        {
+            log.error("Error deleting fingerprint");
+        }
     }
 
     public void setServerHandler(IServerHandler serverHandler)
@@ -277,6 +302,11 @@ public class Kernel
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public String getUsername()
+    {
+        return username;
     }
 
     public void setPassword(String password)
@@ -292,6 +322,16 @@ public class Kernel
     public void setKeepAlivePort(int keepAlivePort)
     {
         this.keepAlivePort = keepAlivePort;
+    }
+
+    public int getListeningPort()
+    {
+        return listeningPort;
+    }
+
+    public int getKeepAlivePort()
+    {
+        return keepAlivePort;
     }
 
     public void setKeepAliveOutgoing(AliveThread keepAliveOutgoing)
@@ -337,5 +377,10 @@ public class Kernel
     public void setSongMetadataService(ISongMetadataService songMetadataService)
     {
         this.songMetadataService = songMetadataService;
+    }
+
+    public void setRequestCleanup(RequestCleanupThread requestCleanup)
+    {
+        this.requestCleanup = requestCleanup;
     }
 }

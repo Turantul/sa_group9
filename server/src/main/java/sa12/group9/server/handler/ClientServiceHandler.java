@@ -28,6 +28,31 @@ public class ClientServiceHandler implements IClientServiceHandler
     
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
+    
+    private double coveragePercentage;
+    private int minStepSize;
+    private int maxStepSize;
+    private int ducationPerLevel;
+    
+    public ClientServiceHandler()
+    {
+        coveragePercentage = 0.5;
+        minStepSize = 2;
+        maxStepSize = 20;
+        ducationPerLevel = 1;
+        
+        try
+        {
+            coveragePercentage = Double.parseDouble(PropertiesHelper.getProperty("coveragePercentage"));
+            minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
+            maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
+            ducationPerLevel = Integer.parseInt(PropertiesHelper.getProperty("ducationPerLevel"));
+        }
+        catch (IOException ex)
+        {
+            log.info("Failed to read properties file");
+        }
+    }
 
     @Override
     public boolean verifyLogin(LoginRequest request)
@@ -57,24 +82,6 @@ public class ClientServiceHandler implements IClientServiceHandler
             else
             {
                 long count = peerdao.getCountOfPeers();
-
-                // Default values
-                double coveragePercentage = 0.5;
-                int minStepSize = 2;
-                int maxStepSize = 20;
-                int ducationPerLevel = 1;
-
-                try
-                {
-                    coveragePercentage = Double.parseDouble(PropertiesHelper.getProperty("coveragePercentage"));
-                    minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
-                    maxStepSize = Integer.parseInt(PropertiesHelper.getProperty("maxStepSize"));
-                    ducationPerLevel = Integer.parseInt(PropertiesHelper.getProperty("ducationPerLevel"));
-                }
-                catch (IOException ex)
-                {
-                    log.info("Failed to read properties file");
-                }
                 
                 if (count >= minStepSize)
                 {
@@ -88,7 +95,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                         stepSize = maxStepSize;
                     }
 
-                    int ttl = (int) (Math.log(count * coveragePercentage) / Math.log(stepSize));
+                    int ttl = new Double(Math.ceil(Math.log(count * coveragePercentage) / Math.log(stepSize))).intValue();
                     int secondsToWait = (ttl + 1) * ducationPerLevel;
 
                     response.setPeers(getRandomPeerList(stepSize));

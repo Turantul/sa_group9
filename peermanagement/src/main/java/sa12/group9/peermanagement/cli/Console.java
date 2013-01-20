@@ -98,6 +98,7 @@ public class Console
                         }
                         else
                         {
+                        	System.out.println("Parsing file. This might take a while ...");
                             Fingerprint finger = fingerprintService.generateFingerprint(fileLocation);
                             command.setFingerprint(finger);
                             SongMetadata smd = songMetadataService.getSongMetadata(fileLocation);
@@ -124,7 +125,7 @@ public class Console
                 if (in.startsWith("!removefile"))
                 {
                     String[] split = in.split(" ");
-                    if (split.length != 3)
+                    if (split.length != 4)
                     {
                         System.out.println("Correct usage is !removefile <peeraddress> <peermanagementport> <filenumber>");
                     }
@@ -156,7 +157,7 @@ public class Console
             }
             catch (IOException e)
             {
-                log.error("Error while Commandhandling");
+                log.error("Error sending command to peer. Maybe you entered the wrong address or peer is not online?");
             }
         }
     }

@@ -1,4 +1,4 @@
-package sa12.group9.commons.dto;
+package sa12.group9.common.dto;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

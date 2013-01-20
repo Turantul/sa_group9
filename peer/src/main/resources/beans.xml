@@ -17,6 +17,7 @@
     <property name="keepAliveOutgoing" ref="keepAliveOutgoing" />
     <property name="keepAliveIncoming" ref="keepAliveIncoming" />
     <property name="keepAliveCleanup" ref="keepAliveCleanup" />
+    <property name="requestCleanup" ref="requestCleanup" />
     <property name="management" ref="management" />
     <property name="requestThread" ref="requestThread" />
     <property name="fingerprintService" ref="fingerprintService" />
@@ -49,6 +50,9 @@
 
   <bean id="peerManager" class="${root}.peer.service.PeerManager">
   </bean>
+  
+  <bean id="requestManager" class="${root}.peer.service.RequestManager">
+  </bean>
 
   <bean id="keepAliveOutgoing" class="${root}.peer.service.thread.KeepAliveOutgoingThread">
     <property name="listeningPort">
@@ -74,6 +78,11 @@
     <property name="peerManager" ref="peerManager" />
   </bean>
 
+  <bean id="requestCleanup" class="${root}.peer.service.thread.RequestCleanupThread">
+    <property name="keepAliveCleanupInterval" value="${request.cleanup.interval}" />
+    <property name="requestManager" ref="requestManager" />
+  </bean>
+
   <bean id="management" class="${root}.peer.service.thread.ManagementThread">
     <property name="managementPort">
       <util:constant static-field="${root}.peer.Launcher.MANAGEMENTPORT" />
@@ -86,6 +95,7 @@
       <util:constant static-field="${root}.peer.Launcher.LISTENINGPORT" />
     </property>
     <property name="peerManager" ref="peerManager" />
+    <property name="requestManager" ref="requestManager" />
   </bean>
 
   <!-- This is a datasource for usage with h2 in server mode -->
@@ -113,7 +123,8 @@
     <property name="dataSource" ref="H2DataSource" />
     <property name="sql_create">
       <value>
-        CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint OTHER);
+        CREATE TABLE IF NOT EXISTS fingerprint (id IDENTITY PRIMARY KEY, user VARCHAR, metadata OTHER, fingerprint
+        OTHER);
       </value>
     </property>
     <property name="sql_insert">
@@ -123,7 +134,7 @@
     </property>
     <property name="sql_delete">
       <value>
-        DELETE FROM fingerprint WHERE user=? and metadata=?;
+        DELETE FROM fingerprint WHERE id=? and user=?;
       </value>
     </property>
     <property name="sql_findFingerprintByUserAndMetadata">
