@@ -1,0 +1,6 @@
+The only major change we did in comparison to the first assignment is the order of request processing at a peers site.
+Instead of calculating a match and deciding on the outcome whether to forward the request to neighbor peers or not, the request
+is forwarded immideately.
+
+This has some performance improvements as the flooding speeds up and more peers are reached faster. However, the load at one
+peer does not significantly increase because it checks whether it has already processed a request.

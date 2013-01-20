@@ -25,18 +25,18 @@ import sa12.group9.server.util.PropertiesHelper;
 public class PeerServiceHandler implements IPeerServiceHandler
 {
     private static Log log = LogFactory.getLog(PeerServiceHandler.class);
-    
+
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
-    
+
     private int minStepSize = 2;
     private int maxStepSize = 20;
-    
+
     public PeerServiceHandler()
     {
         minStepSize = 2;
         maxStepSize = 20;
-        
+
         try
         {
             minStepSize = Integer.parseInt(PropertiesHelper.getProperty("minStepSize"));
@@ -54,7 +54,7 @@ public class PeerServiceHandler implements IPeerServiceHandler
         if (authenticate(request))
         {
             long count = peerdao.getCountOfPeers();
-            
+
             int stepSize = (int) (count / 100);
             if (stepSize < minStepSize)
             {
@@ -64,14 +64,15 @@ public class PeerServiceHandler implements IPeerServiceHandler
             {
                 stepSize = maxStepSize;
             }
-            
+
             List<PeerEndpoint> randomPeersSelection = new ArrayList<PeerEndpoint>();
             List<PeerEndpoint> allPeers = peerdao.getAllPeers();
 
             Random random = new Random();
             int randomlyChosenPeersCount = 0;
 
-            // iterate as long as either the wanted number is reached or the maximum
+            // iterate as long as either the wanted number is reached or the
+            // maximum
             // number of peers in database return
             while ((randomlyChosenPeersCount < stepSize) && (randomlyChosenPeersCount < allPeers.size()))
             {
@@ -100,7 +101,7 @@ public class PeerServiceHandler implements IPeerServiceHandler
         if (authenticate(request))
         {
             PeerEndpoint peer = peerdao.getPeer(remoteAddress, request.getListeningPort(), request.getKeepAlivePort());
-            
+
             if (peer == null)
             {
                 System.out.println("successfully logged in as " + request.getUsername().toString() + "");
@@ -111,10 +112,10 @@ public class PeerServiceHandler implements IPeerServiceHandler
                 peer.setKeepAlivePort(request.getKeepAlivePort());
                 peer.setListeningPort(request.getListeningPort());
             }
-            
+
             peer.setLastKeepAlive(new Date());
             peerdao.storePeer(peer);
-            
+
             return true;
         }
         return false;

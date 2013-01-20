@@ -21,17 +21,16 @@ import sa12.group9.server.dao.MongoUserDAO;
 public class LoginBean
 {
     private static Log log = LogFactory.getLog(LoginBean.class);
-    
+
     private MongoUserDAO usersdao = MongoUserDAO.getInstance();
-	private IRequestDAO requestdao = MongoRequestDAO.getInstance();
+    private IRequestDAO requestdao = MongoRequestDAO.getInstance();
 
     private String loginname;
     private String password;
     private String retypePassword;
     private List<Request> requestsforuser;
 
-
-	public int getCoins()
+    public int getCoins()
     {
         try
         {
@@ -42,7 +41,7 @@ public class LoginBean
         catch (Exception e)
         {
             log.error("Could not get coins for user " + loginname);
-            return 0;
+            return -1;
         }
     }
 
@@ -75,16 +74,16 @@ public class LoginBean
     {
         this.retypePassword = retypePassword;
     }
-    
 
-	public List<Request> getRequestsforuser() {
-		return requestsforuser;
-	}
+    public List<Request> getRequestsforuser()
+    {
+        return requestsforuser;
+    }
 
-	public void setRequestsforuser(List<Request> requestsforuser) {
-		this.requestsforuser = requestsforuser;
-	}
-    
+    public void setRequestsforuser(List<Request> requestsforuser)
+    {
+        this.requestsforuser = requestsforuser;
+    }
 
     public String CheckValidUser()
     {
@@ -106,13 +105,13 @@ public class LoginBean
             return "fail";
         }
     }
-    
+
     public String updateUser()
     {
         try
         {
             User registeredUser = new User();
-           
+
             registeredUser = usersdao.searchUser(loginname);
             registeredUser.setUsername(loginname);
             registeredUser.setPassword(Encrypter.encryptString(password));
@@ -130,15 +129,15 @@ public class LoginBean
             return "editfail";
         }
     }
-    
+
     public String deleteUser()
     {
         try
         {
             usersdao.deleteUser(loginname);
-            
+
             log.info("Successfully deleted user " + loginname);
-            
+
             return "deletesuccess";
         }
         catch (Exception e)
@@ -147,31 +146,29 @@ public class LoginBean
             return "deletefail";
         }
     }
- 
-    public String GetRequestsForUser(){
-		
-    	try{
 
-    		requestsforuser = new ArrayList<Request>();
-    		List<Request> allrequests = requestdao.getAllRequests();
+    public String GetRequestsForUser()
+    {
+        try
+        {
+            requestsforuser = new ArrayList<Request>();
+            List<Request> allrequests = requestdao.getAllRequests();
 
-    		for (Request request : allrequests){	
-    			
-    			if(request.getUsername().toString().equals(loginname)){
- 
-    				requestsforuser.add(request);
-    			}
-    		}
-    		
-    		
-    		return "success";
-    	    
-    	}catch (Exception e) {
-			log.info("problem with fetching requests for user, could not get all requests for a user");
-			return "fail";
-		}
-    	
-		
+            for (Request request : allrequests)
+            {
+                if (request.getUsername().toString().equals(loginname))
+                {
+                    requestsforuser.add(request);
+                }
+            }
+
+            return "success";
+
+        }
+        catch (Exception e)
+        {
+            log.info("problem with fetching requests for user, could not get all requests for a user");
+            return "fail";
+        }
     }
-    
 }

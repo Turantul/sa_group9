@@ -3,7 +3,6 @@ package sa12.group9.server.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -20,8 +19,7 @@ public class MongoPeerDAO implements IPeerDAO
     private MongoPeerDAO()
     {
         super();
-        ApplicationContext ctx = new GenericXmlApplicationContext("mongo-config.xml");
-        mongoOperation = (MongoOperations) ctx.getBean("mongoOperation");
+        mongoOperation = (MongoOperations) new GenericXmlApplicationContext("mongo-config.xml").getBean("mongoOperation");
     }
 
     public static MongoPeerDAO getInstance()
@@ -62,12 +60,13 @@ public class MongoPeerDAO implements IPeerDAO
     @Override
     public PeerEndpoint getPeer(String address, int listeningPort, int keepAlivePort)
     {
-        return mongoOperation.findOne(new Query(Criteria.where("address").is(address).and("listeningPort").is(listeningPort).and("keepAlivePort").is(keepAlivePort)), PeerEndpoint.class, "peers");
+        return mongoOperation.findOne(new Query(Criteria.where("address").is(address).and("listeningPort").is(listeningPort).and("keepAlivePort").is(keepAlivePort)),
+                PeerEndpoint.class, "peers");
     }
 
-	@Override
-	public void cleanupPeers(int cleanupPeriod) {
-		mongoOperation.remove(new Query(Criteria.where("lastKeepAlive").lt(new Date(System.currentTimeMillis()-cleanupPeriod))), "peers");	
-	}
-
+    @Override
+    public void cleanupPeers(int cleanupPeriod)
+    {
+        mongoOperation.remove(new Query(Criteria.where("lastKeepAlive").lt(new Date(System.currentTimeMillis() - cleanupPeriod))), "peers");
+    }
 }

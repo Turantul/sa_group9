@@ -7,51 +7,45 @@ import sa12.group9.common.beans.User;
 public interface IUserDAO
 {
     /**
+     * Stores a User in the database
      * 
-     * stores a User in the database
-     * 
-     * @param the userobject that gets stored in the db
+     * @param user the userobject that gets stored in the db
      */
     void storeUser(User user);
 
     /**
+     * Stores a list of users in the database
      * 
-     * stores a list of users in the database
-     * 
-     * @param a list of users to get stored in the db
+     * @param users a list of users to get stored in the db
      */
     void storeUser(List<User> users);
 
     /**
+     * Searches a user in the database by the username
      * 
-     * searches a user in the database by the username
-     * 
-     * @param the searchparameter to find a user
-     * @return
+     * @param userName the searchparameter to find a user
+     * @return the user object
      */
     User searchUser(String userName);
 
     /**
+     * Returns all Users as a List of Users
      * 
-     * returns all Users as a List of Users
-     * 
-     * @return
+     * @return list of all users
      */
     List<User> getAllUser();
 
     /**
+     * Updates a User
      * 
-     * updates a User
-     * 
-     * @param the user that gets updated
+     * @param user the user that gets updated
      */
     void updateUser(User user);
 
     /**
+     * Deletes a user
      * 
-     * deletes a user
-     * 
-     * @param the name of the user that gets deleted
+     * @param userName the name of the user that gets deleted
      */
     void deleteUser(String userName);
 }

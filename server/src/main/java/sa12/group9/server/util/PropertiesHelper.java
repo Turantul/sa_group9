@@ -6,7 +6,7 @@ import java.util.Properties;
 public class PropertiesHelper
 {
     private static Properties prop;
-    
+
     static
     {
         Properties prop = new Properties();
@@ -19,7 +19,7 @@ public class PropertiesHelper
             prop = null;
         }
     }
-    
+
     public static String getProperty(String property) throws IOException
     {
         if (prop != null)

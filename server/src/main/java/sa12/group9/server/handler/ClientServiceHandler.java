@@ -29,25 +29,24 @@ import sa12.group9.server.util.PropertiesHelper;
 public class ClientServiceHandler implements IClientServiceHandler
 {
     private static Log log = LogFactory.getLog(ClientServiceHandler.class);
-    
+
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
 
     private IRequestDAO requestdao = MongoRequestDAO.getInstance();
 
-    
     private double coveragePercentage;
     private int minStepSize;
     private int maxStepSize;
     private int durationPerLevel;
-    
+
     public ClientServiceHandler()
     {
         coveragePercentage = 0.5;
         minStepSize = 2;
         maxStepSize = 20;
         durationPerLevel = 3;
-        
+
         try
         {
             coveragePercentage = Double.parseDouble(PropertiesHelper.getProperty("coveragePercentage"));
@@ -89,7 +88,7 @@ public class ClientServiceHandler implements IClientServiceHandler
             else
             {
                 long count = peerdao.getCountOfPeers();
-                
+
                 if (count >= minStepSize)
                 {
                     int stepSize = (int) (count / 100);
@@ -109,28 +108,32 @@ public class ClientServiceHandler implements IClientServiceHandler
                     response.setMaxPeersForForwarding(stepSize);
                     response.setTtl(ttl);
                     response.setSecondsToWait(secondsToWait);
-                    
-                    log.info("Created new request for " + request.getUsername() + " with a stepsize of " + stepSize + ", TTL of " + ttl + " and " + secondsToWait + " seconds to wait.");
 
-                    //set request log parameters
+                    log.info("Created new request for " + request.getUsername() + " with a stepsize of " + stepSize + ", TTL of " + ttl + " and " + secondsToWait
+                            + " seconds to wait.");
+
+                    // set request log parameters
                     Request requestToLog = new Request();
-                    
+
                     requestToLog.setId(request.getId());
                     requestToLog.setUsername(request.getUsername());
                     requestToLog.setIssuedate(new Date());
                     requestToLog.setStatus("pending");
-                    requestToLog.setFinisheddate(new Date(System.currentTimeMillis()+(secondsToWait*1000)));
-                    
-                    try{
-                
-                    	//create request in db
-                    	requestdao.storeRequest(requestToLog);
-                        
-                    }catch (Exception e) {
-						e.printStackTrace();
-						log.info("failed to save Request for user " + request.getUsername() + ", due to error with MongoRequestDAO");
-					}
-                    
+                    requestToLog.setFinisheddate(new Date(System.currentTimeMillis() + (secondsToWait * 1000)));
+
+                    try
+                    {
+
+                        // create request in db
+                        requestdao.storeRequest(requestToLog);
+
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                        log.info("failed to save Request for user " + request.getUsername() + ", due to error with MongoRequestDAO");
+                    }
+
                 }
                 else
                 {
@@ -149,51 +152,57 @@ public class ClientServiceHandler implements IClientServiceHandler
     @Override
     public void notifySuccess(SuccessRequest request)
     {
-    	
+
         if (authenticate(request))
         {
-            
-        	//update the coins of client that issued the request!
-        	try {
-            	User user = userdao.searchUser(request.getUsername());
+
+            // update the coins of client that issued the request!
+            try
+            {
+                User user = userdao.searchUser(request.getUsername());
                 user.setCoins(user.getCoins() - 1);
                 userdao.updateUser(user);
-                
-                
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.info("failed to save user " + request.getUsername() + ", due to error with MongouserDAO");
-			}
-        	
-          	//update the coins of peer that found the song!
-        	try {
-            	User user = userdao.searchUser(request.getInformation().getPeerUsername());
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                log.info("failed to save user " + request.getUsername() + ", due to error with MongouserDAO");
+            }
+
+            // update the coins of peer that found the song!
+            try
+            {
+                User user = userdao.searchUser(request.getInformation().getPeerUsername());
                 user.setCoins(user.getCoins() + 3);
                 userdao.updateUser(user);
-                               
-                
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.info("failed to save user " + request.getInformation().getPeerUsername() + ", due to error with MongouserDAO");
-			}
-            
-        	//log in the database
-            try {
-				
-            	Request requestToLog = requestdao.searchRequestById(request.getId());
 
-            	requestToLog.setFinisheddate(new Date());
-            	requestToLog.setStatus("finished");
-            	requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());
-            	requestToLog.setInterpret(request.getInformation().getInterpret());
-            	requestToLog.setTitle(request.getInformation().getTitle());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                log.info("failed to save user " + request.getInformation().getPeerUsername() + ", due to error with MongouserDAO");
+            }
 
-            	requestdao.updateRequest(requestToLog);
-            	
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.info("failed to save request for user: " + request.getUsername() + ", due to error with MongoRequestDAO");
-			}
+            // log in the database
+            try
+            {
+                Request requestToLog = requestdao.searchRequestById(request.getId());
+
+                requestToLog.setFinisheddate(new Date());
+                requestToLog.setStatus("finished");
+                requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());
+                requestToLog.setInterpret(request.getInformation().getInterpret());
+                requestToLog.setTitle(request.getInformation().getTitle());
+
+                requestdao.updateRequest(requestToLog);
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                log.info("failed to save request for user: " + request.getUsername() + ", due to error with MongoRequestDAO");
+            }
         }
     }
 
@@ -233,18 +242,7 @@ public class ClientServiceHandler implements IClientServiceHandler
         {
             return false;
         }
-        
-		//  System.out.println("requestusername:" + request.getUsername());
-		//  System.out.println("requestpassword:" + request.getPassword());
-		//        
-		//  System.out.println("fetchedusername:" + fetcheduser.getUsername());
-		//  System.out.println("fetchedpassword:" + fetcheduser.getPassword());        
-        
 
-        //do not encrypt password for matching
-        //return request.getUsername().equals(fetcheduser.getUsername()) && request.getPassword().equals(fetcheduser.getPassword());    
-        
-        //encrypt password of request for matching
         return request.getUsername().equals(fetcheduser.getUsername()) && Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword());
     }
 }

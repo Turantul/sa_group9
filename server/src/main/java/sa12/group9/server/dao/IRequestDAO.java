@@ -2,76 +2,65 @@ package sa12.group9.server.dao;
 
 import java.util.List;
 
-
 import sa12.group9.common.beans.Request;
-
 
 public interface IRequestDAO
 {
     /**
-     * stores the Request in the database
+     * Stores the Request in the database
      * 
-     * @param information about the request a Client calls
+     * @param request information about the request a Client calls
      */
-  
     void storeRequest(Request request);
 
     /**
+     * Stores a List of Requests in the database
      * 
-     * stores a List of Requests in the database
-     * 
-     * @param a List of requests
+     * @param requests a List of requests
      */
     void storeRequests(List<Request> requests);
 
     /**
+     * Searches a Requests by username in the database
      * 
-     * searches a Requests by username in the database
-     * 
-     * @param the username for finding a Request
-     * @return
+     * @param username the username for finding a Request
+     * @return the request
      */
-    
     Request searchRequestByUsername(String username);
 
     /**
-     *
-     * searches a Request by Id in the database
+     * Searches a Request by Id in the database
      * 
-     * @return
+     * @param id id of the request
+     * @return the request
      */
-    
-    Request searchRequestById(String Id);
+    Request searchRequestById(String id);
 
     /**
-     *
-     * returns all the Requests as a List from the database
+     * Returns all the Requests as a List from the database
      * 
-     * @return
+     * @return list of requests
      */
     List<Request> getAllRequests();
 
     /**
+     * Returns the count of all requests for a user from the database
      * 
-     * returns the count of all requests for a user from the database
-     * 
-     * @return
+     * @param username username to look for
+     * @return amount of requests
      */
+    long getCountOfRequestsForUser(String username);
 
-	long getCountOfRequestsForUser(String username);
-	
     /**
+     * Updates the Request in the database
      * 
-     * updates the Request in the database
-     * 
-     * @param the request that has to be updated
+     * @param request the request that has to be updated
      */
     void updateRequest(Request request);
-    
+
     /**
-     * Setting all requests which have ther expected finishingTime exeeded to failed
+     * Setting all requests which have ther expected finishingTime exeeded to
+     * failed
      */
     void cleanupRequests();
-     
-    
 }

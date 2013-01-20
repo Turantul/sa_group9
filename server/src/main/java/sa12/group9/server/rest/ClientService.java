@@ -1,7 +1,6 @@
 package sa12.group9.server.rest;
 
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -17,9 +16,8 @@ import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.server.handler.ClientServiceHandler;
 import sa12.group9.server.handler.IClientServiceHandler;
-import sa12.group9.server.thread.KeepAliveCleanupThread;
 import sa12.group9.server.thread.RequestCleanupThread;
-
+import sa12.group9.server.util.PropertiesHelper;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -31,20 +29,22 @@ public class ClientService
     private IClientServiceHandler clientHandler = new ClientServiceHandler();
     private RequestCleanupThread requestCleanupThread;
 
-    public ClientService(){
-    	this.requestCleanupThread = new RequestCleanupThread();
-		Properties prop = new Properties();
-        try {
-			prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
-			int cleanupPeriod = Integer.parseInt(prop.getProperty("request.cleanupPeriod"));
-			this.requestCleanupThread.setCleanupPeriod(cleanupPeriod);
-			this.requestCleanupThread.start();
-		} catch (IOException e) {
-			log.error("Error reading configuration properties.");
-		}
+    public ClientService()
+    {
+        requestCleanupThread = new RequestCleanupThread();
+
+        try
+        {
+            int cleanupPeriod = Integer.parseInt(PropertiesHelper.getProperty("request.cleanupPeriod"));
+            requestCleanupThread.setCleanupPeriod(cleanupPeriod);
+            requestCleanupThread.start();
+        }
+        catch (IOException e)
+        {
+            log.error("Error reading configuration properties.");
+        }
     }
-    
-    
+
     @POST
     @Path("login")
     @Consumes("application/json")
@@ -62,10 +62,8 @@ public class ClientService
     public SearchIssueResponse issueSearchRequest(SearchIssueRequest request)
     {
         log.info("Got search issue request for " + request.getUsername());
-        
-        SearchIssueResponse response = clientHandler.issueSearchRequest(request);
 
-        return response;
+        return clientHandler.issueSearchRequest(request);
     }
 
     @POST

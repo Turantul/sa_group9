@@ -20,8 +20,7 @@ public class RegisterBean
 {
     private static Log log = LogFactory.getLog(RegisterBean.class);
     private IUserDAO userdao = MongoUserDAO.getInstance();
-    
-    
+
     private String loginname;
     private String password;
     private String retypePassword;
@@ -62,7 +61,6 @@ public class RegisterBean
         if (checkPasswordMatch())
         {
             User newlyRegisteredUser = new User();
-            
 
             newlyRegisteredUser.setUsername(loginname);
             newlyRegisteredUser.setPassword(Encrypter.encryptString(password));
@@ -72,7 +70,9 @@ public class RegisterBean
                 initialCoins = Integer.parseInt(PropertiesHelper.getProperty("initialCoins"));
             }
             catch (IOException e)
-            {}
+            {
+                log.info("Failed to read properties file");
+            }
             newlyRegisteredUser.setCoins(initialCoins);
             userdao.storeUser(newlyRegisteredUser);
 

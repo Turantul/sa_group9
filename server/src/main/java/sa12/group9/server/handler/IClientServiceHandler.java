@@ -8,37 +8,34 @@ import sa12.group9.common.beans.SuccessRequest;
 
 public interface IClientServiceHandler
 {
-	/**
-	 * verifies the login
-	 * 
-	 * @param the request to verify the login
-	 * @return
-	 */
-	boolean verifyLogin(LoginRequest request);
+    /**
+     * Verifies the login
+     * 
+     * @param request the request to verify the login
+     * @return true if successful
+     */
+    boolean verifyLogin(LoginRequest request);
 
-	/**
-	 * 
-	 * issues a Search Request and returns a Response
-	 * 
-	 * @param the request to issue a Search
-	 * @return
-	 */
-	public SearchIssueResponse issueSearchRequest(SearchIssueRequest request);
+    /**
+     * Issues a Search Request and returns a Response
+     * 
+     * @param request the request to issue a Search
+     * @return response
+     */
+    SearchIssueResponse issueSearchRequest(SearchIssueRequest request);
 
-	/**
-	 * 
-	 * notifies on successful match and updates the coins
-	 * 
-	 * @param the request that comes back on a successful match
-	 */
-	public void notifySuccess(SuccessRequest request);
+    /**
+     * Notifies on successful match and updates the coins
+     * 
+     * @param request the request that comes back on a successful match
+     */
+    void notifySuccess(SuccessRequest request);
 
-	/**
-	 * 
-	 * returns a random list of peers
-	 * 
-	 * @param the number of wanted peers to fetch
-	 * @return
-	 */
-	PeerList getRandomPeerList(int numberOfWantedPeers);
+    /**
+     * Returns a random list of peers
+     * 
+     * @param numberOfWantedPeers the number of wanted peers to fetch
+     * @return random subset
+     */
+    PeerList getRandomPeerList(int numberOfWantedPeers);
 }
