@@ -35,6 +35,21 @@
 
 	</navigation-rule>
 	
+	<navigation-rule>
+		<from-view-id>/loginsuccess.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{login.GetRequestsForUser}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>showrequests.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.GetRequestsForUser}</from-action>
+			<from-outcome>fail</from-outcome>
+			<to-view-id>showrequestsfail.xhtml</to-view-id>
+		</navigation-case>
+
+	</navigation-rule>
+	
 	
 	<navigation-rule>
 		<from-view-id>/register.xhtml</from-view-id>

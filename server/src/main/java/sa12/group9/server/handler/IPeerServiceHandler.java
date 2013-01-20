@@ -7,18 +7,19 @@ import sa12.group9.common.beans.PeerList;
 public interface IPeerServiceHandler
 {
 	/**
-	 * TODO
+	 * returns a Random List of Peers 
 	 * 
-	 * @param request
+	 * @param the request for finding a random list of peers
 	 * @return
 	 */
 	PeerList getRandomPeerList(LoginRequest request);
 
 	/**
-	 * TODO
 	 * 
-	 * @param request
-	 * @param remoteAddress 
+	 * Marks the peer as alive
+	 * 
+	 * @param the Request that marks a peer as alive
+	 * @param the remoteaddress of the peer 
 	 * @return
 	 */
 	boolean markAsAlive(IsAliveNotification request, String remoteAddress);

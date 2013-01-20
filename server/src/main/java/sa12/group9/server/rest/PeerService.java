@@ -36,7 +36,7 @@ public class PeerService
 		Properties prop = new Properties();
         try {
 			prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
-			int cleanupPeriod = Integer.parseInt(prop.getProperty("cleanupPeriod"));
+			int cleanupPeriod = Integer.parseInt(prop.getProperty("alive.cleanupPeriod"));
 			this.aliveCleanupThread.setCleanupPeriod(cleanupPeriod);
 			this.aliveCleanupThread.start();
 		} catch (IOException e) {

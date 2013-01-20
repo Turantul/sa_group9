@@ -9,32 +9,35 @@ import sa12.group9.common.beans.SuccessRequest;
 public interface IClientServiceHandler
 {
 	/**
-	 * TODO
+	 * verifies the login
 	 * 
-	 * @param request
+	 * @param the request to verify the login
 	 * @return
 	 */
 	boolean verifyLogin(LoginRequest request);
 
 	/**
-	 * TODO
 	 * 
-	 * @param request
+	 * issues a Search Request and returns a Response
+	 * 
+	 * @param the request to issue a Search
 	 * @return
 	 */
 	public SearchIssueResponse issueSearchRequest(SearchIssueRequest request);
 
 	/**
-	 * TODO
 	 * 
-	 * @param request
+	 * notifies on successful match and updates the coins
+	 * 
+	 * @param the request that comes back on a successful match
 	 */
 	public void notifySuccess(SuccessRequest request);
 
 	/**
-	 * TODO
 	 * 
-	 * @param numberOfWantedPeers
+	 * returns a random list of peers
+	 * 
+	 * @param the number of wanted peers to fetch
 	 * @return
 	 */
 	PeerList getRandomPeerList(int numberOfWantedPeers);

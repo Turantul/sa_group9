@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Swazam show requests</title>
+</h:head>
+<h:body>
+
+	
+	<h:dataTable value="#{login.requestsforuser}" var="r">
+ 
+		<h:column>
+			<f:facet name="header">||RequestID</f:facet>
+			||#{r.id}
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">||IssuedDate</f:facet>
+			||#{r.issuedate}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||FinishedDate</f:facet>
+			||#{r.finisheddate}
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">||Request Status</f:facet>
+			||#{r.status}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||FoundBy</f:facet>
+			||#{r.foundbyuser}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||Matched Title</f:facet>
+			||#{r.title}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||matched artist</f:facet>
+			||#{r.interpret}
+		</h:column>
+	 
+ 
+	</h:dataTable>
+	
+	edit your account:
+	<br/>
+	<h:link value="back" outcome="loginsuccess"/> <br/>
+	<h:link value="Edit" outcome="edit" /><br/>
+	<h:link value="logout" outcome="login"/>
+	
+	
+	</h:body>
+</html>

@@ -51,6 +51,7 @@ public class MongoUserDAO implements IUserDAO{
 	
 		 
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(user.getUsername())), Update.update("password", Encrypter.encryptString(user.getPassword())) , User.class);
+		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(user.getUsername())), Update.update("coins", user.getCoins()) , User.class);
 		
 	}
 	

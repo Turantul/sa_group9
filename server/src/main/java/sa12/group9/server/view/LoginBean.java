@@ -1,14 +1,19 @@
 package sa12.group9.server.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
-import sa12.group9.server.dao.IUserDAO;
+import sa12.group9.server.dao.IRequestDAO;
+import sa12.group9.server.dao.MongoRequestDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 
 @ManagedBean
@@ -16,17 +21,20 @@ import sa12.group9.server.dao.MongoUserDAO;
 public class LoginBean
 {
     private static Log log = LogFactory.getLog(LoginBean.class);
+    
+    private MongoUserDAO usersdao = MongoUserDAO.getInstance();
+	private IRequestDAO requestdao = MongoRequestDAO.getInstance();
 
     private String loginname;
     private String password;
     private String retypePassword;
+    private List<Request> requestsforuser;
 
-    public int getCoins()
+
+	public int getCoins()
     {
         try
         {
-            MongoUserDAO usersdao = MongoUserDAO.getInstance();
-
             User loggedinuser = usersdao.searchUser(loginname);
 
             return loggedinuser.getCoins();
@@ -67,12 +75,21 @@ public class LoginBean
     {
         this.retypePassword = retypePassword;
     }
+    
+
+	public List<Request> getRequestsforuser() {
+		return requestsforuser;
+	}
+
+	public void setRequestsforuser(List<Request> requestsforuser) {
+		this.requestsforuser = requestsforuser;
+	}
+    
 
     public String CheckValidUser()
     {
-        IUserDAO userdao = MongoUserDAO.getInstance();
 
-        User fetcheduser = userdao.searchUser(loginname);
+        User fetcheduser = usersdao.searchUser(loginname);
 
         if (fetcheduser == null)
         {
@@ -95,13 +112,12 @@ public class LoginBean
         try
         {
             User registeredUser = new User();
-            IUserDAO userdao = MongoUserDAO.getInstance();
-
-            registeredUser = userdao.searchUser(loginname);
+           
+            registeredUser = usersdao.searchUser(loginname);
             registeredUser.setUsername(loginname);
             registeredUser.setPassword(Encrypter.encryptString(password));
 
-            userdao.storeUser(registeredUser);
+            usersdao.storeUser(registeredUser);
 
             log.info("Successfully updated user " + loginname);
 
@@ -119,9 +135,7 @@ public class LoginBean
     {
         try
         {
-            IUserDAO userdao = MongoUserDAO.getInstance();
-
-            userdao.deleteUser(loginname);
+            usersdao.deleteUser(loginname);
             
             log.info("Successfully deleted user " + loginname);
             
@@ -133,4 +147,31 @@ public class LoginBean
             return "deletefail";
         }
     }
+ 
+    public String GetRequestsForUser(){
+		
+    	try{
+
+    		requestsforuser = new ArrayList<Request>();
+    		List<Request> allrequests = requestdao.getAllRequests();
+
+    		for (Request request : allrequests){	
+    			
+    			if(request.getUsername().toString().equals(loginname)){
+ 
+    				requestsforuser.add(request);
+    			}
+    		}
+    		
+    		
+    		return "success";
+    	    
+    	}catch (Exception e) {
+			log.info("problem with fetching requests for user, could not get all requests for a user");
+			return "fail";
+		}
+    	
+		
+    }
+    
 }

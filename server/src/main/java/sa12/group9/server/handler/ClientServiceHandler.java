@@ -2,6 +2,7 @@ package sa12.group9.server.handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -11,14 +12,17 @@ import org.apache.commons.logging.LogFactory;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
+import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
 import sa12.group9.server.dao.IPeerDAO;
+import sa12.group9.server.dao.IRequestDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
+import sa12.group9.server.dao.MongoRequestDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 import sa12.group9.server.util.PropertiesHelper;
 
@@ -28,6 +32,9 @@ public class ClientServiceHandler implements IClientServiceHandler
     
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
+
+    private IRequestDAO requestdao = MongoRequestDAO.getInstance();
+
     
     private double coveragePercentage;
     private int minStepSize;
@@ -105,7 +112,25 @@ public class ClientServiceHandler implements IClientServiceHandler
                     
                     log.info("Created new request for " + request.getUsername() + " with a stepsize of " + stepSize + ", TTL of " + ttl + " and " + secondsToWait + " seconds to wait.");
 
-                    // TODO: log in the database
+                    //set request log parameters
+                    Request requestToLog = new Request();
+                    
+                    requestToLog.setId(request.getId());
+                    requestToLog.setUsername(request.getUsername());
+                    requestToLog.setIssuedate(new Date());
+                    requestToLog.setStatus("pending");
+                    requestToLog.setFinisheddate(new Date(System.currentTimeMillis()+(secondsToWait*1000)));
+                    
+                    try{
+                
+                    	//create request in db
+                    	requestdao.storeRequest(requestToLog);
+                        
+                    }catch (Exception e) {
+						e.printStackTrace();
+						log.info("failed to save Request for user " + request.getUsername() + ", due to error with MongoRequestDAO");
+					}
+                    
                 }
                 else
                 {
@@ -124,13 +149,51 @@ public class ClientServiceHandler implements IClientServiceHandler
     @Override
     public void notifySuccess(SuccessRequest request)
     {
+    	
         if (authenticate(request))
         {
-            User user = userdao.searchUser(request.getUsername());
-            user.setCoins(user.getCoins() - 1);
+            
+        	//update the coins of client that issued the request!
+        	try {
+            	User user = userdao.searchUser(request.getUsername());
+                user.setCoins(user.getCoins() - 1);
+                userdao.updateUser(user);
+                
+                
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("failed to save user " + request.getUsername() + ", due to error with MongouserDAO");
+			}
+        	
+          	//update the coins of peer that found the song!
+        	try {
+            	User user = userdao.searchUser(request.getInformation().getPeerUsername());
+                user.setCoins(user.getCoins() + 3);
+                userdao.updateUser(user);
+                               
+                
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("failed to save user " + request.getInformation().getPeerUsername() + ", due to error with MongouserDAO");
+			}
+            
+        	//log in the database
+            try {
+				
+            	Request requestToLog = requestdao.searchRequestById(request.getId());
 
-            // TODO: update the coins of the peer who found it!
-            // TODO: log in the database
+            	requestToLog.setFinisheddate(new Date());
+            	requestToLog.setStatus("finished");
+            	requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());
+            	requestToLog.setInterpret(request.getInformation().getInterpret());
+            	requestToLog.setTitle(request.getInformation().getTitle());
+
+            	requestdao.updateRequest(requestToLog);
+            	
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("failed to save request for user: " + request.getUsername() + ", due to error with MongoRequestDAO");
+			}
         }
     }
 
@@ -170,6 +233,18 @@ public class ClientServiceHandler implements IClientServiceHandler
         {
             return false;
         }
+        
+		//  System.out.println("requestusername:" + request.getUsername());
+		//  System.out.println("requestpassword:" + request.getPassword());
+		//        
+		//  System.out.println("fetchedusername:" + fetcheduser.getUsername());
+		//  System.out.println("fetchedpassword:" + fetcheduser.getPassword());        
+        
+
+        //do not encrypt password for matching
+        //return request.getUsername().equals(fetcheduser.getUsername()) && request.getPassword().equals(fetcheduser.getPassword());    
+        
+        //encrypt password of request for matching
         return request.getUsername().equals(fetcheduser.getUsername()) && Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword());
     }
 }
