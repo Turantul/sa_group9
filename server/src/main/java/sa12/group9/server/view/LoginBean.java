@@ -1,5 +1,6 @@
 package sa12.group9.server.view;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import sa12.group9.server.dao.MongoUserDAO;
 
 @ManagedBean
 @SessionScoped
-public class LoginBean
+public class LoginBean implements Serializable
 {
     private static Log log = LogFactory.getLog(LoginBean.class);
 

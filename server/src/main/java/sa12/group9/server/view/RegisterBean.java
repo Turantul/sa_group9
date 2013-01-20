@@ -1,6 +1,7 @@
 package sa12.group9.server.view;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -16,7 +17,7 @@ import sa12.group9.server.util.PropertiesHelper;
 
 @ManagedBean
 @RequestScoped
-public class RegisterBean
+public class RegisterBean implements Serializable
 {
     private static Log log = LogFactory.getLog(RegisterBean.class);
     private IUserDAO userdao = MongoUserDAO.getInstance();
