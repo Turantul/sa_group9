@@ -18,11 +18,6 @@ public class KeepAliveIncomingThread extends AliveThread
     private DatagramSocket datagram;
     private IPeerManager peerManager;
 
-    public KeepAliveIncomingThread()
-    {
-
-    }
-
     @Override
     public void run()
     {

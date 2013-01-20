@@ -125,7 +125,17 @@ public class MainAction implements ActionListener, ICallback
                 {
                     log.info("Calculating fingerprint");
                     frame.swapPanel(new CalculatingPanel(MainAction.this));
-                    Fingerprint finger = fingerprintService.generateFingerprint(f.getAbsolutePath());
+                    Fingerprint finger = null;
+                    try
+                    {
+                        finger = fingerprintService.generateFingerprint(f.getAbsolutePath());
+                    }
+                    catch (IllegalArgumentException e)
+                    {
+                        frame.showError("The fingerprint is too small. Please try a longer one.", "Error issuing search");
+                        resetPanel();
+                        return;
+                    }
                     String id = UUID.randomUUID().toString();
 
                     log.info("Issuing server request");

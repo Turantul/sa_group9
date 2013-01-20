@@ -2,7 +2,6 @@ package sa12.group9.server.dao;
 
 import java.util.List;
 
-import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.CoinHistory;
 
 public interface ICoinHistoryDAO
@@ -21,7 +20,6 @@ public interface ICoinHistoryDAO
      */
     void storeCoinHistory(List<CoinHistory> coinhistories);
 
-
     /**
      * Returns all CoinHistories from the database
      * 
@@ -32,7 +30,7 @@ public interface ICoinHistoryDAO
     /**
      * Searches a cointhistory by given Username
      * 
-     * @param username of the 
+     * @param username of the
      * @return the peer endpoint
      */
     CoinHistory searchCoinHistoryByUsername(String username);

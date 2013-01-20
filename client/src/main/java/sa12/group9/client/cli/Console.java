@@ -68,7 +68,16 @@ public class Console implements ICallback
                 try
                 {
                     System.out.println("Calculating fingerprint...");
-                    Fingerprint finger = fingerprintService.generateFingerprint(location);
+                    Fingerprint finger = null;
+                    try
+                    {
+                        finger = fingerprintService.generateFingerprint(location);
+                    }
+                    catch (IllegalArgumentException e)
+                    {
+                        System.out.println("The fingerprint is too small. Please try a longer one.");
+                        return;
+                    }
                     String id = UUID.randomUUID().toString();
 
                     SearchIssueResponse response = serverHandler.generateSearchRequest(username, password, id, finger.hashCode());
@@ -157,7 +166,6 @@ public class Console implements ICallback
                             System.out.println("An unknown error occured.\nPlease try again.");
                         }
                     }
-
                 }
                 catch (IOException e)
                 {

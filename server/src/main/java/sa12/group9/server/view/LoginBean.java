@@ -27,20 +27,17 @@ public class LoginBean implements Serializable
 {
     private static Log log = LogFactory.getLog(LoginBean.class);
 
-    private IUserDAO usersdao = MongoUserDAO.getInstance(); 
+    private IUserDAO usersdao = MongoUserDAO.getInstance();
     private IRequestDAO requestdao = MongoRequestDAO.getInstance();
     private ICoinHistoryDAO coinhistorydao = MongoCoinHistoryDAO.getInstance();
-    
-    
+
     private String loginname;
     private String password;
     private String retypePassword;
     private List<Request> requestsforuser;
     private List<CoinHistory> coinhistoryforuser;
 
-
-
-	public int getCoins()
+    public int getCoins()
     {
         try
         {
@@ -94,14 +91,16 @@ public class LoginBean implements Serializable
     {
         this.requestsforuser = requestsforuser;
     }
-    
-    public List<CoinHistory> getCoinhistoryforuser() {
-		return coinhistoryforuser;
-	}
 
-	public void setCoinhistoryforuser(List<CoinHistory> coinhistoryforuser) {
-		this.coinhistoryforuser = coinhistoryforuser;
-	}
+    public List<CoinHistory> getCoinhistoryforuser()
+    {
+        return coinhistoryforuser;
+    }
+
+    public void setCoinhistoryforuser(List<CoinHistory> coinhistoryforuser)
+    {
+        this.coinhistoryforuser = coinhistoryforuser;
+    }
 
     public String CheckValidUser()
     {
@@ -189,19 +188,19 @@ public class LoginBean implements Serializable
             return "fail";
         }
     }
-    
+
     public String GetCoinHistoryForUser()
     {
         try
         {
-        	coinhistoryforuser = new ArrayList<CoinHistory>();
+            coinhistoryforuser = new ArrayList<CoinHistory>();
             List<CoinHistory> allcoinhistories = coinhistorydao.getAllCoinHistories();
 
             for (CoinHistory coinhistory : allcoinhistories)
             {
                 if (coinhistory.getUsername().toString().equals(loginname))
                 {
-                	coinhistoryforuser.add(coinhistory);
+                    coinhistoryforuser.add(coinhistory);
                 }
             }
 

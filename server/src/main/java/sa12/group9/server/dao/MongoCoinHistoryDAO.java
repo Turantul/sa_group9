@@ -1,16 +1,13 @@
 package sa12.group9.server.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import sa12.group9.common.beans.CoinHistory;
-import sa12.group9.common.beans.Request;
 
 public class MongoCoinHistoryDAO implements ICoinHistoryDAO
 {
@@ -47,12 +44,9 @@ public class MongoCoinHistoryDAO implements ICoinHistoryDAO
         return mongoOperation.findOne(new Query(Criteria.where("username").is(username)), CoinHistory.class, "coinhistory");
     }
 
-
     @Override
     public List<CoinHistory> getAllCoinHistories()
     {
         return mongoOperation.findAll(CoinHistory.class, "coinhistory");
     }
-
-
 }
