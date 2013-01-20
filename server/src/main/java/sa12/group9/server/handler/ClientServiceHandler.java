@@ -186,8 +186,7 @@ public class ClientServiceHandler implements IClientServiceHandler
             	requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());
             	requestToLog.setInterpret(request.getInformation().getInterpret());
             	requestToLog.setTitle(request.getInformation().getTitle());
-            	
-            	
+
             	requestdao.updateRequest(requestToLog);
             	
 			} catch (Exception e) {

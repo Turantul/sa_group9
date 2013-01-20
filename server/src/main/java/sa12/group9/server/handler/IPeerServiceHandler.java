@@ -9,7 +9,7 @@ public interface IPeerServiceHandler
 	/**
 	 * returns a Random List of Peers 
 	 * 
-	 * @param request
+	 * @param the request for finding a random list of peers
 	 * @return
 	 */
 	PeerList getRandomPeerList(LoginRequest request);
@@ -18,8 +18,8 @@ public interface IPeerServiceHandler
 	 * 
 	 * Marks the peer as alive
 	 * 
-	 * @param request
-	 * @param remoteAddress 
+	 * @param the Request that marks a peer as alive
+	 * @param the remoteaddress of the peer 
 	 * @return
 	 */
 	boolean markAsAlive(IsAliveNotification request, String remoteAddress);

@@ -10,7 +10,7 @@ public interface IPeerDAO
      * 
      * stores the peerEndpoint in the database
      * 
-     * @param peer
+     * @param information about the peer
      */
     void storePeer(PeerEndpoint peer);
 
@@ -18,7 +18,7 @@ public interface IPeerDAO
      * 
      * stores a List of PeerEndpoints in the database
      * 
-     * @param peers
+     * @param a List of PeerEndpoints (information about the peer)
      */
     void storePeers(List<PeerEndpoint> peers);
 
@@ -26,7 +26,7 @@ public interface IPeerDAO
      * 
      * searches a peer by address in the database given as a String 
      * 
-     * @param address
+     * @param the address of the peer
      * @return
      */
     PeerEndpoint searchPeer(String address);
@@ -43,7 +43,7 @@ public interface IPeerDAO
      * 
      * gets the count of all the peers in the database
      * 
-     * @return
+     * @return 
      */
     long getCountOfPeers();
     
@@ -51,9 +51,9 @@ public interface IPeerDAO
      * 
      * returns a peer from the database given an address, a listeningport and a keepaliveport
      * 
-     * @param address
-     * @param listeningPort
-     * @param keepAlivePort
+     * @param the address of the peer
+     * @param the listeningPort of the peer
+     * @param the keepAlivePort of the peer
      * @return
      */
     PeerEndpoint getPeer(String address, int listeningPort, int keepAlivePort);
@@ -61,7 +61,7 @@ public interface IPeerDAO
      * 
      * defines the cleanup period for the peers
      * 
-     * @param cleanupPeriod
+     * @param defines the cleanup period when peers are removed from the database
      */
     void cleanupPeers(int cleanupPeriod);
 }

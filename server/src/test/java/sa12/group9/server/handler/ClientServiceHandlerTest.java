@@ -3,8 +3,6 @@ package sa12.group9.server.handler;
 import java.util.Date;
 
 import sa12.group9.common.beans.FoundInformation;
-import sa12.group9.common.beans.PeerEndpoint;
-import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.common.beans.User;

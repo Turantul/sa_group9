@@ -10,7 +10,7 @@ public interface IUserDAO
      * 
      * stores a User in the database
      * 
-     * @param user
+     * @param the userobject that gets stored in the db
      */
     void storeUser(User user);
 
@@ -18,7 +18,7 @@ public interface IUserDAO
      * 
      * stores a list of users in the database
      * 
-     * @param users
+     * @param a list of users to get stored in the db
      */
     void storeUser(List<User> users);
 
@@ -26,7 +26,7 @@ public interface IUserDAO
      * 
      * searches a user in the database by the username
      * 
-     * @param userName
+     * @param the searchparameter to find a user
      * @return
      */
     User searchUser(String userName);
@@ -43,7 +43,7 @@ public interface IUserDAO
      * 
      * updates a User
      * 
-     * @param user
+     * @param the user that gets updated
      */
     void updateUser(User user);
 
@@ -51,7 +51,7 @@ public interface IUserDAO
      * 
      * deletes a user
      * 
-     * @param userName
+     * @param the name of the user that gets deleted
      */
     void deleteUser(String userName);
 }

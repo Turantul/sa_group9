@@ -11,7 +11,7 @@ public interface IRequestDAO
     /**
      * stores the Request in the database
      * 
-     * @param request
+     * @param information about the request a Client calls
      */
   
     void storeRequest(Request request);
@@ -20,7 +20,7 @@ public interface IRequestDAO
      * 
      * stores a List of Requests in the database
      * 
-     * @param requests
+     * @param a List of requests
      */
     void storeRequests(List<Request> requests);
 
@@ -28,7 +28,7 @@ public interface IRequestDAO
      * 
      * searches a Requests by username in the database
      * 
-     * @param username
+     * @param the username for finding a Request
      * @return
      */
     
@@ -64,7 +64,7 @@ public interface IRequestDAO
      * 
      * updates the Request in the database
      * 
-     * @param request
+     * @param the request that has to be updated
      */
     void updateRequest(Request request);
     
