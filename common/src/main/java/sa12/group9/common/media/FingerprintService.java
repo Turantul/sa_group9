@@ -10,7 +10,7 @@ import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 public class FingerprintService implements IFingerprintService
 {
     private float herz;
-    
+
     public Fingerprint generateFingerprint(String path) throws IOException
     {
         FingerprintSystem system = new FingerprintSystem(herz);

@@ -29,7 +29,7 @@ public class SongMetadataService implements ISongMetadataService
         }
         catch (Exception e)
         {
-        	System.out.println("Error determining song metadata.");
+            System.out.println("Error determining song metadata.");
         }
         return smd;
     }

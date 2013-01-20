@@ -34,7 +34,8 @@ public interface IServerHandler
      * @param username
      * @param password
      * @param id of the lookup request
-     * @param information holding information about the peer which found the song
+     * @param information holding information about the peer which found the
+     *        song
      */
     void notifySuccess(String username, String password, String id, FoundInformation information);
 }

@@ -17,7 +17,7 @@ public interface IServerHandler
      * @return list of peers (may be empty)
      */
     List<PeerEndpoint> getNeighbors(String username, String password);
-    
+
     /**
      * Notifies about the availability
      * 

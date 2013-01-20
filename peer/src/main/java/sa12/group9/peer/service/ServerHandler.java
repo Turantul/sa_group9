@@ -29,7 +29,7 @@ public class ServerHandler implements IServerHandler
 
         client = Client.create(config);
     }
-    
+
     @Override
     public List<PeerEndpoint> getNeighbors(String username, String password)
     {
@@ -39,12 +39,12 @@ public class ServerHandler implements IServerHandler
 
         WebResource resource = client.resource(serverUrl + "getNeighbors");
         PeerList response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(PeerList.class, request);
-        
+
         List<PeerEndpoint> peers = Collections.synchronizedList(response.getPeers());
 
         return peers;
     }
-    
+
     @Override
     public boolean isAlive(String username, String password, int listeningPort, int keepAlivePort)
     {
@@ -56,10 +56,10 @@ public class ServerHandler implements IServerHandler
 
         WebResource resource = client.resource(serverUrl + "isAlive");
         boolean response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(Boolean.class, request);
-        
+
         return response;
     }
-    
+
     public void setServerUrl(String serverUrl)
     {
         this.serverUrl = serverUrl;

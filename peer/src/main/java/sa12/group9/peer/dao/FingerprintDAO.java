@@ -29,7 +29,7 @@ public class FingerprintDAO implements IFingerprintDAO
         Statement stat = dataSource.getConnection().createStatement();
         stat.execute(sql_create);
     }
-    
+
     @Override
     public void persistFingerprint(String user, SongMetadata smd, Fingerprint fp) throws SQLException
     {
@@ -40,7 +40,7 @@ public class FingerprintDAO implements IFingerprintDAO
         prep.execute();
     }
 
-    public void deleteFingerprint(Long id,String user) throws SQLException
+    public void deleteFingerprint(Long id, String user) throws SQLException
     {
         PreparedStatement prep = dataSource.getConnection().prepareStatement(sql_delete);
         prep.setLong(1, id);
@@ -92,8 +92,8 @@ public class FingerprintDAO implements IFingerprintDAO
         ResultSet rs = prep.executeQuery();
         while (rs.next())
         {
-        	Object[] data = new Object[]{rs.getObject(3), rs.getObject(4)};
-            ret.put((Long)rs.getObject(1), data);
+            Object[] data = new Object[] { rs.getObject(3), rs.getObject(4) };
+            ret.put((Long) rs.getObject(1), data);
         }
 
         return ret;

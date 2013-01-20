@@ -129,8 +129,11 @@ public class MainAction implements ActionListener, ICallback
                     String id = UUID.randomUUID().toString();
 
                     log.info("Issuing server request");
-                    frame.swapPanel(new IssuingSearchRequestPanel(MainAction.this));
+                    
                     SearchIssueResponse response = serverHandler.generateSearchRequest(username, password, id, finger.hashCode());
+                    
+                    frame.swapPanel(new IssuingSearchRequestPanel(MainAction.this, response));
+                    
                     if (response.getErrorMsg() != null && !response.getErrorMsg().equals(""))
                     {
                         log.info("Request could not be issued because: " + response.getErrorMsg());

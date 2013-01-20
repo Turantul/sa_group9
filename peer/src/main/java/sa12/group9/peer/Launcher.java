@@ -11,7 +11,7 @@ public class Launcher
     public static int LISTENINGPORT;
     public static int KEEPALIVEPORT;
     public static int MANAGEMENTPORT;
-    
+
     public static void main(String[] args)
     {
         if (args.length != 5)

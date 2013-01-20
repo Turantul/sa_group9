@@ -152,7 +152,7 @@ public class Kernel
                     for (Long key : fingerprintList.keySet())
                     {
                         Object[] data = fingerprintList.get(key);
-                        System.out.println(key + " " + ((SongMetadata) data[0]).getInterpret() + " " + ((SongMetadata) data[0]).getTitle());
+                        System.out.println(key + ": " + ((SongMetadata) data[0]).getInterpret() + " - " + ((SongMetadata) data[0]).getTitle());
                     }
                 }
                 if (in.startsWith("!addpeer"))
