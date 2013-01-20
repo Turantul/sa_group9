@@ -1,6 +1,6 @@
 @echo off
 
-set pathToMongoDB="C:\Users\Michael\Desktop\mongodb-win32-x86_64-2.2.2\bin"
+set pathToMongoDB="TODO: set path to MongoDB installation including /bin"
 
 cd %pathToMongoDB%
 
