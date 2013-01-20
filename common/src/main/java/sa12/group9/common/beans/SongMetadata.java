@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class SongMetadata implements Serializable
 {
-	private static final long serialVersionUID = 3259205233705769862L;
-	
 	protected String interpret;
     protected String title;
     protected int length;
