@@ -97,7 +97,6 @@ public class RequestHandler extends Thread
 		    socketout.close();
 		    socket.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error("Error sending FoundInformation response to requester");
 		}
 	}

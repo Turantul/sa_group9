@@ -33,7 +33,11 @@ public class KeepAliveCleanupThread extends Thread
 	    			}
 	    		}
 	    		if(peerManager.getPeerCount()<requestNewPeerThreshold){
+	    			try{
 	    			kernel.requestNewPeersFromServer();
+	    			}catch(Exception e){
+	    				log.error("Connection to server failed");
+	    			}
 	    		}
 	    		Thread.sleep(keepAliveCleanupInterval);				
 			} catch (InterruptedException e) {

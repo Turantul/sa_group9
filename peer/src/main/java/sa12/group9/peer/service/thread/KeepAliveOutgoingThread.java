@@ -47,7 +47,11 @@ public class KeepAliveOutgoingThread extends AliveThread
 					log.error("Failed to send keepAlive message\n"+e.getMessage());
 				}
 	        }
+	        try{
 	        kernel.sendKeepAliveToServer();
+	        }catch(Exception e){
+	        	log.error("Error sending keepAlive to Server");
+	        }
 	        try {
 				Thread.sleep(keepAliveOutgoingInterval);
 			} catch (InterruptedException e) {
