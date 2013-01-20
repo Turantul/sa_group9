@@ -180,28 +180,28 @@ public class LoginBean implements Serializable
         }
     }
     
-//    public String GetCoinHistoryForUser()
-//    {
-//        try
-//        {
-//        	coinhistoryforuser = new ArrayList<CoinHistory>();
-//            List<CoinHistory> allcoinhistories = coinhistorydao.getAllCoinHistories();
-//
-//            for (Request request : allrequests)
-//            {
-//                if (request.getUsername().toString().equals(loginname))
-//                {
-//                    requestsforuser.add(request);
-//                }
-//            }
-//
-//            return "success";
-//
-//        }
-//        catch (Exception e)
-//        {
-//            log.info("problem with fetching requests for user, could not get all requests for a user");
-//            return "fail";
-//        }
-//    }
+    public String GetCoinHistoryForUser()
+    {
+        try
+        {
+        	coinhistoryforuser = new ArrayList<CoinHistory>();
+            List<CoinHistory> allcoinhistories = coinhistorydao.getAllCoinHistories();
+
+            for (CoinHistory coinhistory : allcoinhistories)
+            {
+                if (coinhistory.getUsername().toString().equals(loginname))
+                {
+                	coinhistoryforuser.add(coinhistory);
+                }
+            }
+
+            return "success";
+
+        }
+        catch (Exception e)
+        {
+            log.info("problem with fetching coinhistory for user, could not get all requests for a user");
+            return "fail";
+        }
+    }
 }

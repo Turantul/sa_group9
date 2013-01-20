@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Swazam show requests</title>
+</h:head>
+<h:body>
+
+	<h:dataTable value="#{login.coinhistoryforuser}" var="c">
+ 
+		<h:column>
+			<f:facet name="header">||historyid</f:facet>
+			||#{c.uuid}
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">||changedate</f:facet>
+			||#{c.changedate}
+		</h:column>
+
+		<h:column>
+			<f:facet name="header">||coins after request</f:facet>
+			||#{c.coins}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||RequestId</f:facet>
+			||#{c.requestid}
+		</h:column>
+ 
+	</h:dataTable>
+	
+
+	<br/><br/>
+	<h:link value="back" outcome="loginsuccess"/> <br/>
+
+	
+	
+	</h:body>
+</html>

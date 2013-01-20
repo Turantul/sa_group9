@@ -10,6 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class CoinHistory
 
 { 
+
+	@Id
+    private UUID uuid;
+	private String username;
+	private Date changedate;
+	private int coins;
+	private String requestid;
+    
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -40,12 +48,5 @@ public class CoinHistory
 	public void setRequestid(String requestid) {
 		this.requestid = requestid;
 	}
-	@Id
-    private UUID uuid;
-	private String username;
-	private Date changedate;
-	private int coins;
-	private String requestid;
-    
 
 }

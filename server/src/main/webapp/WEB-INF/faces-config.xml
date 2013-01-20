@@ -47,6 +47,16 @@
 			<from-outcome>fail</from-outcome>
 			<to-view-id>showrequestsfail.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.GetCoinHistoryForUser}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>showcoins.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.GetCoinHistoryForUser}</from-action>
+			<from-outcome>fail</from-outcome>
+			<to-view-id>showcoinsfail.xhtml</to-view-id>
+		</navigation-case>
 
 	</navigation-rule>
 	
