@@ -19,7 +19,9 @@ import sa12.group9.server.util.PropertiesHelper;
 public class RegisterBean
 {
     private static Log log = LogFactory.getLog(RegisterBean.class);
-
+    private IUserDAO userdao = MongoUserDAO.getInstance();
+    
+    
     private String loginname;
     private String password;
     private String retypePassword;
@@ -56,11 +58,11 @@ public class RegisterBean
 
     public String registerUser()
     {
-        IUserDAO userdao = MongoUserDAO.getInstance();
 
         if (checkPasswordMatch())
         {
             User newlyRegisteredUser = new User();
+            
 
             newlyRegisteredUser.setUsername(loginname);
             newlyRegisteredUser.setPassword(Encrypter.encryptString(password));

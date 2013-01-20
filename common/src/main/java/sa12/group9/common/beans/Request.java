@@ -16,10 +16,22 @@ public class Request {
 	private Date finisheddate;
 	private String status;
 	private String foundbyuser;
+	private String interpret;
+	private String title;
 
-	
-	
 
+	public String getInterpret() {
+		return interpret;
+	}
+	public void setInterpret(String interpret) {
+		this.interpret = interpret;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public String getFoundbyuser() {
 		return foundbyuser;
 	}
@@ -38,30 +50,32 @@ public class Request {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Date getIssueDate() {
+
+    public Date getIssuedate() {
 		return issuedate;
 	}
-	public void setIssueDate(Date issueDate) {
-		this.issuedate = issueDate;
+	public void setIssuedate(Date issuedate) {
+		this.issuedate = issuedate;
 	}
-	public Date getFinishedDate() {
+	public Date getFinisheddate() {
 		return finisheddate;
 	}
-	public void setFinishedDate(Date finishedDate) {
-		this.finisheddate = finishedDate;
+	public void setFinisheddate(Date finisheddate) {
+		this.finisheddate = finisheddate;
 	}
-    public String getId() {
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	
 	@Override
 	public String toString() {
 		return "Request [id=" + id + ", username=" + username + ", issuedate="
 				+ issuedate + ", finisheddate=" + finisheddate + ", status="
-				+ status + ", foundbyuser=" + foundbyuser + "]";
+				+ status + ", foundbyuser=" + foundbyuser + ", interpret="
+				+ interpret + ", title=" + title + "]";
 	}
+
 
 }

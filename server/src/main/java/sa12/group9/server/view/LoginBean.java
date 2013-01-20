@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.model.DataModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +30,8 @@ public class LoginBean
     private String retypePassword;
     private List<Request> requestsforuser;
 
-    public int getCoins()
+
+	public int getCoins()
     {
         try
         {
@@ -75,6 +75,15 @@ public class LoginBean
     {
         this.retypePassword = retypePassword;
     }
+    
+
+	public List<Request> getRequestsforuser() {
+		return requestsforuser;
+	}
+
+	public void setRequestsforuser(List<Request> requestsforuser) {
+		this.requestsforuser = requestsforuser;
+	}
     
 
     public String CheckValidUser()
@@ -149,14 +158,11 @@ public class LoginBean
     		for (Request request : allrequests){	
     			
     			if(request.getUsername().toString().equals(loginname)){
-    				
-    				
-    
+ 
     				requestsforuser.add(request);
     			}
     		}
     		
-    		//requestsDataModel.setWrappedData(requestsforuser);
     		
     		return "success";
     	    
@@ -167,18 +173,5 @@ public class LoginBean
     	
 		
     }
-
-	public List<Request> getRequestsforuser() {
-		return requestsforuser;
-	}
-
-	public void setRequestsforuser(List<Request> requestsforuser) {
-		this.requestsforuser = requestsforuser;
-	}
-
-
-
-
-
     
 }

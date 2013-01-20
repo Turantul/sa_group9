@@ -3,8 +3,6 @@ package sa12.group9.server.handler;
 import java.util.Date;
 
 import sa12.group9.common.beans.FoundInformation;
-import sa12.group9.common.beans.PeerEndpoint;
-import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.common.beans.User;
@@ -35,9 +33,11 @@ public class ClientServiceHandlerTest {
 		
 		//create the user;
 		
+		
 		User user = new User();
 		user.setCoins(20);
 		user.setUsername("bert");
+		
 		user.setPassword(Encrypter.encryptString("1234"));
 
 		
@@ -57,7 +57,7 @@ public class ClientServiceHandlerTest {
 		
 		Request request = new Request();
 		request.setId("123");
-		request.setIssueDate(new Date());
+		request.setIssuedate(new Date());
 		request.setUsername("bert");
 		request.setStatus("pending");
 		
@@ -73,6 +73,8 @@ public class ClientServiceHandlerTest {
 		
 		FoundInformation foundinfo = new FoundInformation();
 		foundinfo.setPeerUsername("hugo");
+		foundinfo.setInterpret("nirvana");
+		foundinfo.setTitle("smells like poo");
 		successrequest.setInformation(foundinfo);
 		
 		IClientServiceHandler clientservice = new ClientServiceHandler();

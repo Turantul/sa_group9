@@ -66,9 +66,11 @@ public class MongoRequestDAO implements IRequestDAO
 	@Override
 	public void updateRequest(Request request) {
 	 
-		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("finisheddate", request.getFinishedDate()) , Request.class);
+		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("finisheddate", request.getFinisheddate()) , Request.class);
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("status", request.getStatus()) , Request.class);
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("foundbyuser", request.getFoundbyuser()) , Request.class);
+		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("interpret", request.getInterpret()) , Request.class);
+		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("title", request.getTitle()) , Request.class);
 		
 	}
 
