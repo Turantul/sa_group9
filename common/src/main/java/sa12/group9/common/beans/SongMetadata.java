@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class SongMetadata implements Serializable
 {
-	private static final long serialVersionUID = 3259205233705769862L;
-	
-	protected String interpret;
+    private static final long serialVersionUID = 3259205233705769862L;
+
+    protected String interpret;
     protected String title;
     protected int length;
     protected String album;
@@ -61,16 +61,16 @@ public class SongMetadata implements Serializable
     {
         this.genre = genre;
     }
-    
+
     public String toString()
     {
-    	String s = "";
-    	s += "Interpret: " + interpret;
-    	s += "\nTitle: " + title;
-    	s += "\nLength: " + length;
-    	s += "\nAlbum: " + album;
-    	s += "\nGenre: " + genre;
-    	
-    	return s;
+        String s = "";
+        s += "Interpret: " + interpret;
+        s += "\nTitle: " + title;
+        s += "\nLength: " + length;
+        s += "\nAlbum: " + album;
+        s += "\nGenre: " + genre;
+
+        return s;
     }
 }

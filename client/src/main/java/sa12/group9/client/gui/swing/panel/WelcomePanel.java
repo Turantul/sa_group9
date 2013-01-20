@@ -31,5 +31,4 @@ public class WelcomePanel extends AbstractWorkingPanel
         button.addActionListener((ActionListener) actlist);
         add(button, "align center, push");
     }
-
 }

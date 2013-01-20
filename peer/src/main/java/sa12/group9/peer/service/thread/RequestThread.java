@@ -13,22 +13,24 @@ import sa12.group9.peer.service.IPeerManager;
 import sa12.group9.peer.service.IRequestManager;
 import sa12.group9.peer.service.Kernel;
 
-public class RequestThread extends Thread {
-	
-	private static Log log = LogFactory.getLog(RequestThread.class);
-	
-	private ServerSocket serverSocket;
-	private ExecutorService pool;
-	private Kernel kernel;
-	private int listeningPort;
-	private IPeerManager peerManager;
-	private IRequestManager requestManager;
-	
-	public RequestThread(){
-		pool = Executors.newCachedThreadPool();
-	}
-	
-	@Override
+public class RequestThread extends Thread
+{
+
+    private static Log log = LogFactory.getLog(RequestThread.class);
+
+    private ServerSocket serverSocket;
+    private ExecutorService pool;
+    private Kernel kernel;
+    private int listeningPort;
+    private IPeerManager peerManager;
+    private IRequestManager requestManager;
+
+    public RequestThread()
+    {
+        pool = Executors.newCachedThreadPool();
+    }
+
+    @Override
     public void run()
     {
         try
@@ -53,36 +55,41 @@ public class RequestThread extends Thread {
         }
         catch (IOException e)
         {
-            log.error("Error opening TCP socket on port "+listeningPort);
+            log.error("Error opening TCP socket on port " + listeningPort);
         }
     }
 
-	public void setKernel(Kernel kernel) {
-		this.kernel = kernel;
-	}
+    public void setKernel(Kernel kernel)
+    {
+        this.kernel = kernel;
+    }
 
-	public void setListeningPort(int listeningPort) {
-		this.listeningPort = listeningPort;
-	}
+    public void setListeningPort(int listeningPort)
+    {
+        this.listeningPort = listeningPort;
+    }
 
-	public void setPeerManager(IPeerManager peerManager) {
-		this.peerManager = peerManager;
-	}
-	
+    public void setPeerManager(IPeerManager peerManager)
+    {
+        this.peerManager = peerManager;
+    }
+
     public void setRequestManager(IRequestManager requestManager)
     {
         this.requestManager = requestManager;
     }
 
-	public void shutdown() {
-		log.debug("Shutdown RequestThread");
-		pool.shutdown();
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			log.error("Error closing Socket.\n"+e.getMessage());
-		}		
-	}
-    
-    
+    public void shutdown()
+    {
+        log.debug("Shutdown RequestThread");
+        pool.shutdown();
+        try
+        {
+            serverSocket.close();
+        }
+        catch (IOException e)
+        {
+            log.error("Error closing Socket.\n" + e.getMessage());
+        }
+    }
 }

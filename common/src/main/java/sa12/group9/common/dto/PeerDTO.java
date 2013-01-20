@@ -4,34 +4,38 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
-@Document(collection="peers")
+@Document(collection = "peers")
 public class PeerDTO
 {
-	@Id
-	private String uuid;
-	private String address;
+    @Id
+    private String uuid;
+    private String address;
     private int listeningPort;
     private int keepAlivePort;
     private Date lastKeepAlive;
     private String userid;
-    
-    public String getUuid() {
- 		return uuid;
- 	}
 
- 	public void setUuid(String uuid) {
- 		this.uuid = uuid;
- 	}
-    
-    public String getUserid() {
-		return userid;
-	}
+    public String getUuid()
+    {
+        return uuid;
+    }
 
-	public void setUserid(String userid) {
-		this.userid = userid;
-	}
+    public void setUuid(String uuid)
+    {
+        this.uuid = uuid;
+    }
 
-	public String getAddress()
+    public String getUserid()
+    {
+        return userid;
+    }
+
+    public void setUserid(String userid)
+    {
+        this.userid = userid;
+    }
+
+    public String getAddress()
     {
         return address;
     }
@@ -61,11 +65,13 @@ public class PeerDTO
         this.keepAlivePort = keepAlivePort;
     }
 
-	public Date getLastKeepAlive() {
-		return lastKeepAlive;
-	}
+    public Date getLastKeepAlive()
+    {
+        return lastKeepAlive;
+    }
 
-	public void setLastKeepAlive(Date lastKeepAlive) {
-		this.lastKeepAlive = lastKeepAlive;
-	}
+    public void setLastKeepAlive(Date lastKeepAlive)
+    {
+        this.lastKeepAlive = lastKeepAlive;
+    }
 }

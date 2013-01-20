@@ -4,36 +4,44 @@ import java.io.Serializable;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
-public class ManagementCommand implements Serializable{
-	private String command;
-	private Fingerprint fingerprint = null;
-	private SongMetadata metadata = null;
-	
-	public ManagementCommand(String command){
-		this.command = command;
-	}
+public class ManagementCommand implements Serializable
+{
+    private String command;
+    private Fingerprint fingerprint = null;
+    private SongMetadata metadata = null;
 
-	public String getCommand() {
-		return command;
-	}
+    public ManagementCommand(String command)
+    {
+        this.command = command;
+    }
 
-	public void setCommand(String command) {
-		this.command = command;
-	}
+    public String getCommand()
+    {
+        return command;
+    }
 
-	public Fingerprint getFingerprint() {
-		return fingerprint;
-	}
+    public void setCommand(String command)
+    {
+        this.command = command;
+    }
 
-	public void setFingerprint(Fingerprint fingerprint) {
-		this.fingerprint = fingerprint;
-	}
+    public Fingerprint getFingerprint()
+    {
+        return fingerprint;
+    }
 
-	public SongMetadata getSongMetadata() {
-		return metadata;
-	}
-	
-	public void setSongMetadata(SongMetadata smd) {
-		this.metadata = smd;
-	}
+    public void setFingerprint(Fingerprint fingerprint)
+    {
+        this.fingerprint = fingerprint;
+    }
+
+    public SongMetadata getSongMetadata()
+    {
+        return metadata;
+    }
+
+    public void setSongMetadata(SongMetadata smd)
+    {
+        this.metadata = smd;
+    }
 }
