@@ -16,6 +16,11 @@ start mvn exec:java -Dexec.mainClass="sa12.group9.peer.Launcher" -Dexec.args=%pe
 start mvn exec:java -Dexec.mainClass="sa12.group9.peer.Launcher" -Dexec.args=%peer4%
 start mvn exec:java -Dexec.mainClass="sa12.group9.peer.Launcher" -Dexec.args=%peer5%
 
+cd ../peermanagement
+
+REM start console
+start mvn exec:java -Dexec.mainClass="sa12.group9.peer.Launcher"
+
 cd ..
 
 @echo on
