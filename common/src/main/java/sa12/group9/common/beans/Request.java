@@ -9,7 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Request {
 	
 	@Id
-    private String username;
+	private String id;
+
+	private String username;
 	private Date issuedate;
 	private Date finisheddate;
 	private String status;
@@ -40,7 +42,12 @@ public class Request {
 	public void setFinishedDate(Date finishedDate) {
 		this.finisheddate = finishedDate;
 	}
-
+    public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
     
 

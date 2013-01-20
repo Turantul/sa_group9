@@ -7,6 +7,8 @@ public class HandlerTest {
 	 */
 	public static void main(String[] args) {
 		
+		IClientServiceHandler clientservicehandler = new ClientServiceHandler();
+		
 		
 
 	}

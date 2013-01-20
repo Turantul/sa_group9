@@ -105,6 +105,7 @@ public class ClientServiceHandler implements IClientServiceHandler
 
                     Request requestToLog = new Request();
                     
+                    requestToLog.setId(request.getId());
                     requestToLog.setUsername(request.getUsername());
                     requestToLog.setIssueDate(new Date());
                     requestToLog.setStatus("pending");
@@ -139,7 +140,7 @@ public class ClientServiceHandler implements IClientServiceHandler
         if (authenticate(request))
         {
             
-        	//update the coins of the peer who found it!
+        	//update the coins of client that issued the request!
         	try {
             	User user = userdao.searchUser(request.getUsername());
                 user.setCoins(user.getCoins() - 1);
@@ -151,12 +152,24 @@ public class ClientServiceHandler implements IClientServiceHandler
 				e.printStackTrace();
 				log.info("failed to save user " + request.getUsername() + ", due to error with MongouserDAO");
 			}
+        	
+          	//update the coins of peer that found the song!
+        	try {
+            	User user = userdao.searchUser(request.getInformation().getPeerUsername());
+                user.setCoins(user.getCoins() + 3);
+                userdao.updateUser(user);
+                               
+                
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("failed to save user " + request.getInformation().getPeerUsername() + ", due to error with MongouserDAO");
+			}
             
         	//log in the database
         	
             try {
 				
-            	Request requestToLog = requestdao.searchRequestByUsername(request.getUsername());
+            	Request requestToLog = requestdao.searchRequestById(request.getId());
             	
             	requestToLog.setFinishedDate(new Date());
             	requestToLog.setStatus("finished");

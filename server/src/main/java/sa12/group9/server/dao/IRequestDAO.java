@@ -36,6 +36,14 @@ public interface IRequestDAO
      * 
      * @return
      */
+    
+    Request searchRequestById(String Id);
+
+    /**
+     *
+     * 
+     * @return
+     */
     List<Request> getAllRequests();
 
     /**
