@@ -35,14 +35,14 @@ public class DAOTest {
 		Request request = new Request();
 		
 		request.setUsername("bert");
-		request.setIssueDate(new Date());
+		request.setIssuedate(new Date());
 		request.setStatus("pending");
 
 		requestdao.storeRequest(request);
 		
 		//update the request
 
-		request.setFinishedDate(new Date());
+		request.setFinisheddate(new Date());
 		request.setStatus("finished");
 		
 		requestdao.updateRequest(request);
@@ -55,7 +55,7 @@ public class DAOTest {
 		Request request = new Request();
 		
 		request.setUsername("bert");
-		request.setIssueDate(new Date());
+		request.setIssuedate(new Date());
 		request.setStatus("pending");
 		
 		IRequestDAO requestdao = MongoRequestDAO.getInstance();

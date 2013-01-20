@@ -117,7 +117,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     
                     requestToLog.setId(request.getId());
                     requestToLog.setUsername(request.getUsername());
-                    requestToLog.setIssueDate(new Date());
+                    requestToLog.setIssuedate(new Date());
                     requestToLog.setStatus("pending");
                     
                     try{
@@ -181,9 +181,14 @@ public class ClientServiceHandler implements IClientServiceHandler
 				
             	Request requestToLog = requestdao.searchRequestById(request.getId());
             	
-            	requestToLog.setFinishedDate(new Date());
+            	
+            	
+            	requestToLog.setFinisheddate(new Date());
             	requestToLog.setStatus("finished");
             	requestToLog.setFoundbyuser(request.getInformation().getPeerUsername());
+            	requestToLog.setInterpret(request.getInformation().getInterpret());
+            	requestToLog.setTitle(request.getInformation().getTitle());
+            	
             	
             	requestdao.updateRequest(requestToLog);
             	

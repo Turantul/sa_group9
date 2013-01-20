@@ -14,17 +14,34 @@
 	<h:dataTable value="#{login.requestsforuser}" var="r">
  
 		<h:column>
-			#{r.id}
+			<f:facet name="header">||RequestID</f:facet>
+			||#{r.id}
 		</h:column>
 	
 		<h:column>
-			#{r.username}
+			<f:facet name="header">||IssuedDate</f:facet>
+			||#{r.issuedate}
 		</h:column>
 		<h:column>
-			#{r.status}
+			<f:facet name="header">||FinishedDate</f:facet>
+			||#{r.finisheddate}
+		</h:column>
+	
+		<h:column>
+			<f:facet name="header">||Request Status</f:facet>
+			||#{r.status}
 		</h:column>
 		<h:column>
-			#{r.foundbyuser}
+			<f:facet name="header">||FoundBy</f:facet>
+			||#{r.foundbyuser}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||Matched Title</f:facet>
+			||#{r.title}
+		</h:column>
+		<h:column>
+			<f:facet name="header">||matched artist</f:facet>
+			||#{r.interpret}
 		</h:column>
 	 
  

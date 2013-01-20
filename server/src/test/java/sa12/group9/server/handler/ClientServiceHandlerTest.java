@@ -35,9 +35,11 @@ public class ClientServiceHandlerTest {
 		
 		//create the user;
 		
+		
 		User user = new User();
 		user.setCoins(20);
 		user.setUsername("bert");
+		
 		user.setPassword(Encrypter.encryptString("1234"));
 
 		
@@ -57,7 +59,7 @@ public class ClientServiceHandlerTest {
 		
 		Request request = new Request();
 		request.setId("123");
-		request.setIssueDate(new Date());
+		request.setIssuedate(new Date());
 		request.setUsername("bert");
 		request.setStatus("pending");
 		
@@ -73,6 +75,8 @@ public class ClientServiceHandlerTest {
 		
 		FoundInformation foundinfo = new FoundInformation();
 		foundinfo.setPeerUsername("hugo");
+		foundinfo.setInterpret("nirvana");
+		foundinfo.setTitle("smells like poo");
 		successrequest.setInformation(foundinfo);
 		
 		IClientServiceHandler clientservice = new ClientServiceHandler();
