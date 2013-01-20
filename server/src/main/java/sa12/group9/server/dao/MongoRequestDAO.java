@@ -74,7 +74,7 @@ public class MongoRequestDAO implements IRequestDAO
 
 	@Override
 	public void cleanupRequests() {
-		mongoOperation.updateMulti(new Query(Criteria.where("finisheddate").lt(new Date(System.currentTimeMillis()))), new Update().set("status", "failed"), "requests");	
+		mongoOperation.updateMulti(new Query(Criteria.where("status").is("pending").and("finisheddate").lt(new Date(System.currentTimeMillis()))), new Update().set("status", "failed"), "requests");	
 	}
 
 }
