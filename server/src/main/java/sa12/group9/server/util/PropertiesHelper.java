@@ -3,8 +3,6 @@ package sa12.group9.server.util;
 import java.io.IOException;
 import java.util.Properties;
 
-import sa12.group9.server.handler.ClientServiceHandler;
-
 public class PropertiesHelper
 {
     private static Properties prop;
@@ -14,7 +12,7 @@ public class PropertiesHelper
         Properties prop = new Properties();
         try
         {
-            prop.load(ClientServiceHandler.class.getClassLoader().getResourceAsStream("config.properties"));
+            prop.load(PropertiesHelper.class.getClassLoader().getResourceAsStream("config.properties"));
         }
         catch (IOException e)
         {

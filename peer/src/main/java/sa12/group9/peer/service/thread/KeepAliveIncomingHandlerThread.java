@@ -1,8 +1,6 @@
 package sa12.group9.peer.service.thread;
 
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;

@@ -11,7 +11,7 @@
     </property>
   </bean>
 
-  <bean id="console" class="${root}.peer.cli.Console" init-method="initialize" lazy-init="true">
+  <bean id="console" class="${root}.peermanagement.cli.Console" init-method="initialize" lazy-init="true">
     <property name="fingerprintService" ref="fingerprintService" />
     <property name="songMetadataService" ref="songMetadataService" />
   </bean>
