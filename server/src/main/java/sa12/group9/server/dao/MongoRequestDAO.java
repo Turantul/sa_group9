@@ -70,7 +70,7 @@ public class MongoRequestDAO implements IRequestDAO
 	 
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("finisheddate", request.getFinishedDate()) , Request.class);
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("status", request.getStatus()) , Request.class);
-		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("foundbyuser", request.getStatus()) , Request.class);
+		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("foundbyuser", request.getFoundbyuser()) , Request.class);
 		
 	}
 

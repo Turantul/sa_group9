@@ -19,6 +19,7 @@ public class Request {
 
 	
 	
+
 	public String getFoundbyuser() {
 		return foundbyuser;
 	}
@@ -56,6 +57,11 @@ public class Request {
 		this.id = id;
 	}
 	
-    
+	@Override
+	public String toString() {
+		return "Request [id=" + id + ", username=" + username + ", issuedate="
+				+ issuedate + ", finisheddate=" + finisheddate + ", status="
+				+ status + ", foundbyuser=" + foundbyuser + "]";
+	}
 
 }

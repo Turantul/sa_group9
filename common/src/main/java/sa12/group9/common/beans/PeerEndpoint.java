@@ -61,11 +61,19 @@ public class PeerEndpoint
         this.keepAlivePort = keepAlivePort;
     }
 
-	public Date getLastKeepAlive() {
+	public Date getLastKeepAlive() { 
 		return lastKeepAlive;
 	}
-
+ 
 	public void setLastKeepAlive(Date lastKeepAlive) {
 		this.lastKeepAlive = lastKeepAlive;
+	}
+
+	@Override
+	public String toString() {
+		return "PeerEndpoint [uuid=" + uuid + ", address=" + address
+				+ ", listeningPort=" + listeningPort + ", keepAlivePort="
+				+ keepAlivePort + ", lastKeepAlive=" + lastKeepAlive
+				+ ", userid=" + userid + "]";
 	}
 }

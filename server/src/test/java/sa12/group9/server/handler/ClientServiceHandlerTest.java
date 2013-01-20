@@ -2,6 +2,7 @@ package sa12.group9.server.handler;
 
 import java.util.Date;
 
+import sa12.group9.common.beans.FoundInformation;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
 import sa12.group9.common.beans.Request;
@@ -38,9 +39,19 @@ public class ClientServiceHandlerTest {
 		user.setCoins(20);
 		user.setUsername("bert");
 		user.setPassword(Encrypter.encryptString("1234"));
-		
+
 		
 		userdao.storeUser(user);
+		
+		//create the peer;
+		
+		User peer = new User();
+		peer.setCoins(20);
+		peer.setUsername("hugo");
+		peer.setPassword(Encrypter.encryptString("1234"));
+		
+		
+		userdao.storeUser(peer);
 		
 		//create the original request
 		
@@ -58,8 +69,11 @@ public class ClientServiceHandlerTest {
 		SuccessRequest successrequest = new SuccessRequest();
 		successrequest.setUsername("bert");
 		successrequest.setId("123");
-		successrequest.setPassword(Encrypter.encryptString("1234"));
+		successrequest.setPassword("1234");
 		
+		FoundInformation foundinfo = new FoundInformation();
+		foundinfo.setPeerUsername("hugo");
+		successrequest.setInformation(foundinfo);
 		
 		IClientServiceHandler clientservice = new ClientServiceHandler();
 		
@@ -70,6 +84,8 @@ public class ClientServiceHandlerTest {
 		//print updated result
 		
 		System.out.println(requestdao.searchRequestById("123").toString());
+		System.out.println(userdao.searchUser("bert").toString());
+		System.out.println(userdao.searchUser("hugo").toString());
 	}
 
 }

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="users")
 public class User
-{
+{ 
 	@Id
     private String username;
     private String password;
@@ -29,6 +29,11 @@ public class User
 	}
 	public void setCoins(Integer coins) {
 		this.coins = coins;
+	}
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", password=" + password
+				+ ", coins=" + coins + "]";
 	}
 
     

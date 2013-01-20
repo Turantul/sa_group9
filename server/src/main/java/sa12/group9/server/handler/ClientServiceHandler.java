@@ -224,12 +224,17 @@ public class ClientServiceHandler implements IClientServiceHandler
         }
         
         System.out.println("requestusername:" + request.getUsername());
-        System.out.println("requestpassword:" + Encrypter.encryptString(request.getPassword()));
+        System.out.println("requestpassword:" + request.getPassword());
         
         System.out.println("fetchedusername:" + fetcheduser.getUsername());
         System.out.println("fetchedpassword:" + fetcheduser.getPassword());        
         
-        System.out.println(request.getUsername().equals(fetcheduser.getUsername()) && Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword()));
+        
+        
+        //do not encrypt password for matching
+        //return request.getUsername().equals(fetcheduser.getUsername()) && request.getPassword().equals(fetcheduser.getPassword());    
+        
+        //encrypt password of request for matching
         return request.getUsername().equals(fetcheduser.getUsername()) && Encrypter.encryptString(request.getPassword()).equals(fetcheduser.getPassword());
     }
 }
