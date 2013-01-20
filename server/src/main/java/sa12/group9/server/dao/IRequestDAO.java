@@ -58,4 +58,10 @@ public interface IRequestDAO
      */
     void updateRequest(Request request);
     
+    /**
+     * Setting all requests which have ther expected finishingTime exeeded to failed
+     */
+    void cleanupRequests();
+     
+    
 }

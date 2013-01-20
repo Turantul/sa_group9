@@ -1,5 +1,6 @@
 package sa12.group9.server.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -69,6 +70,11 @@ public class MongoRequestDAO implements IRequestDAO
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("status", request.getStatus()) , Request.class);
 		mongoOperation.updateFirst(new Query(Criteria.where("_id").is(request.getId())), Update.update("foundbyuser", request.getFoundbyuser()) , Request.class);
 		
+	}
+
+	@Override
+	public void cleanupRequests() {
+		mongoOperation.updateMulti(new Query(Criteria.where("finisheddate").lt(new Date(System.currentTimeMillis()))), new Update().set("status", "failed"), "requests");	
 	}
 
 }

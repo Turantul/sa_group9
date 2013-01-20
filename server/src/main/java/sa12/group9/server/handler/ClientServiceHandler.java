@@ -119,6 +119,7 @@ public class ClientServiceHandler implements IClientServiceHandler
                     requestToLog.setUsername(request.getUsername());
                     requestToLog.setIssueDate(new Date());
                     requestToLog.setStatus("pending");
+                    requestToLog.setFinishedDate(new Date(System.currentTimeMillis()+(secondsToWait*1000)));
                     
                     try{
                 
