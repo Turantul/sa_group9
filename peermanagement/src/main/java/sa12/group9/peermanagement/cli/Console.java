@@ -62,10 +62,14 @@ public class Console
                     else
                     {
                         ManagementCommand command = new ManagementCommand(in);
-                        Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
-                        ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
-                        socketout.writeObject(command);
-                        new CommandResponseListener(socket).start();
+                        try {
+                        	Socket socket = new Socket(split[1].trim(), Integer.parseInt(split[2].trim()));
+                        	ObjectOutputStream socketout = new ObjectOutputStream(socket.getOutputStream());
+                            socketout.writeObject(command);
+                            new CommandResponseListener(socket).start();
+                        } catch (IllegalArgumentException iae) {
+                        	System.out.println("Enter a port in the range 1-65535");
+                        }
                     }
                 }
                 if (in.startsWith("!addfile"))
