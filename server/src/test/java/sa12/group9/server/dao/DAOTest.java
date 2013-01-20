@@ -1,9 +1,12 @@
 package sa12.group9.server.dao;
 
+import java.util.Date;
 import java.util.UUID;
 
 import sa12.group9.common.beans.PeerEndpoint;
+import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.User;
+import sa12.group9.common.util.Encrypter;
 
 
 
@@ -17,14 +20,55 @@ public class DAOTest {
 		//testpeerdao();
 		//testuserdao();
 		//removeuser();
-		updateuser();
+		//updateuser();
+		//testrequestdao();
+		updaterequest();
+	}
+	
+	public static void updaterequest(){
+		
+		
+		IRequestDAO requestdao = MongoRequestDAO.getInstance();
+		
+		//create the request
+		
+		Request request = new Request();
+		
+		request.setUsername("bert");
+		request.setIssueDate(new Date());
+		request.setStatus("pending");
+
+		requestdao.storeRequest(request);
+		
+		//update the request
+
+		request.setFinishedDate(new Date());
+		request.setStatus("finished");
+		
+		requestdao.updateRequest(request);
+		
+		
+	}
+	
+	public static void testrequestdao(){
+		
+		Request request = new Request();
+		
+		request.setUsername("bert");
+		request.setIssueDate(new Date());
+		request.setStatus("pending");
+		
+		IRequestDAO requestdao = MongoRequestDAO.getInstance();
+		
+		requestdao.storeRequest(request);
+		
 	}
 	
 	public static void updateuser(){
 		IUserDAO userdao = MongoUserDAO.getInstance();
 		User affe = new User();
 		affe.setUsername("affe");
-		affe.setPassword("herbert1234566");
+		affe.setPassword(Encrypter.encryptString("hallo"));
 		
 		userdao.updateUser(affe);
 		

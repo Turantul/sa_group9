@@ -2,6 +2,7 @@ package sa12.group9.server.handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -11,14 +12,17 @@ import org.apache.commons.logging.LogFactory;
 import sa12.group9.common.beans.LoginRequest;
 import sa12.group9.common.beans.PeerEndpoint;
 import sa12.group9.common.beans.PeerList;
+import sa12.group9.common.beans.Request;
 import sa12.group9.common.beans.SearchIssueRequest;
 import sa12.group9.common.beans.SearchIssueResponse;
 import sa12.group9.common.beans.SuccessRequest;
 import sa12.group9.common.beans.User;
 import sa12.group9.common.util.Encrypter;
 import sa12.group9.server.dao.IPeerDAO;
+import sa12.group9.server.dao.IRequestDAO;
 import sa12.group9.server.dao.IUserDAO;
 import sa12.group9.server.dao.MongoPeerDAO;
+import sa12.group9.server.dao.MongoRequestDAO;
 import sa12.group9.server.dao.MongoUserDAO;
 import sa12.group9.server.util.PropertiesHelper;
 
@@ -28,6 +32,7 @@ public class ClientServiceHandler implements IClientServiceHandler
     
     private IUserDAO userdao = MongoUserDAO.getInstance();
     private IPeerDAO peerdao = MongoPeerDAO.getInstance();
+    private IRequestDAO requestdao = MongoRequestDAO.getInstance();
 
     @Override
     public boolean verifyLogin(LoginRequest request)
@@ -98,7 +103,21 @@ public class ClientServiceHandler implements IClientServiceHandler
                     
                     log.info("Created new request for " + request.getUsername() + " with a stepsize of " + stepSize + ", TTL of " + ttl + " and " + secondsToWait + " seconds to wait.");
 
-                    // TODO: log in the database
+                    Request requestToLog = new Request();
+                    
+                    requestToLog.setUsername(request.getUsername());
+                    requestToLog.setIssueDate(new Date());
+                    requestToLog.setStatus("pending");
+                    
+                    try{
+                
+                    	requestdao.storeRequest(requestToLog);
+                        
+                    }catch (Exception e) {
+						e.printStackTrace();
+						log.info("failed to save Request for user " + request.getUsername() + ", due to error with MongoRequestDAO");
+					}
+                    
                 }
                 else
                 {
@@ -119,11 +138,38 @@ public class ClientServiceHandler implements IClientServiceHandler
     {
         if (authenticate(request))
         {
-            User user = userdao.searchUser(request.getUsername());
-            user.setCoins(user.getCoins() - 1);
-
-            // TODO: update the coins of the peer who found it!
-            // TODO: log in the database
+            
+        	//update the coins of the peer who found it!
+        	try {
+            	User user = userdao.searchUser(request.getUsername());
+                user.setCoins(user.getCoins() - 1);
+                userdao.updateUser(user);
+                
+                
+                
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("failed to save user " + request.getUsername() + ", due to error with MongouserDAO");
+			}
+            
+        	//log in the database
+        	
+            try {
+				
+            	Request requestToLog = requestdao.searchRequestByUsername(request.getUsername());
+            	
+            	requestToLog.setFinishedDate(new Date());
+            	requestToLog.setStatus("finished");
+            	
+            	requestdao.updateRequest(requestToLog);
+            	
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("failed to save request for user: " + request.getUsername() + ", due to error with MongoRequestDAO");
+			}
+            
+         
+            
         }
     }
 
