@@ -1,4 +1,4 @@
-package sa12.group9.peer;
+package sa12.group9.peermanagement;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

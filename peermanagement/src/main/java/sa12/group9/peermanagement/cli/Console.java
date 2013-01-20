@@ -1,4 +1,4 @@
-package sa12.group9.peer.cli;
+package sa12.group9.peermanagement.cli;
 
 import java.io.BufferedReader;
 import java.io.File;
